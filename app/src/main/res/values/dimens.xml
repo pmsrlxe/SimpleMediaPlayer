@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="lib_video_player_bottom_height">75dp</dimen>
+    <dimen name="lib_video_player_progress_dialog_margin_top">220dp</dimen>
+    <dimen name="lib_video_player_volume_dialog_margin_left">24dp</dimen>
+    <dimen name="lib_video_player_width">956dp</dimen>
+    <dimen name="lib_video_player_height">537dp</dimen>
+</resources>
