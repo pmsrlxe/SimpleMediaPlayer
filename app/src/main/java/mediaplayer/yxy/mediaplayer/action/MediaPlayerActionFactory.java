@@ -13,7 +13,7 @@ import mediaplayer.yxy.mediaplayer.action.reset.ResetFactory;
 import mediaplayer.yxy.mediaplayer.action.seekcomplete.SeekCompleteFactory;
 import mediaplayer.yxy.mediaplayer.action.seeking.SeekingFactory;
 import mediaplayer.yxy.mediaplayer.action.started.StartedFactory;
-import mediaplayer.yxy.mediaplayer.action.stop.StopedFactory;
+import mediaplayer.yxy.mediaplayer.action.stop.StoppedFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class MediaPlayerActionFactory {
@@ -34,7 +34,7 @@ public class MediaPlayerActionFactory {
             case Started:
                 return StartedFactory.getAction(wrapper, wantState);
             case Stopped:
-                return StopedFactory.getAction(wrapper, wantState);
+                return StoppedFactory.getAction(wrapper, wantState);
             case Preparing:
                 return PreparingFactory.getAction(wrapper, wantState);
             case Prepared:

@@ -2,7 +2,9 @@ package mediaplayer.yxy.mediaplayer.action.reset;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none._NoneAction;
+import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.seekcomplete.SeekCompleteFactory;
+import mediaplayer.yxy.mediaplayer.action.seeking.SeekingFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ResetFactory {
@@ -14,13 +16,13 @@ public class ResetFactory {
     public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState wantState) {
         switch (wantState) {
             case Reset:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
             case Paused:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
             case Started:
                 return new ResetStartedAction(wrapper, wantState);
             case Stopped:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
             case Preparing:
                 return new ResetPreparedAction(wrapper, wantState);
             case Prepared:
@@ -28,11 +30,15 @@ public class ResetFactory {
             case Released:
                 return new ResetReleasedAction(wrapper, wantState);
             case Error:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
             case Complete:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
             case Buffering:
-                return new _NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, wantState);
+            case Seeking:
+                return SeekingFactory.getAction(wrapper, wantState);
+            case SeekComplete:
+                return SeekCompleteFactory.getAction(wrapper, wantState);
             default:
                 throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
         }

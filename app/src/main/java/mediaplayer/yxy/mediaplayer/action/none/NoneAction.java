@@ -6,9 +6,9 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class _NoneAction extends MediaPlayerAction {
+public class NoneAction extends MediaPlayerAction {
 
-    public _NoneAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
+    public NoneAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
         super(mediaPlayer, wantState);
     }
 
