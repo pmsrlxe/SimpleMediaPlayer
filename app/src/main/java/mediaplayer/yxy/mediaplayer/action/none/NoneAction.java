@@ -1,5 +1,7 @@
 package mediaplayer.yxy.mediaplayer.action.none;
 
+import android.util.Log;
+
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
@@ -39,6 +41,6 @@ public class NoneAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-
+        Log.e("SimpleMediaPlayer", "perform none action from " + getFromState() + " to " + getWantState());
     }
 }
