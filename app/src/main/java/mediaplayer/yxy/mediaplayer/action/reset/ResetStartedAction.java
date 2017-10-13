@@ -14,7 +14,12 @@ public class ResetStartedAction extends MediaPlayerAction {
 
     @Override
     public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
-        getRealMediaPlayer().start();
+        try {
+            getRealMediaPlayer().start();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Started);
+        } catch (Exception ex) {
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
     }
 
     @Override

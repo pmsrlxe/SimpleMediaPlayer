@@ -46,8 +46,8 @@
         android:id="@+id/rl_prepare_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
         android:layout_centerInParent="true"
+        android:background="@color/black"
         android:visibility="gone">
 
         <ImageView
@@ -83,8 +83,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/play_pressed"
-        android:visibility="gone" />
+        android:src="@drawable/play_pressed" />
 
     <RelativeLayout
         android:id="@+id/rl_4g_error"

@@ -44,6 +44,12 @@ public class StartedPauseAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+        try {
+            getRealMediaPlayer().pause();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
+        } catch (Exception ex) {
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
 
     }
 }

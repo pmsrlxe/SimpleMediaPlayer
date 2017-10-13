@@ -6,6 +6,7 @@ import android.widget.SeekBar;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
+import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
@@ -23,13 +24,13 @@ public class VideoPlayerPresenter {
         player.ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                simpleMediaPlayer.start();
+                handleStart();
             }
         });
         player.ivStart2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                simpleMediaPlayer.start();
+                handleStart();
             }
         });
 
@@ -58,8 +59,6 @@ public class VideoPlayerPresenter {
                 MediaParams mediaParams = new MediaParams(model.getUrl(), model.getHeadData(),
                         player.surfaceView);
                 simpleMediaPlayer.reset(mediaParams);
-
-                simpleMediaPlayer.start();
             }
 
             @Override
@@ -80,6 +79,14 @@ public class VideoPlayerPresenter {
             }
         });
 
+    }
+
+    private void handleStart() {
+        if (simpleMediaPlayer.getMediaPlayerState() != MediaPlayerState.Started) {
+            simpleMediaPlayer.start();
+        } else {
+            simpleMediaPlayer.pause();
+        }
     }
 
     public void unbind() {
