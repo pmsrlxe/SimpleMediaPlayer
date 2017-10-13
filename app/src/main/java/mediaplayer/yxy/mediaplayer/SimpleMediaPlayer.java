@@ -9,14 +9,14 @@ import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.data.PrepareParams;
+import mediaplayer.yxy.mediaplayer.data.ResetParams;
 
 public class SimpleMediaPlayer {
     private Context context;
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
-    private PrepareParams prepareParams;
+    private ResetParams resetParams;
 
 
     public void MediaPlayer(Context ctx) {
@@ -24,49 +24,40 @@ public class SimpleMediaPlayer {
     }
 
 
-    //初始化
-    public void initIfNeed() {
-        if (mediaPlayer == null) {
-            mediaPlayer = new LogMediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setScreenOnWhilePlaying(true);
-            mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
-            mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
-            mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
-            mediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
-            mediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
-        }
-    }
-
     //重置
-    public void reset(PrepareParams prepareParams) {
-        this.prepareParams = prepareParams;
-        perform(MediaPlayerState.Reset);
+    public void reset(ResetParams resetParams) {
+        this.resetParams = resetParams;
+        perform(true, MediaPlayerState.Reset);
     }
 
     //准备
     public void prepare() {
-        perform(MediaPlayerState.Prepared);
+        perform(true, MediaPlayerState.Prepared);
+    }
+
+    //播放
+    public void start() {
+        perform(true, MediaPlayerState.Started);
     }
 
     //停止
     public void stop() {
-        perform(MediaPlayerState.Stopped);
+        perform(true, MediaPlayerState.Stopped);
     }
 
     //暂停
     public void pause() {
-        perform(MediaPlayerState.Paused);
+        perform(true, MediaPlayerState.Paused);
     }
 
     //释放
     public void release() {
-        perform(MediaPlayerState.Released);
+        perform(false, MediaPlayerState.Released);
     }
 
     //跳转
     public void seek(long time) {
-        perform(MediaPlayerState.SeekComplete);
+        perform(true, MediaPlayerState.SeekComplete);
     }
 
     public MediaPlayerState getMediaPlayerState() {
@@ -81,13 +72,30 @@ public class SimpleMediaPlayer {
         return context;
     }
 
-    public PrepareParams getPrepareParams() {
-        return prepareParams;
+    public ResetParams getResetParams() {
+        return resetParams;
     }
 
-    private void perform(MediaPlayerState changeToState) {
+    private void perform(boolean init, MediaPlayerState changeToState) {
+        if (init) {
+            initIfNeed();
+        }
         mediaPlayerAction = MediaPlayerActionFactory.getAction(this, changeToState);
         mediaPlayerAction.perform();
+    }
+
+    //初始化
+    private void initIfNeed() {
+        if (mediaPlayer == null) {
+            mediaPlayer = new LogMediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setScreenOnWhilePlaying(true);
+            mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
+            mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
+            mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
+            mediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
+            mediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
+        }
     }
 
    /*--------------------------------listener wrapper---------------------------------------*/
@@ -105,7 +113,6 @@ public class SimpleMediaPlayer {
 
         @Override
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-            mediaPlayerState = MediaPlayerState.Error;
             return mediaPlayerAction != null && mediaPlayerAction.onError(SimpleMediaPlayer.this,
                     new MediaPlayerError(what, extra));
         }
@@ -115,7 +122,6 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onSeekComplete(MediaPlayer mediaPlayer) {
-
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onSeekComplete(SimpleMediaPlayer.this);
             }
@@ -126,8 +132,6 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-            mediaPlayerState = MediaPlayerState.Buffering;
-
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayer.this, percent);
             }
@@ -138,8 +142,6 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayerState = MediaPlayerState.Complete;
-
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onCompletion(SimpleMediaPlayer.this);
             }

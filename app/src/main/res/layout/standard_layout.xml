@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <com.okay.video_player.MySurfaceView
+        <mediaplayer.yxy.mediaplayer.view.MySurfaceView
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
