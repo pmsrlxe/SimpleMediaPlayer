@@ -16,7 +16,6 @@ public class VideoPlayerPresenter {
 
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
-    private boolean hadReset;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;

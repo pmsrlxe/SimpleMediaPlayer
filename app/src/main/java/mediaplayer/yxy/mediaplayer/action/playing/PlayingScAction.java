@@ -39,12 +39,12 @@ public class PlayingScAction extends BaseMediaPlayerAction {
 
     @Override
     public void onCompletion(SimpleMediaPlayer mediaPlayer) {
-
+        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
     }
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
         try {
             float pc = getSimpleMediaPlayer().getMediaParams().getSeekToPercent() * 1.0f / 100;
             int timeInSecond = (int) (pc * getRealMediaPlayer().getDuration());

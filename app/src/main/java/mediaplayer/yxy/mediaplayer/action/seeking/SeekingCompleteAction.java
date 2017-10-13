@@ -39,12 +39,11 @@ public class SeekingCompleteAction extends BaseMediaPlayerAction {
 
     @Override
     public void onCompletion(SimpleMediaPlayer mediaPlayer) {
-
+        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
     }
 
     @Override
     public void perform() {
-super.perform();
-
+        super.perform();
     }
 }
