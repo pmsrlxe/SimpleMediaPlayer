@@ -1,6 +1,8 @@
 package mediaplayer.yxy.mediaplayer.action;
 
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Looper;
 
 import mediaplayer.yxy.mediaplayer.MediaPlayerStateAware;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
@@ -11,12 +13,14 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
     private final MediaPlayerState changeToState;
     private final MediaPlayerState fromState;
     private final MediaPlayer realMediaPlayer;
+    private final Handler handler;
 
     public MediaPlayerAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         this.simpleMediaPlayer = simpleMediaPlayer;
         this.realMediaPlayer = simpleMediaPlayer.getRealMediaPlayer();
         this.fromState = simpleMediaPlayer.getMediaPlayerState();
         this.changeToState = changeToState;
+        this.handler = new Handler(Looper.getMainLooper());
     }
 
     public MediaPlayer getRealMediaPlayer() {
@@ -41,6 +45,16 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
 
 
     protected void submit(Runnable runnable) {
+        if (runnable == null) {
+            return;
+        }
         new Thread(runnable).start();
+    }
+
+    protected void post(Runnable runnable) {
+        if (runnable == null) {
+            return;
+        }
+        handler.post(runnable);
     }
 }

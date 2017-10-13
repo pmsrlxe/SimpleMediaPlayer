@@ -44,17 +44,25 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
         submit(new Runnable() {
             @Override
             public void run() {
                 try {
                     //release 这个方法有网络操作，至少华为p10有。
-                    getRealMediaPlayer().release();
+                    if (getRealMediaPlayer() != null) {
+                        //如果从来没有reset或者操作过，可能是null
+                        getRealMediaPlayer().release();
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 } finally {
-                    getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Released);
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Released);
+                        }
+                    });
                 }
             }
         });

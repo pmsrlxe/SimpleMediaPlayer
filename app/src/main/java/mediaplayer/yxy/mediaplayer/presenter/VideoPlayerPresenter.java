@@ -101,20 +101,18 @@ public class VideoPlayerPresenter {
         });
 
 
-
         player.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                if (hadReset) {
-                    return;
+                if (!hadReset) {
+                    hadReset = true;
+                    MediaParams mediaParams = new MediaParams(
+                            player.surfaceView.getContext(),
+                            model.getUrl(),
+                            model.getHeadData(),
+                            player.surfaceView);
+                    simpleMediaPlayer.reset(mediaParams);
                 }
-                hadReset = true;
-                MediaParams mediaParams = new MediaParams(
-                        player.surfaceView.getContext(),
-                        model.getUrl(),
-                        model.getHeadData(),
-                        player.surfaceView);
-                simpleMediaPlayer.reset(mediaParams);
             }
 
             @Override

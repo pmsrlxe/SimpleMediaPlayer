@@ -3,6 +3,7 @@ package mediaplayer.yxy.mediaplayer;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.view.SurfaceHolder;
 
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
@@ -20,6 +21,7 @@ public class SimpleMediaPlayer {
     private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
     private OnBufferChangeListener onBufferChangeListener;
     private OnBufferStateListener onBufferStateListener;
+    private SurfaceCallBackWrapper surfaceCallBackWrapper;
 
     public void MediaPlayer() {
     }
@@ -31,6 +33,9 @@ public class SimpleMediaPlayer {
     //重置
     public void reset(MediaParams mediaParams) {
         this.mediaParams = new MediaParams(mediaParams);
+        this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
+        this.mediaParams.getSurfaceView().getHolder().addCallback(surfaceCallBackWrapper);
+
         perform(true, MediaPlayerState.Reset);
     }
 
@@ -56,6 +61,9 @@ public class SimpleMediaPlayer {
 
     //释放
     public void release() {
+        if (surfaceCallBackWrapper != null) {
+            this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
+        }
         perform(false, MediaPlayerState.Released);
     }
 
@@ -115,6 +123,10 @@ public class SimpleMediaPlayer {
 
     public void setOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener) {
         this.onMediaPlayerStateChangeListener = onMediaPlayerStateChangeListener;
+    }
+
+    public void updateSurfaceView(SurfaceHolder view) {
+        mediaPlayer.setDisplay(view);
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/
@@ -182,6 +194,23 @@ public class SimpleMediaPlayer {
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onCompletion(SimpleMediaPlayer.this);
             }
+        }
+    }
+
+    private class SurfaceCallBackWrapper implements SurfaceHolder.Callback {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+                getRealMediaPlayer().setDisplay(holder);
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+
         }
     }
 }
