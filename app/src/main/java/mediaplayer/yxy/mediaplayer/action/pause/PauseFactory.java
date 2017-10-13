@@ -34,8 +34,6 @@ public class PauseFactory {
                 return new PausedErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Buffering:
-                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //暂停是可以seek的
                 return new PausedScAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

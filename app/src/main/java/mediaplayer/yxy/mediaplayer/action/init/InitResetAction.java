@@ -49,6 +49,8 @@ public class InitResetAction extends MediaPlayerAction {
             getRealMediaPlayer().setDataSource(getSimpleMediaPlayer().getMediaParams().getUrl());
             getRealMediaPlayer().setDisplay(getSimpleMediaPlayer().getMediaParams()
                     .getSurfaceView().getHolder());
+            //setScreenOnWhilePlaying(true) is ineffective without a SurfaceHolder
+            getRealMediaPlayer().setScreenOnWhilePlaying(true);
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Reset);
         } catch (Exception ex) {
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);

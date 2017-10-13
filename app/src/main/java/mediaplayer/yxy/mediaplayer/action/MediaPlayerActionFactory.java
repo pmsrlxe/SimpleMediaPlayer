@@ -1,7 +1,6 @@
 package mediaplayer.yxy.mediaplayer.action;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.buffering.BufferingFactory;
 import mediaplayer.yxy.mediaplayer.action.complete.CompleteFactory;
 import mediaplayer.yxy.mediaplayer.action.error.ErrorFactory;
 import mediaplayer.yxy.mediaplayer.action.init.InitFactory;
@@ -45,8 +44,6 @@ public class MediaPlayerActionFactory {
                 return ErrorFactory.getAction(simpleMediaPlayer, changeToState);
             case Complete:
                 return CompleteFactory.getAction(simpleMediaPlayer, changeToState);
-            case Buffering:
-                return BufferingFactory.getAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return SeekingFactory.getAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

@@ -34,8 +34,6 @@ public class SeekingFactory {
                 return new SeekingErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //seek到末尾发生了这个
                 return new SeekingCompleteAction(simpleMediaPlayer, changeToState);
-            case Buffering:
-                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new SeekingSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

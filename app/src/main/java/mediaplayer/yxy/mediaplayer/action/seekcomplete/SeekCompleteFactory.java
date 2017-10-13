@@ -34,8 +34,6 @@ public class SeekCompleteFactory {
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Buffering:
-                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new ScSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

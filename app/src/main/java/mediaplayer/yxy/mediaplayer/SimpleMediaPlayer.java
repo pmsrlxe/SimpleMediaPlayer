@@ -2,6 +2,7 @@ package mediaplayer.yxy.mediaplayer;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
@@ -11,11 +12,13 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class SimpleMediaPlayer {
+    private static final String TAG = "SimpleMediaPlayer";
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
     private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
+    private OnBufferChangeListener onBufferChangeListener;
 
     public void MediaPlayer() {
     }
@@ -74,6 +77,10 @@ public class SimpleMediaPlayer {
 
     }
 
+    public void setOnBufferChangeListener(OnBufferChangeListener onBufferChangeListener) {
+        this.onBufferChangeListener = onBufferChangeListener;
+    }
+
     public MediaParams getMediaParams() {
         return mediaParams;
     }
@@ -91,7 +98,6 @@ public class SimpleMediaPlayer {
         if (mediaPlayer == null) {
             mediaPlayer = new LogMediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setScreenOnWhilePlaying(true);
             mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
             mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
             mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
@@ -111,6 +117,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onPrepared(MediaPlayer mp) {
+            Log.e(TAG, "onBufferingUpdate");
             mediaPlayerAction.onPrepared(SimpleMediaPlayer.this);
         }
     }
@@ -119,6 +126,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
+            Log.e(TAG, "onInfo,w:" + what + ",e:" + extra);
             return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayer.this,
                     new MediaPlayerInfo(what, extra));
         }
@@ -128,6 +136,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+            Log.e(TAG, "onError,w:" + what + ",e:" + extra);
             return mediaPlayerAction != null && mediaPlayerAction.onError(SimpleMediaPlayer.this,
                     new MediaPlayerError(what, extra));
         }
@@ -137,6 +146,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onSeekComplete(MediaPlayer mediaPlayer) {
+            Log.e(TAG, "onSeekComplete");
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onSeekComplete(SimpleMediaPlayer.this);
             }
@@ -147,6 +157,10 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
+            Log.e(TAG, "onBufferingUpdate,pc:" + percent);
+            if (onBufferChangeListener != null) {
+                onBufferChangeListener.onBufferUpdate(percent);
+            }
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayer.this, percent);
             }
@@ -157,10 +171,10 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
+            Log.e(TAG, "onCompletion");
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onCompletion(SimpleMediaPlayer.this);
             }
         }
     }
-
 }

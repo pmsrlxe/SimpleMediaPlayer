@@ -4,6 +4,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.SeekBar;
 
+import mediaplayer.yxy.mediaplayer.OnBufferChangeListener;
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
@@ -19,6 +20,7 @@ public class VideoPlayerPresenter {
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
         simpleMediaPlayer = new SimpleMediaPlayer();
+        //state
         simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
             @Override
             public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
@@ -29,6 +31,19 @@ public class VideoPlayerPresenter {
                     player.ivStart.setVisibility(View.GONE);
                     player.ivPause.setVisibility(View.VISIBLE);
                 }
+
+                if (now == MediaPlayerState.Preparing) {
+                    player.rlPreparingLoading.setVisibility(View.VISIBLE);
+                } else {
+                    player.rlPreparingLoading.setVisibility(View.GONE);
+                }
+            }
+        });
+        //缓存
+        simpleMediaPlayer.setOnBufferChangeListener(new OnBufferChangeListener() {
+            @Override
+            public void onBufferUpdate(int percent) {
+                player.skProgress.setSecondaryProgress(percent);
             }
         });
     }
@@ -67,7 +82,6 @@ public class VideoPlayerPresenter {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //TODO process不对
                 simpleMediaPlayer.seekToPercent(seekBar.getProgress());
             }
         });

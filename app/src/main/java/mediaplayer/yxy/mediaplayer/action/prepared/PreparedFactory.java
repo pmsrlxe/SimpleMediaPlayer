@@ -34,8 +34,6 @@ public class PreparedFactory {
                 return new PreparedErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Buffering:
-                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new PreparedSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

@@ -35,8 +35,6 @@ public class PreparingFactory {
                 return new PreparingErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //准备怎么可能导致播放完毕
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Buffering://准备不会buffer
-                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //准备完毕，需要seek到某个地方
                 return new PreparingSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete: //临时状态没有啥要干的

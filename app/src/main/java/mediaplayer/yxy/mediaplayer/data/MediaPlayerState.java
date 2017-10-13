@@ -10,7 +10,6 @@ public enum MediaPlayerState {
     Paused(false),        //暂停了
     Error(false),         //出错了
     Complete(false),      //播放完毕
-    Buffering(true),      //缓冲中
     Seeking(true),        //seek中
     SeekComplete(true),   //seek结束
     Released(false);      //释放了

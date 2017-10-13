@@ -1,6 +1,5 @@
 package mediaplayer.yxy.mediaplayer.view;
 
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.media.AudioManager;
@@ -76,9 +75,8 @@ public class VideoPlayerView extends FrameLayout {
     public ImageView ivThumb;
 
 
-    private ObjectAnimator animator;
-    private RelativeLayout rlPreparingLoading;
-    private ProgressBar pbBufferingLoading;
+    public RelativeLayout rlPreparingLoading;
+    public ProgressBar pbBufferingLoading;
 
 
     public VideoPlayerView(Context context) {

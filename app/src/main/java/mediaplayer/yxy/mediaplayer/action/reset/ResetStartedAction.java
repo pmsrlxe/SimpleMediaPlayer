@@ -15,6 +15,7 @@ public class ResetStartedAction extends MediaPlayerAction {
     @Override
     public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
         try {
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Prepared);
             getRealMediaPlayer().start();
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Started);
         } catch (Exception ex) {
@@ -53,6 +54,7 @@ public class ResetStartedAction extends MediaPlayerAction {
         //已经是reset状态，需要开始播放，那么就preparing
         try {
             getRealMediaPlayer().prepareAsync();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Preparing);
         } catch (Exception ex) {
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
         }
