@@ -44,14 +44,10 @@ public class InitResetAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
         try {
             getRealMediaPlayer().reset();
             getRealMediaPlayer().setDataSource(getSimpleMediaPlayer().getMediaParams().getUrl());
-            getRealMediaPlayer().setDisplay(getSimpleMediaPlayer().getMediaParams()
-                    .getSurfaceView().getHolder());
-            //setScreenOnWhilePlaying(true) is ineffective without a SurfaceHolder
-            getRealMediaPlayer().setScreenOnWhilePlaying(true);
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Reset);
         } catch (Exception ex) {
             ex.printStackTrace();

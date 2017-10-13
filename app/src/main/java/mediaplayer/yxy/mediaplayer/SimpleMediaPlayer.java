@@ -200,7 +200,9 @@ public class SimpleMediaPlayer {
     private class SurfaceCallBackWrapper implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-                getRealMediaPlayer().setDisplay(holder);
+            getRealMediaPlayer().setDisplay(holder);
+            //setScreenOnWhilePlaying(true) is ineffective without a SurfaceHolder
+            getRealMediaPlayer().setScreenOnWhilePlaying(true);
         }
 
         @Override
@@ -210,7 +212,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-
+            pause();
         }
     }
 }

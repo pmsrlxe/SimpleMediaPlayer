@@ -9,6 +9,7 @@ public class MediaParams {
     private Context context;
     private String url;
     private Map<String, String> mapHeadData;
+    @Deprecated
     private SurfaceView surfaceView;
     private int seekToPercent;
 

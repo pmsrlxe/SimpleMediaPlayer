@@ -1,6 +1,5 @@
 package mediaplayer.yxy.mediaplayer.presenter;
 
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -101,31 +100,6 @@ public class VideoPlayerPresenter {
         });
 
 
-        player.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (!hadReset) {
-                    hadReset = true;
-                    MediaParams mediaParams = new MediaParams(
-                            player.surfaceView.getContext(),
-                            model.getUrl(),
-                            model.getHeadData(),
-                            player.surfaceView);
-                    simpleMediaPlayer.reset(mediaParams);
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                simpleMediaPlayer.pause();
-            }
-        });
-
         player.ivFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +107,14 @@ public class VideoPlayerPresenter {
             }
         });
 
+
+        //初始化player
+        MediaParams mediaParams = new MediaParams(
+                player.surfaceView.getContext(),
+                model.getUrl(),
+                model.getHeadData(),
+                player.surfaceView);
+        simpleMediaPlayer.reset(mediaParams);
     }
 
 
