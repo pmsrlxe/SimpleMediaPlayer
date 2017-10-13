@@ -4,6 +4,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.SeekBar;
 
+import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
@@ -15,22 +16,40 @@ public class VideoPlayerPresenter {
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
 
-    public VideoPlayerPresenter(VideoPlayerView player) {
+    public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
         simpleMediaPlayer = new SimpleMediaPlayer();
+        simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
+            @Override
+            public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
+                if (now != MediaPlayerState.Started) {
+                    player.ivStart.setVisibility(View.VISIBLE);
+                    player.ivPause.setVisibility(View.GONE);
+                } else {
+                    player.ivStart.setVisibility(View.GONE);
+                    player.ivPause.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     public void bind(final VideoPlayerModel model) {
         player.ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleStart();
+                simpleMediaPlayer.start();
             }
         });
         player.ivStart2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleStart();
+                simpleMediaPlayer.start();
+            }
+        });
+        player.ivPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleMediaPlayer.pause();
             }
         });
 
@@ -84,13 +103,6 @@ public class VideoPlayerPresenter {
 
     }
 
-    private void handleStart() {
-        if (simpleMediaPlayer.getMediaPlayerState() != MediaPlayerState.Started) {
-            simpleMediaPlayer.start();
-        } else {
-            simpleMediaPlayer.pause();
-        }
-    }
 
     public void unbind() {
         simpleMediaPlayer.release();

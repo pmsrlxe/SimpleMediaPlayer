@@ -28,6 +28,7 @@ import mediaplayer.yxy.mediaplayer.R;
  */
 public class VideoPlayerView extends FrameLayout {
     public ImageView ivStart;
+    public ImageView ivPause;
     public ImageView ivStart2;
     public ImageView ivBack;
     public Button btContinue;
@@ -93,6 +94,7 @@ public class VideoPlayerView extends FrameLayout {
     protected void init(Context context) {
         View.inflate(context, R.layout.standard_layout, this);
         ivStart = (ImageView) findViewById(R.id.start);
+        ivPause = (ImageView) findViewById(R.id.pause);
         ivStart2 = (ImageView) findViewById(R.id.start2);
         ivBack = (ImageView) findViewById(R.id.back);
         rlNetworkError = (RelativeLayout) findViewById(R.id.rl_network_error);

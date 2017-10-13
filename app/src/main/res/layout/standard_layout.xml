@@ -85,6 +85,15 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/play_pressed" />
 
+    <ImageView
+        android:id="@+id/pause"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/pause_normal" />
+
     <RelativeLayout
         android:id="@+id/rl_4g_error"
         android:layout_width="match_parent"

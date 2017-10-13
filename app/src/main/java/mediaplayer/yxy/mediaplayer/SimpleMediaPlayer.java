@@ -15,7 +15,7 @@ public class SimpleMediaPlayer {
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
-
+    private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
 
     public void MediaPlayer() {
     }
@@ -65,8 +65,13 @@ public class SimpleMediaPlayer {
         return mediaPlayerState;
     }
 
-    public synchronized void setMediaPlayerState(MediaPlayerState mediaPlayerState) {
-        this.mediaPlayerState = mediaPlayerState;
+    public synchronized void setMediaPlayerState(MediaPlayerState toState) {
+        MediaPlayerState from = this.mediaPlayerState;
+        this.mediaPlayerState = toState;
+        if (onMediaPlayerStateChangeListener != null) {
+            onMediaPlayerStateChangeListener.onStateChange(from, toState);
+        }
+
     }
 
     public MediaParams getMediaParams() {
@@ -96,7 +101,11 @@ public class SimpleMediaPlayer {
         }
     }
 
-   /*--------------------------------listener wrapper---------------------------------------*/
+    public void setOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener) {
+        this.onMediaPlayerStateChangeListener = onMediaPlayerStateChangeListener;
+    }
+
+    /*--------------------------------listener wrapper---------------------------------------*/
 
     private class OnPreparedListenerWrapper implements MediaPlayer.OnPreparedListener {
 
@@ -153,4 +162,5 @@ public class SimpleMediaPlayer {
             }
         }
     }
+
 }
