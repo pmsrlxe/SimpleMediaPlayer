@@ -12,36 +12,36 @@ public class SeekingFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Reset:
-                return new SeekingResetAction(wrapper, changeToState);
+                return new SeekingResetAction(simpleMediaPlayer, changeToState);
             case Paused:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Started:
-                return new SeekingStartAction(wrapper, changeToState);
+                return new SeekingStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
-                return new SeekingStopAction(wrapper, changeToState);
+                return new SeekingStopAction(simpleMediaPlayer, changeToState);
             case Preparing:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Prepared:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Released:
-                return new CommonReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(simpleMediaPlayer, changeToState);
             case Error:    //seek发生错误了
-                return new SeekingErrorAction(wrapper, changeToState);
+                return new SeekingErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //seek到末尾发生了这个
-                return new SeekingCompleteAction(wrapper, changeToState);
+                return new SeekingCompleteAction(simpleMediaPlayer, changeToState);
             case Buffering:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
-                return new SeekingSeekingAction(wrapper, changeToState);
+                return new SeekingSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
+                throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 

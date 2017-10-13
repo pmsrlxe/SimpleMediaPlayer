@@ -15,36 +15,36 @@ public class ResetFactory {
     /**
      * reset状态下，根据不同的目标状态得到不同的action
      */
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Reset:    //重复reset是可以的，reset完毕之后再次reset
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Paused:   //reset然后preparing，然后pause
-                return new ResetPauseAction(wrapper, changeToState);
+                return new ResetPauseAction(simpleMediaPlayer, changeToState);
             case Started:  //reset之后播放
-                return new ResetStartedAction(wrapper, changeToState);
+                return new ResetStartedAction(simpleMediaPlayer, changeToState);
             case Stopped:  //因为stop就需要重新preparing，所以没有意义。
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Preparing: //可以准备，但是不播放
-                return new ResetPreparedAction(wrapper, changeToState);
+                return new ResetPreparedAction(simpleMediaPlayer, changeToState);
             case Prepared: //可以准备，但是不播放
-                return new ResetPreparedAction(wrapper, changeToState);
+                return new ResetPreparedAction(simpleMediaPlayer, changeToState);
             case Released:
-                return new CommonReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(simpleMediaPlayer, changeToState);
             case Error:    //reset 因为设置了数据源，会出现error，需要处理
-                return new ResetErrorAction(wrapper, changeToState);
+                return new ResetErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Buffering:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //reset->preparing->seek
-                return new ResetSeekingAction(wrapper, changeToState);
+                return new ResetSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
+                throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 

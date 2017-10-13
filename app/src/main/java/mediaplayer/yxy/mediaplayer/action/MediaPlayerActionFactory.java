@@ -22,37 +22,37 @@ public class MediaPlayerActionFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
-        MediaPlayerState currentState = wrapper.getMediaPlayerState();
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
+        MediaPlayerState currentState = simpleMediaPlayer.getMediaPlayerState();
         switch (currentState) {
             case Init:
-                return InitFactory.getAction(wrapper, changeToState);
+                return InitFactory.getAction(simpleMediaPlayer, changeToState);
             case Reset:
-                return ResetFactory.getAction(wrapper, changeToState);
+                return ResetFactory.getAction(simpleMediaPlayer, changeToState);
             case Paused:
-                return PauseFactory.getAction(wrapper, changeToState);
+                return PauseFactory.getAction(simpleMediaPlayer, changeToState);
             case Started:
-                return StartedFactory.getAction(wrapper, changeToState);
+                return StartedFactory.getAction(simpleMediaPlayer, changeToState);
             case Stopped:
-                return StoppedFactory.getAction(wrapper, changeToState);
+                return StoppedFactory.getAction(simpleMediaPlayer, changeToState);
             case Preparing:
-                return PreparingFactory.getAction(wrapper, changeToState);
+                return PreparingFactory.getAction(simpleMediaPlayer, changeToState);
             case Prepared:
-                return PreparedFactory.getAction(wrapper, changeToState);
+                return PreparedFactory.getAction(simpleMediaPlayer, changeToState);
             case Released:
-                return ReleaseFactory.getAction(wrapper, changeToState);
+                return ReleaseFactory.getAction(simpleMediaPlayer, changeToState);
             case Error:
-                return ErrorFactory.getAction(wrapper, changeToState);
+                return ErrorFactory.getAction(simpleMediaPlayer, changeToState);
             case Complete:
-                return CompleteFactory.getAction(wrapper, changeToState);
+                return CompleteFactory.getAction(simpleMediaPlayer, changeToState);
             case Buffering:
-                return BufferingFactory.getAction(wrapper, changeToState);
+                return BufferingFactory.getAction(simpleMediaPlayer, changeToState);
             case Seeking:
-                return SeekingFactory.getAction(wrapper, changeToState);
+                return SeekingFactory.getAction(simpleMediaPlayer, changeToState);
             case SeekComplete:
-                return SeekCompleteFactory.getAction(wrapper, changeToState);
+                return SeekCompleteFactory.getAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state " + wrapper.getMediaPlayerState());
+                throw new RuntimeException("unknown state " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 }

@@ -1,26 +1,23 @@
 package mediaplayer.yxy.mediaplayer;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
+import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.data.MediaParams;
 
 public class SimpleMediaPlayer {
-    private Context context;
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
 
 
-    public void MediaPlayer(Context ctx) {
-        context = ctx;
+    public void MediaPlayer() {
     }
 
     public MediaPlayer getRealMediaPlayer() {
@@ -29,7 +26,7 @@ public class SimpleMediaPlayer {
 
     //重置
     public void reset(MediaParams mediaParams) {
-        this.mediaParams = mediaParams;
+        this.mediaParams = new MediaParams(mediaParams);
         perform(true, MediaPlayerState.Reset);
     }
 
@@ -58,9 +55,10 @@ public class SimpleMediaPlayer {
         perform(false, MediaPlayerState.Released);
     }
 
-    //跳转
-    public void seek(long time) {
-        perform(true, MediaPlayerState.SeekComplete);
+    //跳转 100最大
+    public void seekToPercent(int percent) {
+        mediaParams.setSeekToPercent(percent);
+        perform(false, MediaPlayerState.SeekComplete);
     }
 
     public synchronized MediaPlayerState getMediaPlayerState() {
@@ -69,10 +67,6 @@ public class SimpleMediaPlayer {
 
     public synchronized void setMediaPlayerState(MediaPlayerState mediaPlayerState) {
         this.mediaPlayerState = mediaPlayerState;
-    }
-
-    public Context getContext() {
-        return context;
     }
 
     public MediaParams getMediaParams() {

@@ -12,36 +12,36 @@ public class SeekCompleteFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Reset:
-                return new ScResetAction(wrapper, changeToState);
+                return new ScResetAction(simpleMediaPlayer, changeToState);
             case Paused:
-                return new ScPauseAction(wrapper, changeToState);
+                return new ScPauseAction(simpleMediaPlayer, changeToState);
             case Started:
-                return new ScStartAction(wrapper, changeToState);
+                return new ScStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
-                return new ScStopAction(wrapper, changeToState);
+                return new ScStopAction(simpleMediaPlayer, changeToState);
             case Preparing:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Prepared:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Released:
-                return new CommonReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(simpleMediaPlayer, changeToState);
             case Error:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Buffering:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
-                return new ScSeekingAction(wrapper, changeToState);
+                return new ScSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
+                throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 

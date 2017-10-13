@@ -49,14 +49,17 @@ public class VideoPlayerPresenter {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //TODO process不对
-                simpleMediaPlayer.seek(seekBar.getProgress());
+                simpleMediaPlayer.seekToPercent(seekBar.getProgress());
             }
         });
 
         player.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                MediaParams mediaParams = new MediaParams(model.getUrl(), model.getHeadData(),
+                MediaParams mediaParams = new MediaParams(
+                        player.surfaceView.getContext(),
+                        model.getUrl(),
+                        model.getHeadData(),
                         player.surfaceView);
                 simpleMediaPlayer.reset(mediaParams);
             }

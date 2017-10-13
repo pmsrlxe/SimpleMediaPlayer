@@ -12,36 +12,36 @@ public class StartedFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Reset:
-                return new StartedResetAction(wrapper, changeToState);
+                return new StartedResetAction(simpleMediaPlayer, changeToState);
             case Paused:
-                return new StartedPauseAction(wrapper, changeToState);
+                return new StartedPauseAction(simpleMediaPlayer, changeToState);
             case Started:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Stopped:
-                return new StartedStopAction(wrapper, changeToState);
+                return new StartedStopAction(simpleMediaPlayer, changeToState);
             case Preparing:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Prepared:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Released:
-                return new CommonReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(simpleMediaPlayer, changeToState);
             case Error:    //start还是有可能发生异常的
-                return new StartedErrorAction(wrapper, changeToState);
+                return new StartedErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //播放中，有可能完成的
-                return new StartedCompleteAction(wrapper, changeToState);
+                return new StartedCompleteAction(simpleMediaPlayer, changeToState);
             case Buffering:
-                return new NoneAction(wrapper, changeToState);
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
-                return new StartedSeekingAction(wrapper, changeToState);
+                return new StartedScAction(simpleMediaPlayer, changeToState);
             case SeekComplete: //因为播放中，seek完成自动会播放
-                return new NoneAction(wrapper, changeToState);
+                return new StartedScAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
+                throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 

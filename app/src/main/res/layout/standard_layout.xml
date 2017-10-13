@@ -241,7 +241,7 @@
         android:layout_height="@dimen/lib_video_player_bottom_height"
         android:layout_alignBottom="@+id/surface_container"
         android:background="#99000000"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/start2"
