@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import mediaplayer.yxy.mediaplayer.OnBufferChangeListener;
+import mediaplayer.yxy.mediaplayer.OnBufferStateListener;
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
@@ -44,6 +45,18 @@ public class VideoPlayerPresenter {
             @Override
             public void onBufferUpdate(int percent) {
                 player.skProgress.setSecondaryProgress(percent);
+            }
+        });
+        //播放中暂停进行缓存
+        simpleMediaPlayer.setOnBufferStateListener(new OnBufferStateListener() {
+            @Override
+            public void onPauseForBufferWhenPlaying() {
+                player.rlPreparingLoading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onResumeFromBufferAndPlay() {
+                player.rlPreparingLoading.setVisibility(View.GONE);
             }
         });
     }

@@ -19,6 +19,7 @@ public class SimpleMediaPlayer {
     private MediaParams mediaParams;
     private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
     private OnBufferChangeListener onBufferChangeListener;
+    private OnBufferStateListener onBufferStateListener;
 
     public void MediaPlayer() {
     }
@@ -107,6 +108,10 @@ public class SimpleMediaPlayer {
         }
     }
 
+    public void setOnBufferStateListener(OnBufferStateListener bufferStateListener) {
+        this.onBufferStateListener = bufferStateListener;
+    }
+
     public void setOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener) {
         this.onMediaPlayerStateChangeListener = onMediaPlayerStateChangeListener;
     }
@@ -126,9 +131,10 @@ public class SimpleMediaPlayer {
 
         @Override
         public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
-            Log.e(TAG, "onInfo,w:" + what + ",e:" + extra);
-            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayer.this,
-                    new MediaPlayerInfo(what, extra));
+            MediaPlayerInfo info = new MediaPlayerInfo(what, extra);
+            Log.e(TAG, "onInfo," + info);
+            info.callback(onBufferStateListener);
+            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayer.this, info);
         }
     }
 
