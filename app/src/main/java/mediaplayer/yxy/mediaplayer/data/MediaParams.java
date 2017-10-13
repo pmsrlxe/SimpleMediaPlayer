@@ -6,13 +6,16 @@ import android.view.SurfaceView;
 import java.util.Map;
 
 public class MediaParams {
-    private final Context context;
+    private Context context;
     private String url;
     private Map<String, String> mapHeadData;
     private SurfaceView surfaceView;
     private int seekToPercent;
 
-    public MediaParams(Context context, String url, Map<String, String> mapHeadData, SurfaceView surfaceView) {
+    public MediaParams(Context context,
+                       String url,
+                       Map<String, String> mapHeadData,
+                       SurfaceView surfaceView) {
         this.url = url;
         this.context = context;
         this.mapHeadData = mapHeadData;
@@ -20,7 +23,14 @@ public class MediaParams {
     }
 
     public MediaParams(MediaParams mediaParams) {
-        this(mediaParams.context, mediaParams.url, mediaParams.mapHeadData, mediaParams.surfaceView);
+        this(mediaParams.context,
+                mediaParams.url,
+                mediaParams.mapHeadData,
+                mediaParams.surfaceView);
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public void setUrl(String url) {

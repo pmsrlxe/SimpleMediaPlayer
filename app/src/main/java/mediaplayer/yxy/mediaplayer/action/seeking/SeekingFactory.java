@@ -20,7 +20,7 @@ public class SeekingFactory {
                 return new SeekingResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new SeekingStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new SeekingStopAction(simpleMediaPlayer, changeToState);
@@ -34,6 +34,8 @@ public class SeekingFactory {
                 return new SeekingErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //seek到末尾发生了这个
                 return new SeekingCompleteAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
+                return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new SeekingSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:

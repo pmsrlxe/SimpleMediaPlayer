@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer.action.prepared;
+package mediaplayer.yxy.mediaplayer.action.playing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
@@ -6,9 +6,9 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PreparedStopAction extends BaseMediaPlayerAction {
+public class PlayingResetAction extends BaseMediaPlayerAction {
 
-    public PreparedStopAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public PlayingResetAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -44,7 +44,7 @@ public class PreparedStopAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-        super.perform();
+super.perform();
 
     }
 }

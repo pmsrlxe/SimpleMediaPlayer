@@ -1,20 +1,27 @@
-package mediaplayer.yxy.mediaplayer.action.started;
+package mediaplayer.yxy.mediaplayer.action.preparing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class StartedStopAction extends MediaPlayerAction {
+public class PreparingPauseAction extends BaseMediaPlayerAction {
 
-    public StartedStopAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public PreparingPauseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
     public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
-
+        try {
+            //不用pause，因为preparing完之后，需要start才能播放
+            //这里直接改状态就行了
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
     }
 
     @Override
@@ -44,6 +51,7 @@ public class StartedStopAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+        super.perform();
 
     }
 }

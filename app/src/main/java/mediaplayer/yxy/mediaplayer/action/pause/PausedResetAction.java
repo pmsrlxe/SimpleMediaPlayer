@@ -1,12 +1,12 @@
 package mediaplayer.yxy.mediaplayer.action.pause;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PausedResetAction extends MediaPlayerAction {
+public class PausedResetAction extends BaseMediaPlayerAction {
 
     public PausedResetAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
@@ -44,6 +44,7 @@ public class PausedResetAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+super.perform();
 
     }
 }

@@ -20,7 +20,7 @@ public class SeekCompleteFactory {
                 return new ScResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new ScPauseAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new ScStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new ScStopAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class SeekCompleteFactory {
             case Error:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new ScSeekingAction(simpleMediaPlayer, changeToState);

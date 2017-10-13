@@ -4,7 +4,7 @@ import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
 import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
-import mediaplayer.yxy.mediaplayer.action.reset.ResetStartedAction;
+import mediaplayer.yxy.mediaplayer.action.reset.ResetPlayingAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PreparingFactory {
@@ -20,9 +20,9 @@ public class PreparingFactory {
             case Reset:    //正在准备，突然要你reset
                 return new PreparingResetAction(simpleMediaPlayer, changeToState);
             case Paused:   //意思是，prepared后，要pause
-                return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:  //prepared后要start
-                return new ResetStartedAction(simpleMediaPlayer, changeToState);
+                return new PreparingPauseAction(simpleMediaPlayer, changeToState);
+            case Playing:  //prepared后要start
+                return new ResetPlayingAction(simpleMediaPlayer, changeToState);
             case Stopped:  //好不容易prepared了，又要stop
                 return new PreparingStopAction(simpleMediaPlayer, changeToState);
             case Preparing:
@@ -34,6 +34,8 @@ public class PreparingFactory {
             case Error:    //准备但是出错了
                 return new PreparingErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //准备怎么可能导致播放完毕
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering://准备不会buffer
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //准备完毕，需要seek到某个地方
                 return new PreparingSeekingAction(simpleMediaPlayer, changeToState);

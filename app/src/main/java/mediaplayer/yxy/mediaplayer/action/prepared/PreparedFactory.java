@@ -20,7 +20,7 @@ public class PreparedFactory {
                 return new PreparedResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new PreparedStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new PreparedStopAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class PreparedFactory {
             case Error:   //都prepared了，为什么会出错？难道是同时的buffering吗？
                 return new PreparedErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new PreparedSeekingAction(simpleMediaPlayer, changeToState);

@@ -1,13 +1,14 @@
-package mediaplayer.yxy.mediaplayer.action.release;
+package mediaplayer.yxy.mediaplayer.action.buffering;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
 import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ReleaseFactory {
+public class BufferingFactory {
 
-    private ReleaseFactory() {
+    private BufferingFactory() {
 
     }
 
@@ -16,31 +17,31 @@ public class ReleaseFactory {
             case Init:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Reset:
-                return new ReleaseResetAction(simpleMediaPlayer, changeToState);
+                return new BufferingResetAction(simpleMediaPlayer, changeToState);
             case Paused:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new BufferingPauseAction(simpleMediaPlayer, changeToState);
             case Playing:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new BufferingStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new BufferingStopAction(simpleMediaPlayer, changeToState);
             case Preparing:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Prepared:
+            case Prepared: //buffering中，怎么又回调prepared了?
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Released:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new CommonReleaseAction(simpleMediaPlayer, changeToState);
             case Error:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case PlayBuffering:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new BufferingErrorAction(simpleMediaPlayer, changeToState);
             case Seeking:
-                return new NoneAction(simpleMediaPlayer, changeToState);
+                return new BufferingSeekingAction(simpleMediaPlayer, changeToState);
             case SeekComplete:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             default:
-                throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
+                    throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
     }
 

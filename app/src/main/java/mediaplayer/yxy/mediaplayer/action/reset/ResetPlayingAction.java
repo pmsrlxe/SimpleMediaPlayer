@@ -1,14 +1,14 @@
 package mediaplayer.yxy.mediaplayer.action.reset;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ResetStartedAction extends MediaPlayerAction {
+public class ResetPlayingAction extends BaseMediaPlayerAction {
 
-    public ResetStartedAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public ResetPlayingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -17,8 +17,9 @@ public class ResetStartedAction extends MediaPlayerAction {
         try {
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Prepared);
             getRealMediaPlayer().start();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Started);
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
         } catch (Exception ex) {
+            ex.printStackTrace();
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
         }
     }
@@ -51,6 +52,7 @@ public class ResetStartedAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+super.perform();
         //已经是reset状态，需要开始播放，那么就preparing
         try {
             getRealMediaPlayer().prepareAsync();

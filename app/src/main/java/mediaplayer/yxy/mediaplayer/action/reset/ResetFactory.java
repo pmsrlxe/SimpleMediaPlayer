@@ -23,8 +23,8 @@ public class ResetFactory {
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Paused:   //reset然后preparing，然后pause
                 return new ResetPauseAction(simpleMediaPlayer, changeToState);
-            case Started:  //reset之后播放
-                return new ResetStartedAction(simpleMediaPlayer, changeToState);
+            case Playing:  //reset之后播放
+                return new ResetPlayingAction(simpleMediaPlayer, changeToState);
             case Stopped:  //因为stop就需要重新preparing，所以没有意义。
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Preparing: //可以准备，但是不播放
@@ -36,6 +36,8 @@ public class ResetFactory {
             case Error:    //reset 因为设置了数据源，会出现error，需要处理
                 return new ResetErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //reset->preparing->seek
                 return new ResetSeekingAction(simpleMediaPlayer, changeToState);

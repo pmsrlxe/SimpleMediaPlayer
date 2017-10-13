@@ -12,7 +12,7 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class SimpleMediaPlayer {
-    private static final String TAG = "SimpleMediaPlayer";
+    public static final String TAG = "SimpleMediaPlayer";
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
@@ -41,7 +41,7 @@ public class SimpleMediaPlayer {
 
     //播放
     public void start() {
-        perform(true, MediaPlayerState.Started);
+        perform(true, MediaPlayerState.Playing);
     }
 
     //停止
@@ -75,6 +75,7 @@ public class SimpleMediaPlayer {
         if (onMediaPlayerStateChangeListener != null) {
             onMediaPlayerStateChangeListener.onStateChange(from, toState);
         }
+        Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
 
     }
 
@@ -122,7 +123,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onPrepared(MediaPlayer mp) {
-            Log.e(TAG, "onBufferingUpdate");
+            Log.i(TAG, "onPrepared");
             mediaPlayerAction.onPrepared(SimpleMediaPlayer.this);
         }
     }
@@ -163,7 +164,7 @@ public class SimpleMediaPlayer {
 
         @Override
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-            Log.e(TAG, "onBufferingUpdate,pc:" + percent);
+            Log.i(TAG, "onBufferingUpdate,pc:" + percent);
             if (onBufferChangeListener != null) {
                 onBufferChangeListener.onBufferUpdate(percent);
             }

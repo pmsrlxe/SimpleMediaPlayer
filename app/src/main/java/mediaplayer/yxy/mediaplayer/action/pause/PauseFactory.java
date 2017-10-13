@@ -20,8 +20,8 @@ public class PauseFactory {
                 return new PausedResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:  //重新播放
-                return new PausedStartedAction(simpleMediaPlayer, changeToState);
+            case Playing:  //重新播放
+                return new PausedPlayingAction(simpleMediaPlayer, changeToState);
             case Stopped:  //pause可以停止
                 return new PausedStopedAction(simpleMediaPlayer, changeToState);
             case Preparing://已经preparing了

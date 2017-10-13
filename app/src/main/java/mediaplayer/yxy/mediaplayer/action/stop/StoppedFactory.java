@@ -20,7 +20,7 @@ public class StoppedFactory {
                 return new StoppedResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:  //需要重新 preparing
+            case Playing:  //需要重新 preparing
                 return new StoppedStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new NoneAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class StoppedFactory {
             case Error:    //stop会出错
                 return new StoppedErrorAction(simpleMediaPlayer, changeToState);
             case Complete: //stop了怎么可能播放完成
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:  //stop不可能seek
                 return new NoneAction(simpleMediaPlayer, changeToState);

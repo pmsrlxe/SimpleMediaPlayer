@@ -1,14 +1,14 @@
-package mediaplayer.yxy.mediaplayer.action.started;
+package mediaplayer.yxy.mediaplayer.action.playing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class StartedCompleteAction extends MediaPlayerAction {
+public class PlayingReleaseAction extends BaseMediaPlayerAction {
 
-    public StartedCompleteAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public PlayingReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -44,6 +44,7 @@ public class StartedCompleteAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+super.perform();
 
     }
 }

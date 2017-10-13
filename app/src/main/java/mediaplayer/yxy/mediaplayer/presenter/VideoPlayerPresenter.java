@@ -17,6 +17,7 @@ public class VideoPlayerPresenter {
 
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
+    private boolean hadReset;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
@@ -25,7 +26,7 @@ public class VideoPlayerPresenter {
         simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
             @Override
             public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-                if (now != MediaPlayerState.Started) {
+                if (now != MediaPlayerState.Playing) {
                     player.ivStart.setVisibility(View.VISIBLE);
                     player.ivPause.setVisibility(View.GONE);
                 } else {
@@ -99,9 +100,15 @@ public class VideoPlayerPresenter {
             }
         });
 
+
+
         player.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                if (hadReset) {
+                    return;
+                }
+                hadReset = true;
                 MediaParams mediaParams = new MediaParams(
                         player.surfaceView.getContext(),
                         model.getUrl(),

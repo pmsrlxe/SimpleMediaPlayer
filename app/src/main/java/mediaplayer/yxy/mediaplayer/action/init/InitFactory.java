@@ -2,8 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.init;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class InitFactory {
@@ -20,7 +20,7 @@ public class InitFactory {
                 return new InitResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new NoneAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class InitFactory {
             case Error:    //init不可能发生error
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new NoneAction(simpleMediaPlayer, changeToState);

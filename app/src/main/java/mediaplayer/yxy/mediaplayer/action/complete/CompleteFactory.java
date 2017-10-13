@@ -20,7 +20,7 @@ public class CompleteFactory {
                 return new CompleteResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new CompleteStartAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new NoneAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class CompleteFactory {
             case Error:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new CompleteSeekingAction(simpleMediaPlayer, changeToState);

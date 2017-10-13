@@ -20,7 +20,7 @@ public class ErrorFactory {
                 return new ErrorResetAction(simpleMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, changeToState);
-            case Started:
+            case Playing:
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Stopped:
                 return new NoneAction(simpleMediaPlayer, changeToState);
@@ -33,6 +33,8 @@ public class ErrorFactory {
             case Error:    //error了后，又tm发生error了
                 return new ErrorErrorAction(simpleMediaPlayer, changeToState);
             case Complete:
+                return new NoneAction(simpleMediaPlayer, changeToState);
+            case PlayBuffering: //error后，怎么可能继续buffering？
                 return new NoneAction(simpleMediaPlayer, changeToState);
             case Seeking:
                 return new NoneAction(simpleMediaPlayer, changeToState);

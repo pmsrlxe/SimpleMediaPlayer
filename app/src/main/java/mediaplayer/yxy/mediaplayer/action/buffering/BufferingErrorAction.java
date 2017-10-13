@@ -1,14 +1,14 @@
-package mediaplayer.yxy.mediaplayer.action.started;
+package mediaplayer.yxy.mediaplayer.action.buffering;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class StartedScAction extends MediaPlayerAction {
+public class BufferingErrorAction extends BaseMediaPlayerAction {
 
-    public StartedScAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public BufferingErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -29,7 +29,7 @@ public class StartedScAction extends MediaPlayerAction {
 
     @Override
     public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
-        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Started);
+
     }
 
     @Override
@@ -44,14 +44,7 @@ public class StartedScAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-        try {
-            float pc = getSimpleMediaPlayer().getMediaParams().getSeekToPercent() * 1.0f / 100;
-            int timeInSecond = (int) (pc * getRealMediaPlayer().getDuration());
-            getRealMediaPlayer().seekTo(timeInSecond);
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Seeking);
-        } catch (Exception ex) {
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
-        }
+super.perform();
 
     }
 }

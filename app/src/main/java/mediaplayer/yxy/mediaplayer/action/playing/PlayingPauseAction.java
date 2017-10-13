@@ -1,14 +1,14 @@
-package mediaplayer.yxy.mediaplayer.action.started;
+package mediaplayer.yxy.mediaplayer.action.playing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
+import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class StartedResetAction extends MediaPlayerAction {
+public class PlayingPauseAction extends BaseMediaPlayerAction {
 
-    public StartedResetAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public PlayingPauseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -44,6 +44,14 @@ public class StartedResetAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
+super.perform();
+        try {
+            getRealMediaPlayer().pause();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
 
     }
 }
