@@ -51,12 +51,12 @@ public class VideoPlayerPresenter {
         simpleMediaPlayer.setOnBufferStateListener(new OnBufferStateListener() {
             @Override
             public void onPauseForBufferWhenPlaying() {
-                player.rlPreparingLoading.setVisibility(View.VISIBLE);
+                player.pbBufferingLoading.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onResumeFromBufferAndPlay() {
-                player.rlPreparingLoading.setVisibility(View.GONE);
+                player.pbBufferingLoading.setVisibility(View.GONE);
             }
         });
     }
