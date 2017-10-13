@@ -8,8 +8,8 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PausedCompleteAction extends MediaPlayerAction {
 
-    public PausedCompleteAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
-        super(mediaPlayer, wantState);
+    public PausedCompleteAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, changeToState);
     }
 
     @Override

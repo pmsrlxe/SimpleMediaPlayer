@@ -8,8 +8,8 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class SeekingStopAction extends MediaPlayerAction {
 
-    public SeekingStopAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
-        super(mediaPlayer, wantState);
+    public SeekingStopAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, changeToState);
     }
 
     @Override

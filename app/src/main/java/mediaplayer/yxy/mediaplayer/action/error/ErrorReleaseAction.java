@@ -8,8 +8,8 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ErrorReleaseAction extends MediaPlayerAction {
 
-    public ErrorReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
-        super(mediaPlayer, wantState);
+    public ErrorReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, changeToState);
     }
 
     @Override

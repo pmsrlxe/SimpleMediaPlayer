@@ -8,8 +8,8 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PreparedSeekingAction extends MediaPlayerAction {
 
-    public PreparedSeekingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState wantState) {
-        super(mediaPlayer, wantState);
+    public PreparedSeekingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, changeToState);
     }
 
     @Override

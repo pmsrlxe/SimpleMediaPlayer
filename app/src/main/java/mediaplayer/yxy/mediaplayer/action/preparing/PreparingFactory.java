@@ -12,32 +12,34 @@ public class PreparingFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState wantState) {
-        switch (wantState) {
-            case Reset:
-                return new PreparingResetAction(wrapper, wantState);
-            case Paused:
-                return new NoneAction(wrapper, wantState);
-            case Started:
-                return new ResetStartedAction(wrapper, wantState);
-            case Stopped:
-                return new PreparingStopAction(wrapper, wantState);
+    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+        switch (changeToState) {
+            case Init:
+                return new NoneAction(wrapper, changeToState);
+            case Reset:    //正在准备，突然要你reset
+                return new PreparingResetAction(wrapper, changeToState);
+            case Paused:   //意思是，prepared后，要pause
+                return new NoneAction(wrapper, changeToState);
+            case Started:  //prepared后要start
+                return new ResetStartedAction(wrapper, changeToState);
+            case Stopped:  //好不容易prepared了，又要stop
+                return new PreparingStopAction(wrapper, changeToState);
             case Preparing:
-                return new NoneAction(wrapper, wantState);
-            case Prepared:
-                return new NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, changeToState);
+            case Prepared: //理应发生
+                return new NoneAction(wrapper, changeToState);
             case Released:
-                return new PreparingReleaseAction(wrapper, wantState);
-            case Error:
-                return new NoneAction(wrapper, wantState);
-            case Complete:
-                return new NoneAction(wrapper, wantState);
-            case Buffering:
-                return new NoneAction(wrapper, wantState);
-            case Seeking:
-                return new PreparingSeekingAction(wrapper, wantState);
-            case SeekComplete:
-                return new NoneAction(wrapper, wantState);
+                return new PreparingReleaseAction(wrapper, changeToState);
+            case Error:    //准备但是出错了
+                return new PreparingErrorAction(wrapper, changeToState);
+            case Complete: //准备怎么可能导致播放完毕
+                return new NoneAction(wrapper, changeToState);
+            case Buffering://准备不会buffer
+                return new NoneAction(wrapper, changeToState);
+            case Seeking:  //准备完毕，需要seek到某个地方
+                return new PreparingSeekingAction(wrapper, changeToState);
+            case SeekComplete: //临时状态没有啥要干的
+                return new NoneAction(wrapper, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
         }

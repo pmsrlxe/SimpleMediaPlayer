@@ -85,8 +85,8 @@ public class SimpleMediaPlayer {
         return prepareParams;
     }
 
-    private void perform(MediaPlayerState wantState) {
-        mediaPlayerAction = MediaPlayerActionFactory.getAction(this, wantState);
+    private void perform(MediaPlayerState changeToState) {
+        mediaPlayerAction = MediaPlayerActionFactory.getAction(this, changeToState);
         mediaPlayerAction.perform();
     }
 

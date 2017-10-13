@@ -11,34 +11,34 @@ public class PauseFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState wantState) {
-        switch (wantState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer wrapper, MediaPlayerState changeToState) {
+        switch (changeToState) {
             case Init:
-                return new NoneAction(wrapper, wantState);
-            case Reset:
-                return new PausedResetAction(wrapper, wantState);
+                return new NoneAction(wrapper, changeToState);
+            case Reset:    //可以重新reset
+                return new PausedResetAction(wrapper, changeToState);
             case Paused:
-                return new NoneAction(wrapper, wantState);
-            case Started:
-                return new PausedStartedAction(wrapper, wantState);
-            case Stopped:
-                return new PausedStopedAction(wrapper, wantState);
-            case Preparing:
-                return new NoneAction(wrapper, wantState);
-            case Prepared:
-                return new NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, changeToState);
+            case Started:  //重新播放
+                return new PausedStartedAction(wrapper, changeToState);
+            case Stopped:  //pause可以停止
+                return new PausedStopedAction(wrapper, changeToState);
+            case Preparing://已经preparing了
+                return new NoneAction(wrapper, changeToState);
+            case Prepared: //已经prepared了
+                return new NoneAction(wrapper, changeToState);
             case Released:
-                return new PausedReleasedAction(wrapper, wantState);
-            case Error:
-                return new NoneAction(wrapper, wantState);
+                return new PausedReleasedAction(wrapper, changeToState);
+            case Error:    //pause还是可能发生异常的
+                return new PausedErrorAction(wrapper, changeToState);
             case Complete:
-                return new NoneAction(wrapper, wantState);
+                return new NoneAction(wrapper, changeToState);
             case Buffering:
-                return new NoneAction(wrapper, wantState);
-            case Seeking:
-                return new PausedSeekingAction(wrapper, wantState);
+                return new NoneAction(wrapper, changeToState);
+            case Seeking:  //暂停是可以seek的
+                return new PausedSeekingAction(wrapper, changeToState);
             case SeekComplete:
-                return new PausedCompleteAction(wrapper, wantState);
+                return new PausedCompleteAction(wrapper, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + wrapper.getMediaPlayerState());
         }
