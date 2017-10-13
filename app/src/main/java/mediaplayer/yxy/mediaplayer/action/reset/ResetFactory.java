@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.reset;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ResetFactory {
@@ -31,7 +32,7 @@ public class ResetFactory {
             case Prepared: //可以准备，但是不播放
                 return new ResetPreparedAction(wrapper, changeToState);
             case Released:
-                return new ResetReleasedAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //reset 因为设置了数据源，会出现error，需要处理
                 return new ResetErrorAction(wrapper, changeToState);
             case Complete:

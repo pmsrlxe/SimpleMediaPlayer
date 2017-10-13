@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.pause;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PauseFactory {
@@ -28,7 +29,7 @@ public class PauseFactory {
             case Prepared: //已经prepared了
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new PausedReleasedAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //pause还是可能发生异常的
                 return new PausedErrorAction(wrapper, changeToState);
             case Complete:

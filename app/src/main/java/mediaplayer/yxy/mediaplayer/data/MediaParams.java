@@ -4,12 +4,12 @@ import android.view.SurfaceView;
 
 import java.util.Map;
 
-public class ResetParams {
+public class MediaParams {
     private String url;
     private Map<String, String> mapHeadData;
     private SurfaceView surfaceView;
 
-    public ResetParams(String url, Map<String, String> mapHeadData, SurfaceView surfaceView) {
+    public MediaParams(String url, Map<String, String> mapHeadData, SurfaceView surfaceView) {
         this.url = url;
         this.mapHeadData = mapHeadData;
         this.surfaceView = surfaceView;

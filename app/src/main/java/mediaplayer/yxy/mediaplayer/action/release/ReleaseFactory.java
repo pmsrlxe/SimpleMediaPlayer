@@ -2,7 +2,7 @@ package mediaplayer.yxy.mediaplayer.action.release;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ReleaseFactory {

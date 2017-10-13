@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.prepared;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PreparedFactory {
@@ -28,7 +29,7 @@ public class PreparedFactory {
             case Prepared:
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new PreparedReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:   //都prepared了，为什么会出错？难道是同时的buffering吗？
                 return new PreparedErrorAction(wrapper, changeToState);
             case Complete:

@@ -9,6 +9,7 @@ import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
 public class MainActivity extends Activity {
     private static final String url = "http://rv.okayshare.cn/rv_SyuhtAb8CA.h264.mp4";
+    private VideoPlayerPresenter playerPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,10 +17,16 @@ public class MainActivity extends Activity {
 
         VideoPlayerView videoPlayerView = new VideoPlayerView(this);
 
-        VideoPlayerPresenter playerPresenter = new VideoPlayerPresenter(videoPlayerView);
+        playerPresenter = new VideoPlayerPresenter(videoPlayerView);
         playerPresenter.bind(new VideoPlayerModel(url, null));
 
         setContentView(videoPlayerView);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        playerPresenter.unbind();
     }
 }

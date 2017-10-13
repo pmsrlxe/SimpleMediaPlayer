@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.seeking;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class SeekingFactory {
@@ -28,7 +29,7 @@ public class SeekingFactory {
             case Prepared:
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new SeekingResetAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //seek发生错误了
                 return new SeekingErrorAction(wrapper, changeToState);
             case Complete: //seek到末尾发生了这个

@@ -13,6 +13,11 @@ public class SeekingStopAction extends MediaPlayerAction {
     }
 
     @Override
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+
+    }
+
+    @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
         return false;
     }

@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.seekcomplete;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class SeekCompleteFactory {
@@ -28,7 +29,7 @@ public class SeekCompleteFactory {
             case Prepared:
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new ScReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:
                 return new NoneAction(wrapper, changeToState);
             case Complete:

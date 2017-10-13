@@ -6,10 +6,16 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PreparingErrorAction extends MediaPlayerAction {
+public class
+PreparingErrorAction extends MediaPlayerAction {
 
     public PreparingErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
+    }
+
+    @Override
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+
     }
 
     @Override

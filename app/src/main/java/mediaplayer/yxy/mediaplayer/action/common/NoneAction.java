@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer.action.none;
+package mediaplayer.yxy.mediaplayer.action.common;
 
 import android.util.Log;
 
@@ -8,13 +8,15 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-/**
- * This action means the state change to from current will never happen
- */
 public class NoneAction extends MediaPlayerAction {
 
     public NoneAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
+    }
+
+    @Override
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+
     }
 
     @Override
@@ -44,6 +46,6 @@ public class NoneAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-        Log.e("SimpleMediaPlayer", "perform none action from " + getFromState() + " to " + getchangeToState());
+        Log.e("SimpleMediaPlayer", "perform none action from " + getFromState() + " to " + getChangeToState());
     }
 }

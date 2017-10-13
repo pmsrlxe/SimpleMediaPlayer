@@ -13,12 +13,18 @@ public class ResetStartedAction extends MediaPlayerAction {
     }
 
     @Override
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+        getRealMediaPlayer().start();
+    }
+
+    @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
     public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
+        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
         return false;
     }
 
@@ -39,6 +45,11 @@ public class ResetStartedAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-
+        //已经是reset状态，需要开始播放，那么就preparing
+        try {
+            getRealMediaPlayer().prepareAsync();
+        } catch (Exception ex) {
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
     }
 }

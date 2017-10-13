@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.started;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class StartedFactory {
@@ -28,7 +29,7 @@ public class StartedFactory {
             case Prepared:
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new StartedResetAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //start还是有可能发生异常的
                 return new StartedErrorAction(wrapper, changeToState);
             case Complete: //播放中，有可能完成的

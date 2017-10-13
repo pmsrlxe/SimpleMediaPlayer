@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.preparing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.action.reset.ResetStartedAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
@@ -29,7 +30,7 @@ public class PreparingFactory {
             case Prepared: //理应发生
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new PreparingReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //准备但是出错了
                 return new PreparingErrorAction(wrapper, changeToState);
             case Complete: //准备怎么可能导致播放完毕

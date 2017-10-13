@@ -13,6 +13,11 @@ public class InitResetAction extends MediaPlayerAction {
     }
 
     @Override
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+
+    }
+
+    @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
@@ -39,6 +44,14 @@ public class InitResetAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-
+        try {
+            getRealMediaPlayer().reset();
+            getRealMediaPlayer().setDataSource(getSimpleMediaPlayer().getMediaParams().getUrl());
+            getRealMediaPlayer().setDisplay(getSimpleMediaPlayer().getMediaParams()
+                    .getSurfaceView().getHolder());
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Reset);
+        } catch (Exception ex) {
+            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+        }
     }
 }

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.data.ResetParams;
+import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
@@ -55,10 +55,10 @@ public class VideoPlayerPresenter {
         player.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                ResetParams resetParams = new ResetParams(model.getUrl(), model.getHeadData(),
+                MediaParams mediaParams = new MediaParams(model.getUrl(), model.getHeadData(),
                         player.surfaceView);
-                simpleMediaPlayer.reset(resetParams);
-                
+                simpleMediaPlayer.reset(mediaParams);
+
                 simpleMediaPlayer.start();
             }
 
@@ -80,5 +80,9 @@ public class VideoPlayerPresenter {
             }
         });
 
+    }
+
+    public void unbind() {
+        simpleMediaPlayer.release();
     }
 }

@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer.action.stop;
+package mediaplayer.yxy.mediaplayer.action.common;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
@@ -6,9 +6,9 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class StoppedErrorAction extends MediaPlayerAction {
+public class CommonReleaseAction extends MediaPlayerAction {
 
-    public StoppedErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public CommonReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
@@ -44,6 +44,18 @@ public class StoppedErrorAction extends MediaPlayerAction {
 
     @Override
     public void perform() {
-
+        submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //release 这个方法有网络操作，至少华为p10有。
+                    getRealMediaPlayer().release();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                } finally {
+                    getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Released);
+                }
+            }
+        });
     }
 }

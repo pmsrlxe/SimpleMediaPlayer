@@ -9,24 +9,27 @@ import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.data.ResetParams;
+import mediaplayer.yxy.mediaplayer.data.MediaParams;
 
 public class SimpleMediaPlayer {
     private Context context;
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
-    private ResetParams resetParams;
+    private MediaParams mediaParams;
 
 
     public void MediaPlayer(Context ctx) {
         context = ctx;
     }
 
+    public MediaPlayer getRealMediaPlayer() {
+        return mediaPlayer;
+    }
 
     //重置
-    public void reset(ResetParams resetParams) {
-        this.resetParams = resetParams;
+    public void reset(MediaParams mediaParams) {
+        this.mediaParams = mediaParams;
         perform(true, MediaPlayerState.Reset);
     }
 
@@ -60,11 +63,11 @@ public class SimpleMediaPlayer {
         perform(true, MediaPlayerState.SeekComplete);
     }
 
-    public MediaPlayerState getMediaPlayerState() {
+    public synchronized MediaPlayerState getMediaPlayerState() {
         return mediaPlayerState;
     }
 
-    public void setMediaPlayerState(MediaPlayerState mediaPlayerState) {
+    public synchronized void setMediaPlayerState(MediaPlayerState mediaPlayerState) {
         this.mediaPlayerState = mediaPlayerState;
     }
 
@@ -72,8 +75,8 @@ public class SimpleMediaPlayer {
         return context;
     }
 
-    public ResetParams getResetParams() {
-        return resetParams;
+    public MediaParams getMediaParams() {
+        return mediaParams;
     }
 
     private void perform(boolean init, MediaPlayerState changeToState) {
@@ -95,10 +98,19 @@ public class SimpleMediaPlayer {
             mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
             mediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
             mediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
+            mediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
         }
     }
 
    /*--------------------------------listener wrapper---------------------------------------*/
+
+    private class OnPreparedListenerWrapper implements MediaPlayer.OnPreparedListener {
+
+        @Override
+        public void onPrepared(MediaPlayer mp) {
+            mediaPlayerAction.onPrepared(SimpleMediaPlayer.this);
+        }
+    }
 
     private class OnInfoListenerWrapper implements MediaPlayer.OnInfoListener {
 

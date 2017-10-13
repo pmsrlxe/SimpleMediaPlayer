@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.stop;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class StoppedFactory {
@@ -28,7 +29,7 @@ public class StoppedFactory {
             case Prepared:
                 return new StoppedPreparedAction(wrapper, changeToState);
             case Released:
-                return new StoppedReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //stop会出错
                 return new StoppedErrorAction(wrapper, changeToState);
             case Complete: //stop了怎么可能播放完成

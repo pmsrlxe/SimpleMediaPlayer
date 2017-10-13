@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.error;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ErrorFactory {
@@ -28,7 +29,7 @@ public class ErrorFactory {
             case Prepared:
                 return new ErrorPreparedAction(wrapper, changeToState);
             case Released:
-                return new ErrorReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //error了后，又tm发生error了
                 return new ErrorErrorAction(wrapper, changeToState);
             case Complete:

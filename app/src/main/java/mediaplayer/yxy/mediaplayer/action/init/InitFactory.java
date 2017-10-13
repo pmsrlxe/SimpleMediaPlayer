@@ -2,7 +2,8 @@ package mediaplayer.yxy.mediaplayer.action.init;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
-import mediaplayer.yxy.mediaplayer.action.none.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
+import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class InitFactory {
@@ -28,7 +29,7 @@ public class InitFactory {
             case Prepared:
                 return new NoneAction(wrapper, changeToState);
             case Released:
-                return new InitReleaseAction(wrapper, changeToState);
+                return new CommonReleaseAction(wrapper, changeToState);
             case Error:    //init不可能发生error
                 return new NoneAction(wrapper, changeToState);
             case Complete:
