@@ -3,14 +3,16 @@ package mediaplayer.yxy.mediaplayer.presenter;
 import android.view.View;
 import android.widget.SeekBar;
 
-import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
-import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
-import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
+import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
+import mediaplayer.yxy.mediaplayer.listener.ToolBarVisibleListener;
 import mediaplayer.yxy.mediaplayer.model.DurationModel;
+import mediaplayer.yxy.mediaplayer.model.ToolBarVisibleModel;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
 import mediaplayer.yxy.mediaplayer.view.Utils;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
@@ -20,11 +22,14 @@ public class VideoPlayerPresenter {
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
     private DurationPresenter durationPresenter;
+    private ToolBarVisiblePresenter toolBarVisiblePresenter;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
         durationPresenter = new DurationPresenter();
         simpleMediaPlayer = new SimpleMediaPlayer();
+        toolBarVisiblePresenter = new ToolBarVisiblePresenter();
+
         //state
         simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
             @Override
@@ -42,6 +47,8 @@ public class VideoPlayerPresenter {
                 } else {
                     player.rlPreparingLoading.setVisibility(View.GONE);
                 }
+
+                toolBarVisiblePresenter.notifyStateChange(now);
             }
         });
         //缓存
@@ -111,6 +118,14 @@ public class VideoPlayerPresenter {
             }
         });
 
+        player.rlSurfaceContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolBarVisiblePresenter.toggleShow(simpleMediaPlayer.getMediaPlayerState(),
+                        player.llBottomControl.getVisibility() == View.VISIBLE);
+            }
+        });
+
 
         //初始化player
         MediaParams mediaParams = new MediaParams(
@@ -134,6 +149,20 @@ public class VideoPlayerPresenter {
                 player.skProgress.setProgress(percent);
             }
         });
+
+        //toolbar
+        toolBarVisiblePresenter.setToolBarVisibleListener(new ToolBarVisibleListener() {
+            @Override
+            public void onDismiss() {
+                player.llBottomControl.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onShow() {
+                player.llBottomControl.setVisibility(View.VISIBLE);
+            }
+        });
+        toolBarVisiblePresenter.bind(new ToolBarVisibleModel());
     }
 
 
