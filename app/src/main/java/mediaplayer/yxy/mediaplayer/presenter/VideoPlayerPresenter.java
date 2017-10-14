@@ -34,13 +34,7 @@ public class VideoPlayerPresenter {
         simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
             @Override
             public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-                if (now != MediaPlayerState.Playing) {
-                    player.ivStart.setVisibility(View.VISIBLE);
-                    player.ivPause.setVisibility(View.GONE);
-                } else {
-                    player.ivStart.setVisibility(View.GONE);
-                    player.ivPause.setVisibility(View.VISIBLE);
-                }
+                updateCenterButton(now);
 
                 if (now == MediaPlayerState.Preparing) {
                     player.rlPreparingLoading.setVisibility(View.VISIBLE);
@@ -70,6 +64,16 @@ public class VideoPlayerPresenter {
                 player.pbBufferingLoading.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void updateCenterButton(MediaPlayerState now) {
+        if (now != MediaPlayerState.Playing) {
+            player.ivStart.setVisibility(View.VISIBLE);
+            player.ivPause.setVisibility(View.GONE);
+        } else {
+            player.ivStart.setVisibility(View.GONE);
+            player.ivPause.setVisibility(View.VISIBLE);
+        }
     }
 
     public void bind(final VideoPlayerModel model) {
@@ -155,11 +159,14 @@ public class VideoPlayerPresenter {
             @Override
             public void onDismiss() {
                 player.llBottomControl.setVisibility(View.GONE);
+                player.ivStart.setVisibility(View.GONE);
+                player.ivPause.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
                 player.llBottomControl.setVisibility(View.VISIBLE);
+                updateCenterButton(simpleMediaPlayer.getMediaPlayerState());
             }
         });
         toolBarVisiblePresenter.bind(new ToolBarVisibleModel());

@@ -53,7 +53,7 @@ public class ToolBarVisiblePresenter {
 
     public void notifyStateChange(MediaPlayerState now) {
         if (now == MediaPlayerState.Playing) {
-            postHide(0);
+            postHideByModel();
         } else if (now == MediaPlayerState.Paused) {
             postShow();
         }
@@ -64,17 +64,21 @@ public class ToolBarVisiblePresenter {
         if (now == MediaPlayerState.Playing) {
             if (!currentIsVisible) {
                 postShow();
-                postHide(model == null ? 2500 : model.getHideDuration());
+                postHideByModel();
             } else {
                 postHide(0);
             }
         } else {
-            //2、暂停情况下，点击瞬间出来，瞬间消失
+            //2、其他情况下，点击瞬间出来，瞬间消失
             if (!currentIsVisible) {
                 postShow();
             } else {
                 postHide(0);
             }
         }
+    }
+
+    private void postHideByModel() {
+        postHide(model == null ? 2500 : model.getHideDuration());
     }
 }
