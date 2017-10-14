@@ -49,4 +49,14 @@ public class NoneAction extends BaseMediaPlayerAction {
 super.perform();
         Log.e("SimpleMediaPlayer", "perform none action from " + getFromState() + " to " + getChangeToState());
     }
+
+    @Override
+    public int getDuration() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return 0;
+    }
 }

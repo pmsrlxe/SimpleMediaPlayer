@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.seekcomplete;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ScStartAction extends BaseMediaPlayerAction {
+public class ScStartAction extends ScBaseAction {
 
     public ScStartAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

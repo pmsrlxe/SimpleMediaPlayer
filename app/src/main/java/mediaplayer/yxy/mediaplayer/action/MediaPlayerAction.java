@@ -57,4 +57,10 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
         }
         handler.post(runnable);
     }
+
+    //目前状态下的音视频长度
+    public abstract int getDuration();
+
+    //得到当前的音频长度
+    public abstract int getCurrentPosition();
 }

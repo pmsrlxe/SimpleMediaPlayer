@@ -26,7 +26,7 @@ public class MediaPlayerActionFactory {
 
     public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         MediaPlayerState currentState = simpleMediaPlayer.getMediaPlayerState();
-        MediaPlayerAction retAction = null;
+        MediaPlayerAction retAction;
         switch (currentState) {
             case Init:
                 retAction = InitFactory.getAction(simpleMediaPlayer, changeToState);

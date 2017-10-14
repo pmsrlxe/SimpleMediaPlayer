@@ -1,13 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.preparing;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class
-PreparingErrorAction extends BaseMediaPlayerAction {
+public class PreparingErrorAction extends PreparingBaseAction {
 
     public PreparingErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
@@ -45,7 +43,7 @@ PreparingErrorAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
 
     }
 }

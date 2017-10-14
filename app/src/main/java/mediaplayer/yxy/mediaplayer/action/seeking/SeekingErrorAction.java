@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.seeking;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class SeekingErrorAction extends BaseMediaPlayerAction {
+public class SeekingErrorAction extends SeekingBaseAction {
 
     public SeekingErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

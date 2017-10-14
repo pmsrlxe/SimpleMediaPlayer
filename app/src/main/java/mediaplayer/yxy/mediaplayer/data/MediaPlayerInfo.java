@@ -1,6 +1,6 @@
 package mediaplayer.yxy.mediaplayer.data;
 
-import mediaplayer.yxy.mediaplayer.OnBufferStateListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
 
 public class MediaPlayerInfo {
  /* Do not change these values without updating their counterparts

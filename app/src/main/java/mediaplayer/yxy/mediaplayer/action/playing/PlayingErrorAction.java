@@ -6,7 +6,7 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PlayingErrorAction extends BaseMediaPlayerAction {
+public class PlayingErrorAction extends PlayingBaseAction {
 
     public PlayingErrorAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
@@ -44,7 +44,7 @@ public class PlayingErrorAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
 
     }
 }

@@ -67,4 +67,14 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
             }
         });
     }
+
+    @Override
+    public int getDuration() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return 0;
+    }
 }

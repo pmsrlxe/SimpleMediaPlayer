@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.buffering;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class BufferingReleaseAction extends BaseMediaPlayerAction {
+public class BufferingReleaseAction extends BufferingBaseAction {
 
     public BufferingReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

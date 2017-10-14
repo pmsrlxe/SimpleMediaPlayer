@@ -3,22 +3,27 @@ package mediaplayer.yxy.mediaplayer.presenter;
 import android.view.View;
 import android.widget.SeekBar;
 
-import mediaplayer.yxy.mediaplayer.OnBufferChangeListener;
-import mediaplayer.yxy.mediaplayer.OnBufferStateListener;
+import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
+import mediaplayer.yxy.mediaplayer.model.DurationModel;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
+import mediaplayer.yxy.mediaplayer.view.Utils;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
 public class VideoPlayerPresenter {
 
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
+    private DurationPresenter durationPresenter;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
+        durationPresenter = new DurationPresenter();
         simpleMediaPlayer = new SimpleMediaPlayer();
         //state
         simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
@@ -114,10 +119,26 @@ public class VideoPlayerPresenter {
                 model.getHeadData(),
                 player.surfaceView);
         simpleMediaPlayer.reset(mediaParams);
+
+
+        //duration
+        durationPresenter.bind(new DurationModel(simpleMediaPlayer));
+        durationPresenter.setMediaDurationListener(new MediaDurationListener() {
+            @Override
+            public void onUpdate(int currentMs, int durationMs, int percent) {
+                String currentFormatted = Utils.stringForTime(currentMs);
+                String durationFormatted = Utils.stringForTime(durationMs);
+                player.tvTimeCurrent.setText(currentFormatted);
+                player.tvTimeTotal.setText(durationFormatted);
+
+                player.skProgress.setProgress(percent);
+            }
+        });
     }
 
 
     public void unbind() {
         simpleMediaPlayer.release();
+        durationPresenter.unbind();
     }
 }

@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer;
+package mediaplayer.yxy.mediaplayer.listener;
 
 public interface OnBufferStateListener {
     void onPauseForBufferWhenPlaying();

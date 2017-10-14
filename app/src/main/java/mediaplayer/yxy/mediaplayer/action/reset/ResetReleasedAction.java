@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.reset;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ResetReleasedAction extends BaseMediaPlayerAction {
+public class ResetReleasedAction extends ResetBaseAction {
 
     public ResetReleasedAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
@@ -44,7 +43,17 @@ public class ResetReleasedAction extends BaseMediaPlayerAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
 
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return 0;
+    }
+
+    @Override
+    public int getDuration() {
+        return 0;
     }
 }

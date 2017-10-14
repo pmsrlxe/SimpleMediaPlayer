@@ -11,6 +11,8 @@ import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
 
 public class SimpleMediaPlayer {
     public static final String TAG = "SimpleMediaPlayer";
@@ -125,8 +127,18 @@ public class SimpleMediaPlayer {
         this.onMediaPlayerStateChangeListener = onMediaPlayerStateChangeListener;
     }
 
-    public void updateSurfaceView(SurfaceHolder view) {
-        mediaPlayer.setDisplay(view);
+    public int getDuration() {
+        if (mediaPlayerAction == null) {
+            return 0;
+        }
+        return mediaPlayerAction.getDuration();
+    }
+
+    public int getCurrentPosition() {
+        if (mediaPlayerAction == null) {
+            return 0;
+        }
+        return mediaPlayerAction.getCurrentPosition();
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/

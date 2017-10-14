@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.prepared;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PreparedReleaseAction extends BaseMediaPlayerAction {
+public class PreparedReleaseAction extends PreparedBaseAction {
 
     public PreparedReleaseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

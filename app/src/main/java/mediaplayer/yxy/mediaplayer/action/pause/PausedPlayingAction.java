@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.pause;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class PausedPlayingAction extends BaseMediaPlayerAction {
+public class PausedPlayingAction extends PauseBaseAction {
 
     public PausedPlayingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

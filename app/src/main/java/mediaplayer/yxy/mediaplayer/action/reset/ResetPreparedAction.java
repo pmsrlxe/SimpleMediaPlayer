@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.reset;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ResetPreparedAction extends BaseMediaPlayerAction {
+public class ResetPreparedAction extends ResetBaseAction {
 
     public ResetPreparedAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);

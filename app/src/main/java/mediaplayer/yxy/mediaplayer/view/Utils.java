@@ -48,7 +48,7 @@ public class Utils {
      * @return
      */
     public static String stringForTime(int timeMs) {
-        if (timeMs <= 0 || timeMs >= 24 * 60 * 60 * 1000) {
+        if (timeMs <= 0) {
             return "00:00";
         }
         int totalSeconds = timeMs / 1000;
@@ -65,10 +65,10 @@ public class Utils {
     }
 
     /**
-//     * 设置activity stateBar沉浸
-//     *
-//     * @param activity
-//     */
+     //     * 设置activity stateBar沉浸
+     //     *
+     //     * @param activity
+     //     */
 //    public static void setStateBarTranslucent(Activity activity) {
 //        try {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && activity != null && !activity.isFinishing()) {
@@ -131,6 +131,7 @@ public class Utils {
 
     /**
      * 设备所属系列是否是4.x
+     *
      * @return
      */
     public static boolean is4S() {

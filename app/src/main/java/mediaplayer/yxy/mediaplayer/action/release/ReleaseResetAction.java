@@ -1,12 +1,11 @@
 package mediaplayer.yxy.mediaplayer.action.release;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
-import mediaplayer.yxy.mediaplayer.action.BaseMediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
-public class ReleaseResetAction extends BaseMediaPlayerAction {
+public class ReleaseResetAction extends ReleaseBaseAction {
 
     public ReleaseResetAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
