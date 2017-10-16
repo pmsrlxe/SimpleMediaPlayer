@@ -13,7 +13,7 @@ public class MediaParams {
 
     //0-100
     private int seekToPercent;//这2个互相冲突，设置了那么second就=0，无效了
-    private int seekToSecond;//这2个互相冲突，设置了那么percent就=0，无效了
+    private int seekToMs;//这2个互相冲突，设置了那么percent就=0，无效了
 
     public MediaParams(Context context,
                        String url,
@@ -31,7 +31,7 @@ public class MediaParams {
                 mediaParams.mapHeadData,
                 mediaParams.surfaceView);
         this.seekToPercent = mediaParams.getSeekToPercent();
-        this.seekToSecond = mediaParams.getSeekToSecond();
+        this.seekToMs = mediaParams.getSeekToMs();
     }
 
     public Context getContext() {
@@ -53,7 +53,7 @@ public class MediaParams {
     //0-100
     public void setSeekToPercent(int seekPercent) {
         this.seekToPercent = seekPercent;
-        seekToSecond = 0;
+        seekToMs = 0;
     }
 
     //0-100
@@ -61,13 +61,13 @@ public class MediaParams {
         return seekToPercent;
     }
 
-    public void setSeekToSecond(int seekToSecond) {
-        this.seekToSecond = seekToSecond;
+    public void setSeekToMs(int seekToMs) {
+        this.seekToMs = seekToMs;
         seekToPercent = 0;
     }
 
-    public int getSeekToSecond() {
-        return seekToSecond;
+    public int getSeekToMs() {
+        return seekToMs;
     }
 
     public String getUrl() {

@@ -12,7 +12,7 @@ public enum MediaPlayerState {
     Complete(false),      //播放完毕
     @Deprecated
     //TODO 注意：这个指的是：播放的时候缓冲中的状态，同时会卡住播放，和播放器状态串行的，不是预加载的缓冲。
-    PlayBuffering(false),
+            PlayBuffering(false),
     Seeking(true),        //seek中
     SeekComplete(true),   //seek结束
     Released(false);      //释放了
@@ -34,5 +34,12 @@ public enum MediaPlayerState {
 
     public boolean isTempState() {
         return tempState;
+    }
+
+
+    public boolean hasDataState() {
+        return this == Prepared || this == Paused
+                || this == Playing || this == Complete
+                || this == Seeking || this == SeekComplete;
     }
 }

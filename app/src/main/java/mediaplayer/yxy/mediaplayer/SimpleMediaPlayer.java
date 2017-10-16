@@ -40,7 +40,6 @@ public class SimpleMediaPlayer {
         this.mediaParams = new MediaParams(mediaParams);
         this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
         this.mediaParams.getSurfaceView().getHolder().addCallback(surfaceCallBackWrapper);
-
         perform(true, MediaPlayerState.Reset);
     }
 

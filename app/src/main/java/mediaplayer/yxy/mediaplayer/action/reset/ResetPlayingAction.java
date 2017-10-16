@@ -14,24 +14,29 @@ public class ResetPlayingAction extends ResetBaseAction {
     @Override
     public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
         try {
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Prepared);
-            getRealMediaPlayer().start();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
-
             //0-100
-            int percent = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
-            int seekSecond = getSimpleMediaPlayer().getMediaParams().getSeekToSecond();
+            int percentInt = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
+            int seekToMs = getSimpleMediaPlayer().getMediaParams().getSeekToMs();
 
-            int resultSeekSecond = 0;
-            if (percent > 0) {
-                resultSeekSecond = (int) (percent * 1.0f / 100 * getDuration());
-            } else if (seekSecond > 0) {
-                resultSeekSecond = seekSecond;
+            int resultSeekMs = 0;
+            if (percentInt > 0) {
+                resultSeekMs = (int) (percentInt * 1.0f / 100 * getDuration());
+            } else if (seekToMs > 0) {
+                resultSeekMs = seekToMs;
             }
+            //处理整数的50000或者60000这种，加上100好像没有关键帧问题了
+            //如:给了50000，华为p10会播放的时候回跳到40000，加上100，就没事了
+            resultSeekMs += 100;
+
             //是否有跳转
-            if (resultSeekSecond > 0) {
-                getRealMediaPlayer().seekTo(resultSeekSecond * 1000);
+            if (resultSeekMs > 0) {
+                getRealMediaPlayer().seekTo(resultSeekMs);
+                getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Seeking);
+            } else {
+                getRealMediaPlayer().start();
+                getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
@@ -51,7 +56,8 @@ public class ResetPlayingAction extends ResetBaseAction {
 
     @Override
     public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
-
+        getRealMediaPlayer().start();
+        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
     }
 
     @Override
@@ -66,8 +72,7 @@ public class ResetPlayingAction extends ResetBaseAction {
 
     @Override
     public int getDuration() {
-        if (getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Prepared
-                || getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Playing) {
+        if (!getSimpleMediaPlayer().getMediaPlayerState().hasDataState()) {
             return 0;
         }
         return super.getDuration();
@@ -75,8 +80,7 @@ public class ResetPlayingAction extends ResetBaseAction {
 
     @Override
     public int getCurrentPosition() {
-        if (getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Prepared
-                || getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Playing) {
+        if (!getSimpleMediaPlayer().getMediaPlayerState().hasDataState()) {
             return 0;
         }
         return super.getCurrentPosition();

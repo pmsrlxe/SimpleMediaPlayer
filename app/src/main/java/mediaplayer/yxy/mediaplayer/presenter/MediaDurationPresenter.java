@@ -15,31 +15,14 @@ import mediaplayer.yxy.mediaplayer.model.DurationModel;
 
 public class MediaDurationPresenter {
     private DurationModel model;
-    private Timer timer = new Timer();
+    private Timer timer;
     private MediaDurationListener mediaDurationListener = null;
     private Handler handler = new Handler(Looper.getMainLooper());
-    private TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            if (model != null && mediaDurationListener != null) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int duration = model.getSimpleMediaPlayer().getDuration();
-                        int current = model.getSimpleMediaPlayer().getCurrentPosition();
 
-                        int pc = duration == 0 ? 0 : (int) (current * 1.0f / duration * 100);
-                        mediaDurationListener.onUpdate(current, duration, pc);
-                    }
-                });
-            }
-        }
-    };
-
-    OnMediaPlayerStateChangeListener listener = new OnMediaPlayerStateChangeListener() {
+    private OnMediaPlayerStateChangeListener listener = new OnMediaPlayerStateChangeListener() {
         @Override
         public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-            if (now != MediaPlayerState.Playing) {
+            if (!now.hasDataState()) {
                 stopDuration();
             } else {
                 startDuration();
@@ -54,7 +37,6 @@ public class MediaDurationPresenter {
     public void bind(DurationModel model) {
         this.model = model;
         model.getSimpleMediaPlayer().addOnMediaPlayerStateChangeListener(listener);
-        startDuration();
     }
 
 
@@ -68,13 +50,40 @@ public class MediaDurationPresenter {
     }
 
     private void stopDuration() {
-        timer.cancel();
-        Log.e(SimpleMediaPlayer.TAG, "stopDuration");
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        Log.i(SimpleMediaPlayer.TAG, "stopDuration");
     }
 
 
     private void startDuration() {
-        timer.schedule(timerTask, 0, this.model.getPeriod());
-        Log.e(SimpleMediaPlayer.TAG, "startDuration");
+        if (timer == null) {
+            timer = new Timer();
+        }
+        timer.schedule(createTask(), 0, this.model.getPeriod());
+        Log.i(SimpleMediaPlayer.TAG, "startDuration");
+    }
+
+    private TimerTask createTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                if (model != null && mediaDurationListener != null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int duration = model.getSimpleMediaPlayer().getDuration();
+                            int current = model.getSimpleMediaPlayer().getCurrentPosition();
+
+                            int pc = duration == 0 ? 0 : (int) (current * 1.0f / duration * 100);
+                            Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");
+                            mediaDurationListener.onUpdate(current, duration, pc);
+                        }
+                    });
+                }
+            }
+        };
     }
 }

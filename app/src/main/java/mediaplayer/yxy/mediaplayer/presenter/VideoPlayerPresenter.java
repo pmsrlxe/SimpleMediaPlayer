@@ -142,7 +142,7 @@ public class VideoPlayerPresenter {
                 model.getUrl(),
                 model.getHeadData(),
                 player.surfaceView);
-        mediaParams.setSeekToSecond(model.getSeekToSecond());
+        mediaParams.setSeekToMs(model.getSeekToMs());
         simpleMediaPlayer.reset(mediaParams);
 
 
