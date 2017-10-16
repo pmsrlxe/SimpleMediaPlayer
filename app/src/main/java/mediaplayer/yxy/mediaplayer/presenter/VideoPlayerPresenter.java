@@ -63,20 +63,18 @@ public class VideoPlayerPresenter {
     }
 
     public void bind(final VideoPlayerModel model) {
+        //toolbar
+        toolBarVisiblePresenter.bind(new ToolBarVisibleModel(simpleMediaPlayer));
 
         //state
         onMediaPlayerStateChangeListener = new OnMediaPlayerStateChangeListener() {
             @Override
             public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-                updateCenterButton(now);
-
                 if (now == MediaPlayerState.Preparing) {
                     player.rlPreparingLoading.setVisibility(View.VISIBLE);
                 } else {
                     player.rlPreparingLoading.setVisibility(View.GONE);
                 }
-
-                toolBarVisiblePresenter.notifyStateChange(now);
             }
         };
         simpleMediaPlayer.addOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
@@ -175,7 +173,6 @@ public class VideoPlayerPresenter {
                 updateCenterButton(simpleMediaPlayer.getMediaPlayerState());
             }
         });
-        toolBarVisiblePresenter.bind(new ToolBarVisibleModel());
     }
 
 
@@ -184,6 +181,7 @@ public class VideoPlayerPresenter {
             simpleMediaPlayer.removeOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
         }
         mediaDurationPresenter.unbind();
+        toolBarVisiblePresenter.unbind();
         simpleMediaPlayer.release();
     }
 }

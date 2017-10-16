@@ -23,7 +23,7 @@ public class SimpleMediaPlayer {
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
-    private List<OnMediaPlayerStateChangeListener> onMediaPlayerStateChangeListeners = new ArrayList<>();
+    private List<OnMediaPlayerStateChangeListener> stateChangeListeners = new ArrayList<>();
     private OnBufferChangeListener onBufferChangeListener;
     private OnBufferStateListener onBufferStateListener;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
@@ -68,6 +68,7 @@ public class SimpleMediaPlayer {
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
         }
+        stateChangeListeners.clear();
         perform(false, MediaPlayerState.Released);
     }
 
@@ -84,8 +85,8 @@ public class SimpleMediaPlayer {
     public synchronized void setMediaPlayerState(MediaPlayerState toState) {
         MediaPlayerState from = this.mediaPlayerState;
         this.mediaPlayerState = toState;
-        if (onMediaPlayerStateChangeListeners != null) {
-            for (OnMediaPlayerStateChangeListener l : onMediaPlayerStateChangeListeners) {
+        if (stateChangeListeners != null) {
+            for (OnMediaPlayerStateChangeListener l : stateChangeListeners) {
                 l.onStateChange(from, toState);
             }
         }
@@ -131,14 +132,14 @@ public class SimpleMediaPlayer {
         if (listener == null) {
             return;
         }
-        onMediaPlayerStateChangeListeners.add(listener);
+        stateChangeListeners.add(listener);
     }
 
     public void removeOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener listener) {
         if (listener == null) {
             return;
         }
-        onMediaPlayerStateChangeListeners.remove(listener);
+        stateChangeListeners.remove(listener);
     }
 
     public int getDuration() {
