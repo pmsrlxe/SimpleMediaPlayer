@@ -43,7 +43,7 @@ public class ResetPreparedAction extends ResetBaseAction {
 
     @Override
     public void perform() {
-super.perform();
+        super.perform();
 
     }
 }

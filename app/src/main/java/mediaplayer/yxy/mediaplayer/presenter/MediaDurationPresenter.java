@@ -2,14 +2,18 @@ package mediaplayer.yxy.mediaplayer.presenter;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
+import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
 import mediaplayer.yxy.mediaplayer.model.DurationModel;
 
-public class DurationPresenter {
+public class MediaDurationPresenter {
     private DurationModel model;
     private Timer timer = new Timer();
     private MediaDurationListener mediaDurationListener = null;
@@ -32,21 +36,45 @@ public class DurationPresenter {
         }
     };
 
-    public DurationPresenter() {
+    OnMediaPlayerStateChangeListener listener = new OnMediaPlayerStateChangeListener() {
+        @Override
+        public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
+            if (now != MediaPlayerState.Playing) {
+                stopDuration();
+            } else {
+                startDuration();
+            }
+        }
+    };
+
+    public MediaDurationPresenter() {
 
     }
 
     public void bind(DurationModel model) {
         this.model = model;
-        timer.schedule(timerTask, 0, model.getPeriod());
+        model.getSimpleMediaPlayer().addOnMediaPlayerStateChangeListener(listener);
+        startDuration();
     }
+
 
     public void setMediaDurationListener(MediaDurationListener mediaDurationListener) {
         this.mediaDurationListener = mediaDurationListener;
     }
 
     public void unbind() {
-        timer.cancel();
+        stopDuration();
+        model.getSimpleMediaPlayer().removeOnMediaPlayerStateChangeListener(listener);
     }
 
+    private void stopDuration() {
+        timer.cancel();
+        Log.e(SimpleMediaPlayer.TAG, "stopDuration");
+    }
+
+
+    private void startDuration() {
+        timer.schedule(timerTask, 0, this.model.getPeriod());
+        Log.e(SimpleMediaPlayer.TAG, "startDuration");
+    }
 }

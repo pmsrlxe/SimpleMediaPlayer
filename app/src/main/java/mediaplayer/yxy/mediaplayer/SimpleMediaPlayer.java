@@ -5,6 +5,9 @@ import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerActionFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
@@ -20,7 +23,7 @@ public class SimpleMediaPlayer {
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
-    private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
+    private List<OnMediaPlayerStateChangeListener> onMediaPlayerStateChangeListeners = new ArrayList<>();
     private OnBufferChangeListener onBufferChangeListener;
     private OnBufferStateListener onBufferStateListener;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
@@ -82,8 +85,10 @@ public class SimpleMediaPlayer {
     public synchronized void setMediaPlayerState(MediaPlayerState toState) {
         MediaPlayerState from = this.mediaPlayerState;
         this.mediaPlayerState = toState;
-        if (onMediaPlayerStateChangeListener != null) {
-            onMediaPlayerStateChangeListener.onStateChange(from, toState);
+        if (onMediaPlayerStateChangeListeners != null) {
+            for (OnMediaPlayerStateChangeListener l : onMediaPlayerStateChangeListeners) {
+                l.onStateChange(from, toState);
+            }
         }
         Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
 
@@ -123,8 +128,18 @@ public class SimpleMediaPlayer {
         this.onBufferStateListener = bufferStateListener;
     }
 
-    public void setOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener) {
-        this.onMediaPlayerStateChangeListener = onMediaPlayerStateChangeListener;
+    public void addOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener listener) {
+        if (listener == null) {
+            return;
+        }
+        onMediaPlayerStateChangeListeners.add(listener);
+    }
+
+    public void removeOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener listener) {
+        if (listener == null) {
+            return;
+        }
+        onMediaPlayerStateChangeListeners.remove(listener);
     }
 
     public int getDuration() {

@@ -9,9 +9,11 @@ public class MediaParams {
     private Context context;
     private String url;
     private Map<String, String> mapHeadData;
-    @Deprecated
     private SurfaceView surfaceView;
-    private int seekToPercent;
+
+    //0-100
+    private int seekToPercent;//这2个互相冲突，设置了那么second就=0，无效了
+    private int seekToSecond;//这2个互相冲突，设置了那么percent就=0，无效了
 
     public MediaParams(Context context,
                        String url,
@@ -28,6 +30,8 @@ public class MediaParams {
                 mediaParams.url,
                 mediaParams.mapHeadData,
                 mediaParams.surfaceView);
+        this.seekToPercent = mediaParams.getSeekToPercent();
+        this.seekToSecond = mediaParams.getSeekToSecond();
     }
 
     public Context getContext() {
@@ -46,12 +50,24 @@ public class MediaParams {
         this.surfaceView = surfaceView;
     }
 
+    //0-100
     public void setSeekToPercent(int seekPercent) {
         this.seekToPercent = seekPercent;
+        seekToSecond = 0;
     }
 
+    //0-100
     public int getSeekToPercent() {
         return seekToPercent;
+    }
+
+    public void setSeekToSecond(int seekToSecond) {
+        this.seekToSecond = seekToSecond;
+        seekToPercent = 0;
+    }
+
+    public int getSeekToSecond() {
+        return seekToSecond;
     }
 
     public String getUrl() {

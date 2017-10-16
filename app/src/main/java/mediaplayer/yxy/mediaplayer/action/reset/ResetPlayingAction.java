@@ -17,6 +17,21 @@ public class ResetPlayingAction extends ResetBaseAction {
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Prepared);
             getRealMediaPlayer().start();
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
+
+            //0-100
+            int percent = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
+            int seekSecond = getSimpleMediaPlayer().getMediaParams().getSeekToSecond();
+
+            int resultSeekSecond = 0;
+            if (percent > 0) {
+                resultSeekSecond = (int) (percent * 1.0f / 100 * getDuration());
+            } else if (seekSecond > 0) {
+                resultSeekSecond = seekSecond;
+            }
+            //是否有跳转
+            if (resultSeekSecond > 0) {
+                getRealMediaPlayer().seekTo(resultSeekSecond * 1000);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
@@ -50,8 +65,26 @@ public class ResetPlayingAction extends ResetBaseAction {
     }
 
     @Override
+    public int getDuration() {
+        if (getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Prepared
+                || getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Playing) {
+            return 0;
+        }
+        return super.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        if (getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Prepared
+                || getSimpleMediaPlayer().getMediaPlayerState() != MediaPlayerState.Playing) {
+            return 0;
+        }
+        return super.getCurrentPosition();
+    }
+
+    @Override
     public void perform() {
-super.perform();
+        super.perform();
         //已经是reset状态，需要开始播放，那么就preparing
         try {
             getRealMediaPlayer().prepareAsync();

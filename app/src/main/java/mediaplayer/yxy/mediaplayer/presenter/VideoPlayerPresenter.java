@@ -21,30 +21,16 @@ public class VideoPlayerPresenter {
 
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
-    private DurationPresenter durationPresenter;
+    private MediaDurationPresenter mediaDurationPresenter;
     private ToolBarVisiblePresenter toolBarVisiblePresenter;
+    private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        durationPresenter = new DurationPresenter();
+        mediaDurationPresenter = new MediaDurationPresenter();
         simpleMediaPlayer = new SimpleMediaPlayer();
         toolBarVisiblePresenter = new ToolBarVisiblePresenter();
 
-        //state
-        simpleMediaPlayer.setOnMediaPlayerStateChangeListener(new OnMediaPlayerStateChangeListener() {
-            @Override
-            public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-                updateCenterButton(now);
-
-                if (now == MediaPlayerState.Preparing) {
-                    player.rlPreparingLoading.setVisibility(View.VISIBLE);
-                } else {
-                    player.rlPreparingLoading.setVisibility(View.GONE);
-                }
-
-                toolBarVisiblePresenter.notifyStateChange(now);
-            }
-        });
         //缓存
         simpleMediaPlayer.setOnBufferChangeListener(new OnBufferChangeListener() {
             @Override
@@ -77,6 +63,25 @@ public class VideoPlayerPresenter {
     }
 
     public void bind(final VideoPlayerModel model) {
+
+        //state
+        onMediaPlayerStateChangeListener = new OnMediaPlayerStateChangeListener() {
+            @Override
+            public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
+                updateCenterButton(now);
+
+                if (now == MediaPlayerState.Preparing) {
+                    player.rlPreparingLoading.setVisibility(View.VISIBLE);
+                } else {
+                    player.rlPreparingLoading.setVisibility(View.GONE);
+                }
+
+                toolBarVisiblePresenter.notifyStateChange(now);
+            }
+        };
+        simpleMediaPlayer.addOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
+
+
         player.ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,12 +142,13 @@ public class VideoPlayerPresenter {
                 model.getUrl(),
                 model.getHeadData(),
                 player.surfaceView);
+        mediaParams.setSeekToSecond(model.getSeekToSecond());
         simpleMediaPlayer.reset(mediaParams);
 
 
         //duration
-        durationPresenter.bind(new DurationModel(simpleMediaPlayer));
-        durationPresenter.setMediaDurationListener(new MediaDurationListener() {
+        mediaDurationPresenter.bind(new DurationModel(simpleMediaPlayer));
+        mediaDurationPresenter.setMediaDurationListener(new MediaDurationListener() {
             @Override
             public void onUpdate(int currentMs, int durationMs, int percent) {
                 String currentFormatted = Utils.stringForTime(currentMs);
@@ -174,7 +180,10 @@ public class VideoPlayerPresenter {
 
 
     public void unbind() {
+        if (onMediaPlayerStateChangeListener != null) {
+            simpleMediaPlayer.removeOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
+        }
+        mediaDurationPresenter.unbind();
         simpleMediaPlayer.release();
-        durationPresenter.unbind();
     }
 }
