@@ -2,34 +2,32 @@ package mediaplayer.yxy.mediaplayer.presenter;
 
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
 import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
 import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
-import mediaplayer.yxy.mediaplayer.listener.ToolBarVisibleListener;
-import mediaplayer.yxy.mediaplayer.model.DurationModel;
+import mediaplayer.yxy.mediaplayer.model.ControllerDurationModel;
+import mediaplayer.yxy.mediaplayer.model.ControllerViewModel;
 import mediaplayer.yxy.mediaplayer.model.ToolBarVisibleModel;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
-import mediaplayer.yxy.mediaplayer.view.Utils;
+import mediaplayer.yxy.mediaplayer.view.ControllerView;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
 public class VideoPlayerPresenter {
 
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
-    private MediaDurationPresenter mediaDurationPresenter;
-    private ToolBarVisiblePresenter toolBarVisiblePresenter;
     private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
+    private final ControllerViewPresenter controllerViewPresenter;
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        mediaDurationPresenter = new MediaDurationPresenter();
         simpleMediaPlayer = new SimpleMediaPlayer();
-        toolBarVisiblePresenter = new ToolBarVisiblePresenter();
+        controllerViewPresenter = new ControllerViewPresenter(getControllerView());
 
         //缓存
         simpleMediaPlayer.setOnBufferChangeListener(new OnBufferChangeListener() {
@@ -52,19 +50,12 @@ public class VideoPlayerPresenter {
         });
     }
 
-    private void updateCenterButton(MediaPlayerState now) {
-        if (now != MediaPlayerState.Playing) {
-            player.ivStart.setVisibility(View.VISIBLE);
-            player.ivPause.setVisibility(View.GONE);
-        } else {
-            player.ivStart.setVisibility(View.GONE);
-            player.ivPause.setVisibility(View.VISIBLE);
-        }
-    }
-
     public void bind(final VideoPlayerModel model) {
-        //toolbar
-        toolBarVisiblePresenter.bind(new ToolBarVisibleModel(simpleMediaPlayer));
+        //controller
+        ControllerViewModel controllerViewModel = new ControllerViewModel();
+        controllerViewModel.setToolBarVisibleModel(new ToolBarVisibleModel(simpleMediaPlayer));
+        controllerViewModel.setControllerDurationModel(new ControllerDurationModel(simpleMediaPlayer));
+        controllerViewPresenter.bind(controllerViewModel);
 
         //state
         onMediaPlayerStateChangeListener = new OnMediaPlayerStateChangeListener() {
@@ -124,16 +115,6 @@ public class VideoPlayerPresenter {
 
             }
         });
-
-        player.rlSurfaceContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toolBarVisiblePresenter.toggleShow(simpleMediaPlayer.getMediaPlayerState(),
-                        player.llBottomControl.getVisibility() == View.VISIBLE);
-            }
-        });
-
-
         //初始化player
         MediaParams mediaParams = new MediaParams(
                 player.surfaceView.getContext(),
@@ -143,36 +124,6 @@ public class VideoPlayerPresenter {
         mediaParams.setSeekToMs(model.getSeekToMs());
         simpleMediaPlayer.reset(mediaParams);
 
-
-        //duration
-        mediaDurationPresenter.bind(new DurationModel(simpleMediaPlayer));
-        mediaDurationPresenter.setMediaDurationListener(new MediaDurationListener() {
-            @Override
-            public void onUpdate(int currentMs, int durationMs, int percent) {
-                String currentFormatted = Utils.stringForTime(currentMs);
-                String durationFormatted = Utils.stringForTime(durationMs);
-                player.tvTimeCurrent.setText(currentFormatted);
-                player.tvTimeTotal.setText(durationFormatted);
-
-                player.skProgress.setProgress(percent);
-            }
-        });
-
-        //toolbar
-        toolBarVisiblePresenter.setToolBarVisibleListener(new ToolBarVisibleListener() {
-            @Override
-            public void onDismiss() {
-                player.llBottomControl.setVisibility(View.GONE);
-                player.ivStart.setVisibility(View.GONE);
-                player.ivPause.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onShow() {
-                player.llBottomControl.setVisibility(View.VISIBLE);
-                updateCenterButton(simpleMediaPlayer.getMediaPlayerState());
-            }
-        });
     }
 
 
@@ -180,8 +131,46 @@ public class VideoPlayerPresenter {
         if (onMediaPlayerStateChangeListener != null) {
             simpleMediaPlayer.removeOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
         }
-        mediaDurationPresenter.unbind();
-        toolBarVisiblePresenter.unbind();
+        controllerViewPresenter.unbind();
         simpleMediaPlayer.release();
+    }
+
+    private ControllerView getControllerView() {
+        return new ControllerView() {
+            @Override
+            public View getControlPanel() {
+                return player.llBottomControl;
+            }
+
+            @Override
+            public View getSurfaceContainer() {
+                return player.rlSurfaceContainer;
+            }
+
+            @Override
+            public SeekBar getSeekBar() {
+                return player.skProgress;
+            }
+
+            @Override
+            public View getCenterStartView() {
+                return player.ivStart;
+            }
+
+            @Override
+            public View getCenterPauseView() {
+                return player.ivPause;
+            }
+
+            @Override
+            public TextView getCurrentTimeTextView() {
+                return player.tvTimeCurrent;
+            }
+
+            @Override
+            public TextView getDurationTimeTextView() {
+                return player.tvTimeTotal;
+            }
+        };
     }
 }

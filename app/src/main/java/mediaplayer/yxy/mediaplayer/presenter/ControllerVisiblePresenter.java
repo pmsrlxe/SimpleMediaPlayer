@@ -3,15 +3,21 @@ package mediaplayer.yxy.mediaplayer.presenter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.View;
 
 import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.ToolBarVisibleListener;
 import mediaplayer.yxy.mediaplayer.model.ToolBarVisibleModel;
+import mediaplayer.yxy.mediaplayer.view.ControllerView;
 
-public class ToolBarVisiblePresenter {
+/**
+ * 只管control的显示隐藏相关逻辑
+ */
+public class ControllerVisiblePresenter {
     private static final int HIDE = 1988;
     private static final int SHOW = 1989;
+    private final ControllerView view;
     private ToolBarVisibleListener toolBarVisibleListener;
     private ToolBarVisibleModel model;
     private OnMediaPlayerStateChangeListener listener = new OnMediaPlayerStateChangeListener() {
@@ -56,13 +62,43 @@ public class ToolBarVisiblePresenter {
         }
     };
 
-    public ToolBarVisiblePresenter() {
+    public ControllerVisiblePresenter(ControllerView view) {
+        this.view = view;
     }
 
-    public void bind(ToolBarVisibleModel model) {
+    public void bind(final ToolBarVisibleModel model) {
         this.model = model;
+        view.getSurfaceContainer().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleShow(model.getSimpleMediaPlayer().getMediaPlayerState(),
+                        view.getControlPanel().getVisibility() == View.VISIBLE);
+            }
+        });
+        setToolBarVisibleListener(new ToolBarVisibleListener() {
+            @Override
+            public void onDismiss() {
+                view.getControlPanel().setVisibility(View.GONE);
+                view.getCenterStartView().setVisibility(View.GONE);
+                view.getCenterPauseView().setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onShow() {
+                view.getControlPanel().setVisibility(View.VISIBLE);
+                if (model.getSimpleMediaPlayer().getMediaPlayerState()
+                        != MediaPlayerState.Playing) {
+                    view.getCenterStartView().setVisibility(View.VISIBLE);
+                    view.getCenterPauseView().setVisibility(View.GONE);
+                } else {
+                    view.getCenterStartView().setVisibility(View.GONE);
+                    view.getCenterPauseView().setVisibility(View.VISIBLE);
+                }
+            }
+        });
         model.getSimpleMediaPlayer().addOnMediaPlayerStateChangeListener(listener);
     }
+
 
     public void unbind() {
         if (model != null) {

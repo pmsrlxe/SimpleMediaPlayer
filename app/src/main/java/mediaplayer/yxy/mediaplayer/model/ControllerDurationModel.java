@@ -2,11 +2,11 @@ package mediaplayer.yxy.mediaplayer.model;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 
-public class DurationModel {
+public class ControllerDurationModel {
     private int period = 1000;
     private SimpleMediaPlayer simpleMediaPlayer;
 
-    public DurationModel(SimpleMediaPlayer simpleMediaPlayer) {
+    public ControllerDurationModel(SimpleMediaPlayer simpleMediaPlayer) {
         this.simpleMediaPlayer = simpleMediaPlayer;
     }
 
