@@ -69,7 +69,7 @@ public class SimpleMediaPlayer {
         perform(false, MediaPlayerState.Released);
     }
 
-    //跳转 100最大
+    //跳转 0-100
     public void seekToPercent(int percent) {
         mediaParams.setSeekToPercent(percent);
         perform(false, MediaPlayerState.SeekComplete);
