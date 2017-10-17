@@ -15,7 +15,7 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
-import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
+import mediaplayer.yxy.mediaplayer.listener.OnPlayingBufferListener;
 
 public class SimpleMediaPlayer {
     public static final String TAG = "SimpleMediaPlayer";
@@ -23,10 +23,11 @@ public class SimpleMediaPlayer {
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
-    private List<OnMediaPlayerStateChangeListener> stateChangeListeners = new ArrayList<>();
-    private OnBufferChangeListener onBufferChangeListener;
-    private OnBufferStateListener onBufferStateListener;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
+
+    private List<OnStateChangeListener> stateChangeListeners = new ArrayList<>();
+    private List<OnBufferChangeListener> onBufferChangeListeners = new ArrayList<>();
+    private List<OnPlayingBufferListener> onPlayingBufferListeners = new ArrayList<>();
 
     public void MediaPlayer() {
     }
@@ -86,7 +87,7 @@ public class SimpleMediaPlayer {
         MediaPlayerState from = this.mediaPlayerState;
         this.mediaPlayerState = toState;
         if (stateChangeListeners != null) {
-            for (OnMediaPlayerStateChangeListener l : stateChangeListeners) {
+            for (OnStateChangeListener l : stateChangeListeners) {
                 l.onStateChange(from, toState);
             }
         }
@@ -94,8 +95,12 @@ public class SimpleMediaPlayer {
 
     }
 
-    public void setOnBufferChangeListener(OnBufferChangeListener onBufferChangeListener) {
-        this.onBufferChangeListener = onBufferChangeListener;
+    public void addOnBufferChangeListener(OnBufferChangeListener l) {
+        onBufferChangeListeners.add(l);
+    }
+
+    public void removeOnBufferChangeListener(OnBufferChangeListener l) {
+        onBufferChangeListeners.remove(l);
     }
 
     public MediaParams getMediaParams() {
@@ -124,24 +129,6 @@ public class SimpleMediaPlayer {
         }
     }
 
-    public void setOnBufferStateListener(OnBufferStateListener bufferStateListener) {
-        this.onBufferStateListener = bufferStateListener;
-    }
-
-    public void addOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener listener) {
-        if (listener == null) {
-            return;
-        }
-        stateChangeListeners.add(listener);
-    }
-
-    public void removeOnMediaPlayerStateChangeListener(OnMediaPlayerStateChangeListener listener) {
-        if (listener == null) {
-            return;
-        }
-        stateChangeListeners.remove(listener);
-    }
-
     public int getDuration() {
         if (mediaPlayerAction == null) {
             return 0;
@@ -154,6 +141,29 @@ public class SimpleMediaPlayer {
             return 0;
         }
         return mediaPlayerAction.getCurrentPosition();
+    }
+    /*--------------------------------listeners---------------------------------------*/
+
+    public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
+        onPlayingBufferListeners.add(l);
+    }
+
+    public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
+        onPlayingBufferListeners.remove(l);
+    }
+
+    public void addOnStateChangeListener(OnStateChangeListener listener) {
+        if (listener == null) {
+            return;
+        }
+        stateChangeListeners.add(listener);
+    }
+
+    public void removeOnStateChangeListener(OnStateChangeListener listener) {
+        if (listener == null) {
+            return;
+        }
+        stateChangeListeners.remove(listener);
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/
@@ -173,7 +183,10 @@ public class SimpleMediaPlayer {
         public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
             MediaPlayerInfo info = new MediaPlayerInfo(what, extra);
             Log.e(TAG, "onInfo," + info);
-            info.callback(onBufferStateListener);
+            //回调
+            for (OnPlayingBufferListener listener : onPlayingBufferListeners) {
+                info.callback(listener);
+            }
             return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayer.this, info);
         }
     }
@@ -204,11 +217,12 @@ public class SimpleMediaPlayer {
         @Override
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
             Log.i(TAG, "onBufferingUpdate,pc:" + percent);
-            if (onBufferChangeListener != null) {
-                onBufferChangeListener.onBufferUpdate(percent);
-            }
             if (mediaPlayerAction != null) {
                 mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayer.this, percent);
+            }
+            //通知回调
+            for (OnBufferChangeListener l : onBufferChangeListeners) {
+                l.onBufferUpdate(percent);
             }
         }
     }

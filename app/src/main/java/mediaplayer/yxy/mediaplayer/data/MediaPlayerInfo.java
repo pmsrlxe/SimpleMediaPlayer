@@ -1,6 +1,6 @@
 package mediaplayer.yxy.mediaplayer.data;
 
-import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
+import mediaplayer.yxy.mediaplayer.listener.OnPlayingBufferListener;
 
 public class MediaPlayerInfo {
     //MEDIA_PLAYER_STATE_ERROR        = 0,      0
@@ -135,15 +135,15 @@ public class MediaPlayerInfo {
     }
 
 
-    public void callback(OnBufferStateListener bufferStateListener) {
+    public void callback(OnPlayingBufferListener bufferStateListener) {
         if (bufferStateListener == null) {
             return;
         }
         if (what == MEDIA_INFO_BUFFERING_START) {
-            bufferStateListener.onPauseForBufferWhenPlaying();
+            bufferStateListener.onPauseForBuffer();
         }
         if (what == MEDIA_INFO_BUFFERING_END) {
-            bufferStateListener.onResumeFromBufferAndPlay();
+            bufferStateListener.onPlayingFromPause();
         }
     }
 

@@ -252,14 +252,29 @@
         android:background="#99000000"
         android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/start2"
+        <FrameLayout
+            android:id="@+id/startPause"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="49dp"
-            android:padding="10dp"
-            android:src="@drawable/start_icon" />
+            android:layout_marginLeft="49dp">
+
+            <ImageView
+                android:id="@+id/start2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/start_icon" />
+
+            <ImageView
+                android:id="@+id/pause2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/pause_icon" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/current"
@@ -267,12 +282,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="49dp"
-            android:layout_toRightOf="@+id/start2"
+            android:layout_toRightOf="@+id/startPause"
             android:text="00:00"
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
-        <SeekBar
+        <mediaplayer.yxy.mediaplayer.view.SimpleSeekBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,10 +2,10 @@ package mediaplayer.yxy.mediaplayer.model;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 
-public class ControllerViewModel {
+public class LoadingViewModel {
     private final SimpleMediaPlayer simpleMediaPlayer;
 
-    public ControllerViewModel(SimpleMediaPlayer simpleMediaPlayer) {
+    public LoadingViewModel(SimpleMediaPlayer simpleMediaPlayer) {
         this.simpleMediaPlayer = simpleMediaPlayer;
     }
 

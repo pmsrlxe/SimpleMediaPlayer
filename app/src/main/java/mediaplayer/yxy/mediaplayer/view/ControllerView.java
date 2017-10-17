@@ -1,7 +1,6 @@
 package mediaplayer.yxy.mediaplayer.view;
 
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
@@ -13,9 +12,9 @@ public interface ControllerView {
 
     View getSurfaceContainer();
 
-    SeekBar getSeekBar();
+    SimpleSeekBar getSeekBar();
 
-    View getCenterStartView();
+    View getCenterPlayView();
 
     View getCenterPauseView();
 
@@ -23,4 +22,7 @@ public interface ControllerView {
 
     TextView getDurationTimeTextView();
 
+    View getControlPanelPlayView();
+
+    View getControlPanelPauseView();
 }

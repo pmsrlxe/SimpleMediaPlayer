@@ -8,25 +8,39 @@ import android.widget.SeekBar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
+import mediaplayer.yxy.mediaplayer.OnStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.listener.MediaDurationListener;
+import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
 import mediaplayer.yxy.mediaplayer.model.ControllerDurationModel;
 import mediaplayer.yxy.mediaplayer.view.ControllerView;
 import mediaplayer.yxy.mediaplayer.view.Utils;
 
 /**
- * 只管duration，等进度相关逻辑
+ * 只管进度、时间、seekBar相关逻辑。
  */
 public class ControllerDurationPresenter {
     private final ControllerView view;
     private ControllerDurationModel model;
     private Timer timer;
-    private MediaDurationListener mediaDurationListener = null;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-    private OnMediaPlayerStateChangeListener listener = new OnMediaPlayerStateChangeListener() {
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            model.getSimpleMediaPlayer().seekToPercent(seekBar.getProgress());
+        }
+    };
+
+    private OnStateChangeListener listener = new OnStateChangeListener() {
         @Override
         public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
             if (!now.hasDataState()) {
@@ -37,40 +51,32 @@ public class ControllerDurationPresenter {
         }
     };
 
+    private OnBufferChangeListener bufferChangeListener = new OnBufferChangeListener() {
+        @Override
+        public void onBufferUpdate(int percent) {
+            view.getSeekBar().setSecondaryProgress(percent);
+        }
+    };
+
     public ControllerDurationPresenter(ControllerView view) {
         this.view = view;
-        view.getSeekBar().setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                model.getSimpleMediaPlayer().seekToPercent(seekBar.getProgress());
-            }
-        });
     }
 
     public void bind(ControllerDurationModel model) {
         this.model = model;
-        model.getSimpleMediaPlayer().addOnMediaPlayerStateChangeListener(listener);
-    }
+        view.getSeekBar().addOnSeekBarChangeListener(seekBarChangeListener);
 
+        model.getSimpleMediaPlayer().addOnStateChangeListener(listener);
 
-    public void setMediaDurationListener(MediaDurationListener mediaDurationListener) {
-        this.mediaDurationListener = mediaDurationListener;
+        //缓存 buffer
+        model.getSimpleMediaPlayer().addOnBufferChangeListener(bufferChangeListener);
     }
 
     public void unbind() {
         stopDuration();
-        model.getSimpleMediaPlayer().removeOnMediaPlayerStateChangeListener(listener);
+        view.getSeekBar().removeOnSeekBarChangeListener(seekBarChangeListener);
+        model.getSimpleMediaPlayer().removeOnStateChangeListener(listener);
+        model.getSimpleMediaPlayer().removeOnBufferChangeListener(bufferChangeListener);
     }
 
     private void stopDuration() {
@@ -115,7 +121,7 @@ public class ControllerDurationPresenter {
         int current = model.getSimpleMediaPlayer().getCurrentPosition();
 
         int pc = duration == 0 ? 0 : (int) (current * 1.0f / duration * 100);
-//        Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");
+        //Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");
 
         //更新ui
         String currentFormatted = Utils.stringForTime(current);
@@ -123,10 +129,5 @@ public class ControllerDurationPresenter {
         view.getCurrentTimeTextView().setText(currentFormatted);
         view.getDurationTimeTextView().setText(durationFormatted);
         view.getSeekBar().setProgress(pc);
-
-        //回调
-        if (mediaDurationListener != null) {
-            mediaDurationListener.onUpdate(current, duration, pc);
-        }
     }
 }

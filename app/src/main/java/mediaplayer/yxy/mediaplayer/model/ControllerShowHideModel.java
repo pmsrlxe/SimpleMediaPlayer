@@ -2,12 +2,12 @@ package mediaplayer.yxy.mediaplayer.model;
 
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 
-public class ToolBarVisibleModel {
+public class ControllerShowHideModel {
 
     private int hideDuration = 2500;
     private SimpleMediaPlayer simpleMediaPlayer;
 
-    public ToolBarVisibleModel(SimpleMediaPlayer simpleMediaPlayer) {
+    public ControllerShowHideModel(SimpleMediaPlayer simpleMediaPlayer) {
         this.simpleMediaPlayer = simpleMediaPlayer;
     }
 

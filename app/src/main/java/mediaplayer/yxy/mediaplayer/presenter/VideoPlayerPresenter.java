@@ -1,113 +1,36 @@
 package mediaplayer.yxy.mediaplayer.presenter;
 
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-import mediaplayer.yxy.mediaplayer.OnMediaPlayerStateChangeListener;
 import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
-import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
-import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
-import mediaplayer.yxy.mediaplayer.listener.OnBufferStateListener;
-import mediaplayer.yxy.mediaplayer.model.ControllerDurationModel;
 import mediaplayer.yxy.mediaplayer.model.ControllerViewModel;
-import mediaplayer.yxy.mediaplayer.model.ToolBarVisibleModel;
+import mediaplayer.yxy.mediaplayer.model.LoadingViewModel;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
 import mediaplayer.yxy.mediaplayer.view.ControllerView;
+import mediaplayer.yxy.mediaplayer.view.LoadingView;
+import mediaplayer.yxy.mediaplayer.view.SimpleSeekBar;
 import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
 public class VideoPlayerPresenter {
-
     private final VideoPlayerView player;
     private final SimpleMediaPlayer simpleMediaPlayer;
-    private OnMediaPlayerStateChangeListener onMediaPlayerStateChangeListener;
     private final ControllerViewPresenter controllerViewPresenter;
+    private final LoadingViewPresenter loadingViewPresenter;
+
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        simpleMediaPlayer = new SimpleMediaPlayer();
-        controllerViewPresenter = new ControllerViewPresenter(getControllerView());
-
-        //缓存
-        simpleMediaPlayer.setOnBufferChangeListener(new OnBufferChangeListener() {
-            @Override
-            public void onBufferUpdate(int percent) {
-                player.skProgress.setSecondaryProgress(percent);
-            }
-        });
-        //播放中暂停进行缓存
-        simpleMediaPlayer.setOnBufferStateListener(new OnBufferStateListener() {
-            @Override
-            public void onPauseForBufferWhenPlaying() {
-                player.pbBufferingLoading.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onResumeFromBufferAndPlay() {
-                player.pbBufferingLoading.setVisibility(View.GONE);
-            }
-        });
+        this.simpleMediaPlayer = new SimpleMediaPlayer();
+        this.controllerViewPresenter = new ControllerViewPresenter(getControllerView());
+        this.loadingViewPresenter = new LoadingViewPresenter(createLoadingView());
     }
 
+
     public void bind(final VideoPlayerModel model) {
-        //controller
-        ControllerViewModel controllerViewModel = new ControllerViewModel();
-        controllerViewModel.setToolBarVisibleModel(new ToolBarVisibleModel(simpleMediaPlayer));
-        controllerViewModel.setControllerDurationModel(new ControllerDurationModel(simpleMediaPlayer));
-        controllerViewPresenter.bind(controllerViewModel);
-
-        //state
-        onMediaPlayerStateChangeListener = new OnMediaPlayerStateChangeListener() {
-            @Override
-            public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-                if (now == MediaPlayerState.Preparing) {
-                    player.rlPreparingLoading.setVisibility(View.VISIBLE);
-                } else {
-                    player.rlPreparingLoading.setVisibility(View.GONE);
-                }
-            }
-        };
-        simpleMediaPlayer.addOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
-
-
-        player.ivStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                simpleMediaPlayer.start();
-            }
-        });
-        player.ivStart2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                simpleMediaPlayer.start();
-            }
-        });
-        player.ivPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                simpleMediaPlayer.pause();
-            }
-        });
-
-        //seek
-        player.skProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                simpleMediaPlayer.seekToPercent(seekBar.getProgress());
-            }
-        });
-
+        controllerViewPresenter.bind(new ControllerViewModel(simpleMediaPlayer));
+        loadingViewPresenter.bind(new LoadingViewModel(simpleMediaPlayer));
 
         player.ivFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,11 +51,23 @@ public class VideoPlayerPresenter {
 
 
     public void unbind() {
-        if (onMediaPlayerStateChangeListener != null) {
-            simpleMediaPlayer.removeOnMediaPlayerStateChangeListener(onMediaPlayerStateChangeListener);
-        }
+        loadingViewPresenter.unbind();
         controllerViewPresenter.unbind();
         simpleMediaPlayer.release();
+    }
+
+    private LoadingView createLoadingView() {
+        return new LoadingView() {
+            @Override
+            public View getPreparingLoadingView() {
+                return player.rlPreparingLoading;
+            }
+
+            @Override
+            public View getPlayingBufferLoadingView() {
+                return player.pbBufferingLoading;
+            }
+        };
     }
 
     private ControllerView getControllerView() {
@@ -148,12 +83,12 @@ public class VideoPlayerPresenter {
             }
 
             @Override
-            public SeekBar getSeekBar() {
+            public SimpleSeekBar getSeekBar() {
                 return player.skProgress;
             }
 
             @Override
-            public View getCenterStartView() {
+            public View getCenterPlayView() {
                 return player.ivStart;
             }
 
@@ -170,6 +105,16 @@ public class VideoPlayerPresenter {
             @Override
             public TextView getDurationTimeTextView() {
                 return player.tvTimeTotal;
+            }
+
+            @Override
+            public View getControlPanelPlayView() {
+                return player.ivStart2;
+            }
+
+            @Override
+            public View getControlPanelPauseView() {
+                return player.ivPause2;
             }
         };
     }

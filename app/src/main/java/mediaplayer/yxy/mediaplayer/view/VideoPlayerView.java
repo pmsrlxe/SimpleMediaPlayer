@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import mediaplayer.yxy.mediaplayer.R;
@@ -31,7 +30,7 @@ public class VideoPlayerView extends FrameLayout {
     public ImageView ivStart2;
     public ImageView ivBack;
     public Button btContinue;
-    public SeekBar skProgress;
+    public SimpleSeekBar skProgress;
     public ImageView ivFullScreen;
     public TextView tvTimeCurrent, tvTimeTotal;
     public ViewGroup rlSurfaceContainer;
@@ -77,6 +76,7 @@ public class VideoPlayerView extends FrameLayout {
 
     public RelativeLayout rlPreparingLoading;
     public ProgressBar pbBufferingLoading;
+    public ImageView ivPause2;
 
 
     public VideoPlayerView(Context context) {
@@ -93,6 +93,7 @@ public class VideoPlayerView extends FrameLayout {
         View.inflate(context, R.layout.standard_layout, this);
         ivStart = (ImageView) findViewById(R.id.start);
         ivPause = (ImageView) findViewById(R.id.pause);
+        ivPause2 = (ImageView) findViewById(R.id.pause2);
         ivStart2 = (ImageView) findViewById(R.id.start2);
         ivBack = (ImageView) findViewById(R.id.back);
         rlNetworkError = (RelativeLayout) findViewById(R.id.rl_network_error);
@@ -102,7 +103,7 @@ public class VideoPlayerView extends FrameLayout {
         btErrorRefresh = (Button) findViewById(R.id.bt_error_refresh);
         btContinue = (Button) findViewById(R.id.bt_continue);
         ivFullScreen = (ImageView) findViewById(R.id.fullscreen);
-        skProgress = (SeekBar) findViewById(R.id.progress);
+        skProgress = (SimpleSeekBar) findViewById(R.id.progress);
         tvTimeCurrent = (TextView) findViewById(R.id.current);
         tvTimeTotal = (TextView) findViewById(R.id.total);
         llBottomControl = (ViewGroup) findViewById(R.id.layout_bottom);
