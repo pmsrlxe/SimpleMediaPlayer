@@ -2,6 +2,7 @@ package mediaplayer.yxy.mediaplayer;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -32,11 +33,10 @@ public class SimpleMediaPlayer {
     public void MediaPlayer() {
     }
 
-    public MediaPlayer getRealMediaPlayer() {
-        return mediaPlayer;
-    }
 
-    //重置
+    /**
+     * 重置player
+     */
     public void reset(MediaParams mediaParams) {
         this.mediaParams = new MediaParams(mediaParams);
         this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
@@ -44,27 +44,37 @@ public class SimpleMediaPlayer {
         perform(true, MediaPlayerState.Reset);
     }
 
-    //准备
+    /**
+     * 准备播放
+     */
     public void prepare() {
         perform(true, MediaPlayerState.Prepared);
     }
 
-    //播放
+    /**
+     * 播放
+     */
     public void start() {
         perform(true, MediaPlayerState.Playing);
     }
 
-    //停止
+    /**
+     * 停止
+     */
     public void stop() {
         perform(true, MediaPlayerState.Stopped);
     }
 
-    //暂停
+    /**
+     * 暂停
+     */
     public void pause() {
         perform(true, MediaPlayerState.Paused);
     }
 
-    //释放
+    /**
+     * 释放
+     */
     public void release() {
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
@@ -73,39 +83,56 @@ public class SimpleMediaPlayer {
         perform(false, MediaPlayerState.Released);
     }
 
-    //跳转 0-100
+    /**
+     * 跳转 0-100
+     */
     public void seekToPercent(int percent) {
+        if (percent < 0 || percent > 100) {
+            throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
+        }
         mediaParams.setSeekToPercent(percent);
         perform(false, MediaPlayerState.SeekComplete);
     }
 
+    /**
+     * 获取当前player的状态
+     */
     public synchronized MediaPlayerState getMediaPlayerState() {
         return mediaPlayerState;
     }
 
-    public synchronized void setMediaPlayerState(MediaPlayerState toState) {
-        MediaPlayerState from = this.mediaPlayerState;
-        this.mediaPlayerState = toState;
-        if (stateChangeListeners != null) {
-            for (OnStateChangeListener l : stateChangeListeners) {
-                l.onStateChange(from, toState);
-            }
-        }
-        Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
-
-    }
-
-    public void addOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.add(l);
-    }
-
-    public void removeOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.remove(l);
-    }
-
+    /**
+     * 获取当前player的参数
+     */
     public MediaParams getMediaParams() {
         return mediaParams;
     }
+
+    /**
+     * 获取当前的player长度
+     *
+     * @return 0说明没有
+     */
+    public int getDurationInMs() {
+        if (mediaPlayerAction == null) {
+            return 0;
+        }
+        return mediaPlayerAction.getDuration();
+    }
+
+    /**
+     * 获取当前播放的位置
+     *
+     * @return 0说明没有
+     */
+    public int getCurrentPositionInMs() {
+        if (mediaPlayerAction == null) {
+            return 0;
+        }
+        return mediaPlayerAction.getCurrentPosition();
+    }
+
+    /*--------------------------------内部使用方法---------------------------------------*/
 
     private void perform(boolean init, MediaPlayerState changeToState) {
         if (init) {
@@ -129,19 +156,24 @@ public class SimpleMediaPlayer {
         }
     }
 
-    public int getDuration() {
-        if (mediaPlayerAction == null) {
-            return 0;
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public synchronized void setMediaPlayerState(MediaPlayerState toState) {
+        MediaPlayerState from = this.mediaPlayerState;
+        this.mediaPlayerState = toState;
+        if (stateChangeListeners != null) {
+            for (OnStateChangeListener l : stateChangeListeners) {
+                l.onStateChange(from, toState);
+            }
         }
-        return mediaPlayerAction.getDuration();
+        Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
+
     }
 
-    public int getCurrentPosition() {
-        if (mediaPlayerAction == null) {
-            return 0;
-        }
-        return mediaPlayerAction.getCurrentPosition();
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public MediaPlayer getRealMediaPlayer() {
+        return mediaPlayer;
     }
+
     /*--------------------------------listeners---------------------------------------*/
 
     public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
@@ -164,6 +196,14 @@ public class SimpleMediaPlayer {
             return;
         }
         stateChangeListeners.remove(listener);
+    }
+
+    public void addOnBufferChangeListener(OnBufferChangeListener l) {
+        onBufferChangeListeners.add(l);
+    }
+
+    public void removeOnBufferChangeListener(OnBufferChangeListener l) {
+        onBufferChangeListeners.remove(l);
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/
