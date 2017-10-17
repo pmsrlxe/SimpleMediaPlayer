@@ -83,10 +83,12 @@ public class ControllerDurationPresenter {
 
 
     private void startDuration() {
+        //停止上次的
+        stopDuration();
         if (timer == null) {
             timer = new Timer();
         }
-        timer.schedule(createTask(), 0, this.model.getPeriod());
+        timer.schedule(createTask(), 0, this.model.getUpdatePeriodMs());
         Log.i(SimpleMediaPlayer.TAG, "startDuration");
     }
 
@@ -94,24 +96,26 @@ public class ControllerDurationPresenter {
         return new TimerTask() {
             @Override
             public void run() {
-                if (model != null && mediaDurationListener != null) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            handleDurationUpdate();
-                        }
-                    });
-                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleDurationUpdate();
+                    }
+                });
             }
         };
     }
 
     private void handleDurationUpdate() {
+        if (model == null) {
+            return;
+        }
+
         int duration = model.getSimpleMediaPlayer().getDuration();
         int current = model.getSimpleMediaPlayer().getCurrentPosition();
 
         int pc = duration == 0 ? 0 : (int) (current * 1.0f / duration * 100);
-        Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");
+//        Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");
 
         //更新ui
         String currentFormatted = Utils.stringForTime(current);
@@ -121,6 +125,8 @@ public class ControllerDurationPresenter {
         view.getSeekBar().setProgress(pc);
 
         //回调
-        mediaDurationListener.onUpdate(current, duration, pc);
+        if (mediaDurationListener != null) {
+            mediaDurationListener.onUpdate(current, duration, pc);
+        }
     }
 }

@@ -128,6 +128,11 @@ public class ControllerVisiblePresenter {
             showToolbar();
             return;
         }
+        //preparing过程，有loading框，不能展示
+        if (now == MediaPlayerState.Preparing) {
+            hideToolbar(0);
+            return;
+        }
 
         //1、播放的时候，点击展示出来，需要延迟隐藏
         if (now == MediaPlayerState.Playing) {
