@@ -1,6 +1,6 @@
 package mediaplayer.yxy.mediaplayer.model;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayer;
 
 public class ControllerShowHideModel {
 

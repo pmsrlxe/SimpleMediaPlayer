@@ -1,6 +1,6 @@
 package mediaplayer.yxy.mediaplayer.action.release;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
@@ -11,7 +11,7 @@ public class ReleaseFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
                 return new NoneAction(simpleMediaPlayer, changeToState);

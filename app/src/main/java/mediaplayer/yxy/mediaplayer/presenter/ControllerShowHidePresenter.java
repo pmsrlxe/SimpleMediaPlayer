@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 
-import mediaplayer.yxy.mediaplayer.OnStateChangeListener;
+import mediaplayer.yxy.mediaplayer.listener.OnStateChangeListener;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.model.ControllerShowHideModel;
 import mediaplayer.yxy.mediaplayer.view.ControllerView;

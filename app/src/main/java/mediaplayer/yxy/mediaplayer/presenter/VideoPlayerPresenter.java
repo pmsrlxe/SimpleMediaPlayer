@@ -3,8 +3,9 @@ package mediaplayer.yxy.mediaplayer.presenter;
 import android.view.View;
 import android.widget.TextView;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.data.MediaParams;
+import mediaplayer.yxy.mediaplayer.media.MediaPlayerFactory;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.model.ControllerViewModel;
 import mediaplayer.yxy.mediaplayer.model.LoadingViewModel;
 import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
@@ -15,22 +16,22 @@ import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
 
 public class VideoPlayerPresenter {
     private final VideoPlayerView player;
-    private final SimpleMediaPlayer simpleMediaPlayer;
+    private final SimpleMediaPlayer mediaPlayer;
     private final ControllerViewPresenter controllerViewPresenter;
     private final LoadingViewPresenter loadingViewPresenter;
 
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        this.simpleMediaPlayer = new SimpleMediaPlayer();
+        this.mediaPlayer = MediaPlayerFactory.getMediaPlayer();
         this.controllerViewPresenter = new ControllerViewPresenter(getControllerView());
         this.loadingViewPresenter = new LoadingViewPresenter(createLoadingView());
     }
 
 
     public void bind(final VideoPlayerModel model) {
-        controllerViewPresenter.bind(new ControllerViewModel(simpleMediaPlayer));
-        loadingViewPresenter.bind(new LoadingViewModel(simpleMediaPlayer));
+        controllerViewPresenter.bind(new ControllerViewModel(mediaPlayer));
+        loadingViewPresenter.bind(new LoadingViewModel(mediaPlayer));
 
         player.ivFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +46,7 @@ public class VideoPlayerPresenter {
                 model.getHeadData(),
                 player.surfaceView);
         mediaParams.setSeekToMs(model.getSeekToMs());
-        simpleMediaPlayer.reset(mediaParams);
+        mediaPlayer.reset(mediaParams);
 
     }
 
@@ -53,7 +54,7 @@ public class VideoPlayerPresenter {
     public void unbind() {
         loadingViewPresenter.unbind();
         controllerViewPresenter.unbind();
-        simpleMediaPlayer.release();
+        mediaPlayer.release();
     }
 
     private LoadingView createLoadingView() {

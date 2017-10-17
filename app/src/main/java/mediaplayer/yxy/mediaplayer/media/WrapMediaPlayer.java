@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer;
+package mediaplayer.yxy.mediaplayer.media;
 
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -7,15 +7,13 @@ import android.view.SurfaceHolder;
 import java.io.IOException;
 
 /**
- * Created by yxy on 17/7/28.
  * 为了查找问题写的，主要是打印log，无任何逻辑
  */
-
-public class LogMediaPlayer extends MediaPlayer {
+public class WrapMediaPlayer extends MediaPlayer {
 
     private static final String TAG = "logMedia";
 
-    public LogMediaPlayer() {
+    public WrapMediaPlayer() {
         Log.d(TAG, "new:" + this);
     }
 
@@ -27,7 +25,7 @@ public class LogMediaPlayer extends MediaPlayer {
                 if (listener != null) {
                     listener.onPrepared(mp);
                 }
-                Log.d(TAG, "onPrepared:" + LogMediaPlayer.this);
+                Log.d(TAG, "onPrepared:" + WrapMediaPlayer.this);
             }
         });
     }
@@ -37,7 +35,7 @@ public class LogMediaPlayer extends MediaPlayer {
         super.setOnInfoListener(new OnInfoListener() {
             @Override
             public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.d(TAG, "onInfo(w=" + what + ",e=" + extra + "):" + LogMediaPlayer.this);
+                Log.d(TAG, "onInfo(w=" + what + ",e=" + extra + "):" + WrapMediaPlayer.this);
                 return listener != null && listener.onInfo(mp, what, extra);
             }
         });
@@ -46,13 +44,13 @@ public class LogMediaPlayer extends MediaPlayer {
     @Override
     public void setDisplay(SurfaceHolder sh) {
         super.setDisplay(sh);
-        Log.d(TAG, "setDisplay(hd:" + sh + "):" + LogMediaPlayer.this);
+        Log.d(TAG, "setDisplay(hd:" + sh + "):" + WrapMediaPlayer.this);
     }
 
     @Override
     public void seekTo(int msec) throws IllegalStateException {
         super.seekTo(msec);
-        Log.d(TAG, "seekTo(" + msec + "):" + LogMediaPlayer.this);
+        Log.d(TAG, "seekTo(" + msec + "):" + WrapMediaPlayer.this);
     }
 
     @Override

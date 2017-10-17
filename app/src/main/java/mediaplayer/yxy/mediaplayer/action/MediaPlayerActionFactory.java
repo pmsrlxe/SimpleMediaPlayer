@@ -2,21 +2,22 @@ package mediaplayer.yxy.mediaplayer.action;
 
 import android.util.Log;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
 import mediaplayer.yxy.mediaplayer.action.complete.CompleteFactory;
 import mediaplayer.yxy.mediaplayer.action.error.ErrorFactory;
 import mediaplayer.yxy.mediaplayer.action.init.InitFactory;
 import mediaplayer.yxy.mediaplayer.action.pause.PauseFactory;
+import mediaplayer.yxy.mediaplayer.action.playing.PlayingFactory;
 import mediaplayer.yxy.mediaplayer.action.prepared.PreparedFactory;
 import mediaplayer.yxy.mediaplayer.action.preparing.PreparingFactory;
 import mediaplayer.yxy.mediaplayer.action.release.ReleaseFactory;
 import mediaplayer.yxy.mediaplayer.action.reset.ResetFactory;
 import mediaplayer.yxy.mediaplayer.action.seekcomplete.SeekCompleteFactory;
 import mediaplayer.yxy.mediaplayer.action.seeking.SeekingFactory;
-import mediaplayer.yxy.mediaplayer.action.playing.PlayingFactory;
 import mediaplayer.yxy.mediaplayer.action.stop.StoppedFactory;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 
 public class MediaPlayerActionFactory {
 
@@ -24,7 +25,7 @@ public class MediaPlayerActionFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
         MediaPlayerState currentState = simpleMediaPlayer.getMediaPlayerState();
         MediaPlayerAction retAction;
         switch (currentState) {

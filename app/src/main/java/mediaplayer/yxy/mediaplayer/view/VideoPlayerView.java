@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import mediaplayer.yxy.mediaplayer.R;
+import mediaplayer.yxy.mediaplayer.utils.Utils;
 
 
 /**
@@ -45,7 +46,6 @@ public class VideoPlayerView extends FrameLayout {
     private boolean prepareing;
     public String url;
     public Object[] objects;
-    protected BuriedPointStandard buriedPoint;
     protected int screenWidth;
     protected int screenHeight;
     protected AudioManager mAudioManager;

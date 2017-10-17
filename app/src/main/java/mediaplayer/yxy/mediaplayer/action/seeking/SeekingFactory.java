@@ -1,6 +1,6 @@
 package mediaplayer.yxy.mediaplayer.action.seeking;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 import mediaplayer.yxy.mediaplayer.action.MediaPlayerAction;
 import mediaplayer.yxy.mediaplayer.action.common.CommonReleaseAction;
 import mediaplayer.yxy.mediaplayer.action.common.NoneAction;
@@ -12,7 +12,7 @@ public class SeekingFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
                 return new NoneAction(simpleMediaPlayer, changeToState);

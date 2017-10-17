@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer.view;
+package mediaplayer.yxy.mediaplayer.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;

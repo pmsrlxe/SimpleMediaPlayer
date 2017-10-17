@@ -2,7 +2,7 @@ package mediaplayer.yxy.mediaplayer.presenter;
 
 import android.view.View;
 
-import mediaplayer.yxy.mediaplayer.OnStateChangeListener;
+import mediaplayer.yxy.mediaplayer.listener.OnStateChangeListener;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.OnPlayingBufferListener;
 import mediaplayer.yxy.mediaplayer.model.LoadingViewModel;

@@ -8,13 +8,13 @@ import android.widget.SeekBar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import mediaplayer.yxy.mediaplayer.OnStateChangeListener;
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.listener.OnStateChangeListener;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayer;
 import mediaplayer.yxy.mediaplayer.model.ControllerDurationModel;
 import mediaplayer.yxy.mediaplayer.view.ControllerView;
-import mediaplayer.yxy.mediaplayer.view.Utils;
+import mediaplayer.yxy.mediaplayer.utils.Utils;
 
 /**
  * 只管进度、时间、seekBar相关逻辑。

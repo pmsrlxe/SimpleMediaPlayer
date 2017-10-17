@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer;
+package mediaplayer.yxy.mediaplayer.listener;
 
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 

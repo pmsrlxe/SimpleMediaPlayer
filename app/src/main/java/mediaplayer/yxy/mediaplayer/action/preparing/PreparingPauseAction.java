@@ -1,18 +1,18 @@
 package mediaplayer.yxy.mediaplayer.action.preparing;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class PreparingPauseAction extends PreparingBaseAction {
 
-    public PreparingPauseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public PreparingPauseAction(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
-    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+    public void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer) {
         try {
             //不用pause，因为preparing完之后，需要start才能播放
             //这里直接改状态就行了
@@ -24,27 +24,27 @@ public class PreparingPauseAction extends PreparingBaseAction {
     }
 
     @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
+    public boolean onInfo(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
+    public boolean onError(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerError error) {
         return false;
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
+    public void onSeekComplete(SimpleMediaPlayerImpl mediaPlayer) {
 
     }
 
     @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
+    public void onBufferingUpdate(SimpleMediaPlayerImpl mediaPlayer, int percent) {
 
     }
 
     @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
+    public void onCompletion(SimpleMediaPlayerImpl mediaPlayer) {
 
     }
 

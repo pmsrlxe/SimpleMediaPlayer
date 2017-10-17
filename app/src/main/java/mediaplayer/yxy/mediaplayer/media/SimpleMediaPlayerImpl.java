@@ -1,4 +1,4 @@
-package mediaplayer.yxy.mediaplayer;
+package mediaplayer.yxy.mediaplayer.media;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -17,9 +17,9 @@ import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 import mediaplayer.yxy.mediaplayer.listener.OnBufferChangeListener;
 import mediaplayer.yxy.mediaplayer.listener.OnPlayingBufferListener;
+import mediaplayer.yxy.mediaplayer.listener.OnStateChangeListener;
 
-public class SimpleMediaPlayer {
-    public static final String TAG = "SimpleMediaPlayer";
+public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
     private MediaPlayer mediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
@@ -37,6 +37,7 @@ public class SimpleMediaPlayer {
     /**
      * 重置player
      */
+    @Override
     public void reset(MediaParams mediaParams) {
         this.mediaParams = new MediaParams(mediaParams);
         this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
@@ -47,6 +48,7 @@ public class SimpleMediaPlayer {
     /**
      * 准备播放
      */
+    @Override
     public void prepare() {
         perform(true, MediaPlayerState.Prepared);
     }
@@ -54,6 +56,7 @@ public class SimpleMediaPlayer {
     /**
      * 播放
      */
+    @Override
     public void start() {
         perform(true, MediaPlayerState.Playing);
     }
@@ -61,6 +64,7 @@ public class SimpleMediaPlayer {
     /**
      * 停止
      */
+    @Override
     public void stop() {
         perform(true, MediaPlayerState.Stopped);
     }
@@ -68,6 +72,7 @@ public class SimpleMediaPlayer {
     /**
      * 暂停
      */
+    @Override
     public void pause() {
         perform(true, MediaPlayerState.Paused);
     }
@@ -75,6 +80,7 @@ public class SimpleMediaPlayer {
     /**
      * 释放
      */
+    @Override
     public void release() {
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
@@ -86,6 +92,7 @@ public class SimpleMediaPlayer {
     /**
      * 跳转 0-100
      */
+    @Override
     public void seekToPercent(int percent) {
         if (percent < 0 || percent > 100) {
             throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
@@ -97,6 +104,7 @@ public class SimpleMediaPlayer {
     /**
      * 获取当前player的状态
      */
+    @Override
     public synchronized MediaPlayerState getMediaPlayerState() {
         return mediaPlayerState;
     }
@@ -104,6 +112,7 @@ public class SimpleMediaPlayer {
     /**
      * 获取当前player的参数
      */
+    @Override
     public MediaParams getMediaParams() {
         return mediaParams;
     }
@@ -113,6 +122,7 @@ public class SimpleMediaPlayer {
      *
      * @return 0说明没有
      */
+    @Override
     public int getDurationInMs() {
         if (mediaPlayerAction == null) {
             return 0;
@@ -125,6 +135,7 @@ public class SimpleMediaPlayer {
      *
      * @return 0说明没有
      */
+    @Override
     public int getCurrentPositionInMs() {
         if (mediaPlayerAction == null) {
             return 0;
@@ -145,7 +156,7 @@ public class SimpleMediaPlayer {
     //初始化
     private void initIfNeed() {
         if (mediaPlayer == null) {
-            mediaPlayer = new LogMediaPlayer();
+            mediaPlayer = new WrapMediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
             mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
@@ -175,15 +186,17 @@ public class SimpleMediaPlayer {
     }
 
     /*--------------------------------listeners---------------------------------------*/
-
+    @Override
     public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
         onPlayingBufferListeners.add(l);
     }
 
+    @Override
     public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
         onPlayingBufferListeners.remove(l);
     }
 
+    @Override
     public void addOnStateChangeListener(OnStateChangeListener listener) {
         if (listener == null) {
             return;
@@ -191,6 +204,7 @@ public class SimpleMediaPlayer {
         stateChangeListeners.add(listener);
     }
 
+    @Override
     public void removeOnStateChangeListener(OnStateChangeListener listener) {
         if (listener == null) {
             return;
@@ -198,10 +212,12 @@ public class SimpleMediaPlayer {
         stateChangeListeners.remove(listener);
     }
 
+    @Override
     public void addOnBufferChangeListener(OnBufferChangeListener l) {
         onBufferChangeListeners.add(l);
     }
 
+    @Override
     public void removeOnBufferChangeListener(OnBufferChangeListener l) {
         onBufferChangeListeners.remove(l);
     }
@@ -213,7 +229,7 @@ public class SimpleMediaPlayer {
         @Override
         public void onPrepared(MediaPlayer mp) {
             Log.i(TAG, "onPrepared");
-            mediaPlayerAction.onPrepared(SimpleMediaPlayer.this);
+            mediaPlayerAction.onPrepared(SimpleMediaPlayerImpl.this);
         }
     }
 
@@ -227,7 +243,7 @@ public class SimpleMediaPlayer {
             for (OnPlayingBufferListener listener : onPlayingBufferListeners) {
                 info.callback(listener);
             }
-            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayer.this, info);
+            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayerImpl.this, info);
         }
     }
 
@@ -236,7 +252,7 @@ public class SimpleMediaPlayer {
         @Override
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             Log.e(TAG, "onError,w:" + what + ",e:" + extra);
-            return mediaPlayerAction != null && mediaPlayerAction.onError(SimpleMediaPlayer.this,
+            return mediaPlayerAction != null && mediaPlayerAction.onError(SimpleMediaPlayerImpl.this,
                     new MediaPlayerError(what, extra));
         }
     }
@@ -247,7 +263,7 @@ public class SimpleMediaPlayer {
         public void onSeekComplete(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onSeekComplete");
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onSeekComplete(SimpleMediaPlayer.this);
+                mediaPlayerAction.onSeekComplete(SimpleMediaPlayerImpl.this);
             }
         }
     }
@@ -258,7 +274,7 @@ public class SimpleMediaPlayer {
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
             Log.i(TAG, "onBufferingUpdate,pc:" + percent);
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayer.this, percent);
+                mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayerImpl.this, percent);
             }
             //通知回调
             for (OnBufferChangeListener l : onBufferChangeListeners) {
@@ -273,7 +289,7 @@ public class SimpleMediaPlayer {
         public void onCompletion(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onCompletion");
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onCompletion(SimpleMediaPlayer.this);
+                mediaPlayerAction.onCompletion(SimpleMediaPlayerImpl.this);
             }
         }
     }

@@ -1,43 +1,43 @@
 package mediaplayer.yxy.mediaplayer.action.error;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ErrorResetAction extends ErrorBaseAction {
 
-    public ErrorResetAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public ErrorResetAction(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
-    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+    public void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer) {
 
     }
 
     @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
+    public boolean onInfo(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
+    public boolean onError(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerError error) {
         return false;
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
+    public void onSeekComplete(SimpleMediaPlayerImpl mediaPlayer) {
 
     }
 
     @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
+    public void onBufferingUpdate(SimpleMediaPlayerImpl mediaPlayer, int percent) {
 
     }
 
     @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
+    public void onCompletion(SimpleMediaPlayerImpl mediaPlayer) {
 
     }
 

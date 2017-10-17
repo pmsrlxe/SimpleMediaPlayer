@@ -1,18 +1,18 @@
 package mediaplayer.yxy.mediaplayer.action.reset;
 
-import mediaplayer.yxy.mediaplayer.SimpleMediaPlayer;
+import mediaplayer.yxy.mediaplayer.media.SimpleMediaPlayerImpl;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerError;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerInfo;
 import mediaplayer.yxy.mediaplayer.data.MediaPlayerState;
 
 public class ResetPlayingAction extends ResetBaseAction {
 
-    public ResetPlayingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
+    public ResetPlayingAction(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
-    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+    public void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer) {
         try {
             //0-100
             int percentInt = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
@@ -44,29 +44,29 @@ public class ResetPlayingAction extends ResetBaseAction {
     }
 
     @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
+    public boolean onInfo(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
+    public boolean onError(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerError error) {
         getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
         return false;
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
+    public void onSeekComplete(SimpleMediaPlayerImpl mediaPlayer) {
         getRealMediaPlayer().start();
         getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
     }
 
     @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
+    public void onBufferingUpdate(SimpleMediaPlayerImpl mediaPlayer, int percent) {
 
     }
 
     @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
+    public void onCompletion(SimpleMediaPlayerImpl mediaPlayer) {
 
     }
 
