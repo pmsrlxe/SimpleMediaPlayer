@@ -5,7 +5,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class PausedScAction extends PauseBaseAction {
 
@@ -13,10 +12,6 @@ public class PausedScAction extends PauseBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
@@ -49,8 +44,8 @@ public class PausedScAction extends PauseBaseAction {
         super.perform();
         try {
             float pc = getSimpleMediaPlayer().getMediaParams().getSeekToPercent() * 1.0f / 100;
-            int timeInSecond = (int) (pc * getRealMediaPlayer().getDuration());
-            getRealMediaPlayer().seekTo(timeInSecond);
+            int timeInSecond = (int) (pc * getRealMediaPlayer().doGetDurationMs());
+            getRealMediaPlayer().doSeekTo(timeInSecond);
             getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
         } catch (Throwable ex) {
             ex.printStackTrace();

@@ -24,7 +24,7 @@ public class VideoPlayerPresenter {
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        this.mediaPlayer = MediaPlayerFactory.getMediaPlayer();
+        this.mediaPlayer = MediaPlayerFactory.getMediaPlayer(player.getContext());
         this.controllerViewPresenter = new ControllerViewPresenter(getControllerView());
         this.loadingViewPresenter = new LoadingViewPresenter(createLoadingView());
     }
@@ -41,9 +41,7 @@ public class VideoPlayerPresenter {
             }
         });
         //初始化player
-        MediaParams mediaParams = new MediaParams(
-                player.surfaceView.getContext(),
-                model.getUrl(),
+        MediaParams mediaParams = new MediaParams(model.getUrl(),
                 model.getHeadData(),
                 player.surfaceView);
         mediaParams.setSeekToMs(model.getSeekToMs());

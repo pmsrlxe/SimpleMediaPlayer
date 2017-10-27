@@ -5,7 +5,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class PlayingPauseAction extends PlayingBaseAction {
 
@@ -13,10 +12,6 @@ public class PlayingPauseAction extends PlayingBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
@@ -47,7 +42,7 @@ public class PlayingPauseAction extends PlayingBaseAction {
     public void perform() {
         super.perform();
         try {
-            getRealMediaPlayer().pause();
+            getRealMediaPlayer().doPause();
             getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Paused);
         } catch (Throwable ex) {
             ex.printStackTrace();

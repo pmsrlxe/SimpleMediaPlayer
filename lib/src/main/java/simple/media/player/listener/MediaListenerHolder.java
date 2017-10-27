@@ -9,14 +9,16 @@ import simple.media.player.data.MediaPlayerState;
  * 管理MediaPlayer监听器
  * Created by rty on 27/10/2017.
  */
-
 public class MediaListenerHolder implements MediaPlayerAllAware {
     private final List<OnStateChangeListener> stateChangeListeners = new ArrayList<>();
     private final List<OnBufferChangeListener> onBufferChangeListeners = new ArrayList<>();
     private final List<OnPlayingBufferListener> onPlayingBufferListeners = new ArrayList<>();
 
-
-    //缓冲更新了
+    /**
+     * 缓冲更新了
+     *
+     * @param percent 0-100
+     */
     public void notifyBufferingUpdate(int percent) {
         synchronized (onBufferChangeListeners) {
             //通知回调
@@ -26,7 +28,9 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
         }
     }
 
-    //状态改变了
+    /**
+     * 状态改变了
+     */
     public void notifyStateChangeListener(MediaPlayerState from, MediaPlayerState toState) {
         synchronized (stateChangeListeners) {
             for (OnStateChangeListener l : stateChangeListeners) {
@@ -35,7 +39,9 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
         }
     }
 
-    //播放中,开始缓冲了
+    /**
+     * 播放中,开始缓冲了
+     */
     public void notifyPauseForBuffer() {
         synchronized (onPlayingBufferListeners) {
             for (OnPlayingBufferListener bufferListener : onPlayingBufferListeners) {
@@ -44,7 +50,9 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
         }
     }
 
-    //播放中缓冲结束了，开始播放
+    /**
+     * 播放中缓冲结束了，开始播放
+     */
     public void notifyPlayingFromPause() {
         synchronized (onPlayingBufferListeners) {
             for (OnPlayingBufferListener bufferListener : onPlayingBufferListeners) {

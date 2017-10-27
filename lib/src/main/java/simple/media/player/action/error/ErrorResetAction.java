@@ -5,7 +5,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class ErrorResetAction extends ErrorBaseAction {
 
@@ -13,10 +12,6 @@ public class ErrorResetAction extends ErrorBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {

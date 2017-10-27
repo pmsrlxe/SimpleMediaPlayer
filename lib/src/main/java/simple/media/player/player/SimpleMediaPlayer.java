@@ -1,12 +1,19 @@
 package simple.media.player.player;
 
 
+import android.content.Context;
+
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.listener.MediaPlayerAllAware;
 
 public interface SimpleMediaPlayer extends MediaPlayerAllAware {
     String TAG = "SimpleMediaPlayer";
+
+    void initIfNeed(Context context);
+
+    Context getContext();
+
 
     /**
      * 重置player
@@ -77,7 +84,7 @@ public interface SimpleMediaPlayer extends MediaPlayerAllAware {
     /**
      * 由action调用，设置state
      *
-     * @param reset
+     * @param state
      */
-    void setMediaPlayerStateFromAction(MediaPlayerState reset);
+    void setMediaPlayerStateFromAction(MediaPlayerState state);
 }

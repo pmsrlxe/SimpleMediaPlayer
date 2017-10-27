@@ -1,6 +1,7 @@
 package simple.media.player.player.sys;
 
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.annotation.RestrictTo;
@@ -30,8 +31,29 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
     private MediaParams mediaParams;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
     private MediaListenerHolder listeners = new MediaListenerHolder();
+    private Context context;
 
     public void MediaPlayer() {
+    }
+
+    @Override
+    public void initIfNeed(Context context) {
+        this.context = context;
+        if (realMediaPlayer == null) {
+            realMediaPlayer = new SysRealMediaPlayer();
+            realMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            realMediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
+            realMediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
+            realMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
+            realMediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
+            realMediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
+            realMediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
+        }
+    }
+
+    @Override
+    public Context getContext() {
+        return context;
     }
 
     /**
@@ -42,7 +64,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         this.mediaParams = new MediaParams(mediaParams);
         this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
         this.mediaParams.getSurfaceView().getHolder().addCallback(surfaceCallBackWrapper);
-        perform(true, MediaPlayerState.Reset);
+        perform(MediaPlayerState.Reset);
     }
 
     /**
@@ -50,7 +72,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
      */
     @Override
     public void prepare() {
-        perform(true, MediaPlayerState.Prepared);
+        perform(MediaPlayerState.Prepared);
     }
 
     /**
@@ -58,7 +80,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
      */
     @Override
     public void start() {
-        perform(true, MediaPlayerState.Playing);
+        perform(MediaPlayerState.Playing);
     }
 
     /**
@@ -66,7 +88,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
      */
     @Override
     public void stop() {
-        perform(true, MediaPlayerState.Stopped);
+        perform(MediaPlayerState.Stopped);
     }
 
     /**
@@ -74,7 +96,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
      */
     @Override
     public void pause() {
-        perform(true, MediaPlayerState.Paused);
+        perform(MediaPlayerState.Paused);
     }
 
     /**
@@ -85,7 +107,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
         }
-        perform(false, MediaPlayerState.Released);
+        perform(MediaPlayerState.Released);
         listeners.release();
     }
 
@@ -98,7 +120,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
             throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
         }
         mediaParams.setSeekToPercent(percent);
-        perform(false, MediaPlayerState.SeekComplete);
+        perform(MediaPlayerState.SeekComplete);
     }
 
     /**
@@ -127,7 +149,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         if (mediaPlayerAction == null) {
             return 0;
         }
-        return mediaPlayerAction.getDuration();
+        return mediaPlayerAction.getDurationMs();
     }
 
     /**
@@ -140,31 +162,15 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         if (mediaPlayerAction == null) {
             return 0;
         }
-        return mediaPlayerAction.getCurrentPosition();
+        return mediaPlayerAction.getCurrentPositionMs();
     }
 
     /*--------------------------------内部使用方法---------------------------------------*/
 
-    private void perform(boolean init, MediaPlayerState changeToState) {
-        if (init) {
-            initIfNeed();
-        }
+    private void perform(MediaPlayerState changeToState) {
+        initIfNeed(context);
         mediaPlayerAction = MediaPlayerActionFactory.getAction(this, changeToState);
         mediaPlayerAction.perform();
-    }
-
-    //初始化
-    private void initIfNeed() {
-        if (realMediaPlayer == null) {
-            realMediaPlayer = new SysRealMediaPlayer();
-            realMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            realMediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
-            realMediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
-            realMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
-            realMediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
-            realMediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
-            realMediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
-        }
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)

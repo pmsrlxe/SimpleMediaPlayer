@@ -6,7 +6,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class ResetBaseAction extends BaseMediaPlayerAction {
 
@@ -39,24 +38,20 @@ public class ResetBaseAction extends BaseMediaPlayerAction {
 
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         try {
-            return getRealMediaPlayer().getDuration();
+            return getRealMediaPlayer().doGetDurationMs();
         } catch (Throwable throwable) {
             return 0;
         }
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         try {
-            return getRealMediaPlayer().getCurrentPosition();
+            return getRealMediaPlayer().doGetCurrentPositionMs();
         } catch (Throwable throwable) {
             return 0;
         }

@@ -1,33 +1,36 @@
 package simple.media.player.player;
 
+import simple.media.player.data.MediaParams;
+
 /**
  * 代表真正干活的的那个player
  * real的player只能给action调用！
+ * <p>
+ * 前头+do是为了避免和实现类方法冲突
+ * <p>
  * Created by rty on 27/10/2017.
  */
 
 public interface RealMediaPlayer {
 
-    void seekTo(int msSecond) throws Throwable;
+    void doSeekTo(int msSecond) throws Throwable;
 
-    void prepare() throws Throwable;
+    void doPrepare(MediaParams params) throws Throwable;
 
-    void stop() throws Throwable;
+    void doStop() throws Throwable;
 
-    void start() throws Throwable;
+    void doStart() throws Throwable;
 
-    void pause() throws Throwable;
+    void doPause() throws Throwable;
 
-    int getCurrentPosition() throws Throwable;
+    long doGetCurrentPositionMs() throws Throwable;
 
-    int getDuration() throws Throwable;
+    long doGetDurationMs() throws Throwable;
 
     /**
      * reset下，并且设置下数据源
      */
-    void resetAndSetSource(String url) throws Throwable;
+    void doReset() throws Throwable;
 
-    void prepareAsync() throws Throwable;
-
-    void release();
+    void doRelease();
 }

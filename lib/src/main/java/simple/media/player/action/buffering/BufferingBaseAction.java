@@ -39,24 +39,20 @@ public class BufferingBaseAction extends BaseMediaPlayerAction {
 
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         try {
-            return getRealMediaPlayer().getDuration();
+            return getRealMediaPlayer().doGetDurationMs();
         } catch (Throwable throwable) {
             return 0;
         }
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         try {
-            return getRealMediaPlayer().getCurrentPosition();
+            return getRealMediaPlayer().doGetCurrentPositionMs();
         } catch (Throwable throwable) {
             return 0;
         }

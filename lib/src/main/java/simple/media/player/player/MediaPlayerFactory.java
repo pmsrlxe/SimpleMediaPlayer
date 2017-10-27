@@ -1,5 +1,7 @@
 package simple.media.player.player;
 
+import android.content.Context;
+
 import simple.media.player.player.exo.ExoMediaPlayerImpl;
 import simple.media.player.player.sys.SysMediaPlayerImpl;
 import simple.media.player.utils.Utils;
@@ -12,12 +14,15 @@ public final class MediaPlayerFactory {
     private MediaPlayerFactory() {
     }
 
-    public static SimpleMediaPlayer getMediaPlayer() {
+    public static SimpleMediaPlayer getMediaPlayer(Context context) {
+        SimpleMediaPlayer player;
         if (Utils.isSupportExo()) {
-            return new ExoMediaPlayerImpl();
+            player = new ExoMediaPlayerImpl();
         } else {
-            return new SysMediaPlayerImpl();
+            player = new SysMediaPlayerImpl();
         }
+        player.initIfNeed(context);
+        return player;
     }
 
 }

@@ -6,7 +6,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class CommonReleaseAction extends BaseMediaPlayerAction {
 
@@ -14,10 +13,6 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
@@ -54,7 +49,7 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
                     //release 这个方法有网络操作，至少华为p10有。
                     if (getRealMediaPlayer() != null) {
                         //如果从来没有reset或者操作过，可能是null
-                        getRealMediaPlayer().release();
+                        getRealMediaPlayer().doRelease();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -71,12 +66,12 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
     }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         return 0;
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         return 0;
     }
 }

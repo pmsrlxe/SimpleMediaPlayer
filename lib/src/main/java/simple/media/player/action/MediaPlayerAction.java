@@ -8,7 +8,6 @@ import simple.media.player.data.MediaPlayerState;
 import simple.media.player.listener.MediaPlayerStateAware;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public abstract class MediaPlayerAction implements MediaPlayerStateAware {
     private final SimpleMediaPlayer simpleMediaPlayer;
@@ -41,7 +40,6 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
         return simpleMediaPlayer;
     }
 
-    public abstract void onPrepared(SysMediaPlayerImpl simpleMediaPlayer);
 
     public abstract void perform();
 
@@ -61,8 +59,8 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
     }
 
     //目前状态下的音视频长度
-    public abstract int getDuration();
+    public abstract long getDurationMs();
 
     //得到当前的音频长度
-    public abstract int getCurrentPosition();
+    public abstract long getCurrentPositionMs();
 }

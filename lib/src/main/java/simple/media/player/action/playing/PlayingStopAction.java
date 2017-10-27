@@ -13,10 +13,6 @@ public class PlayingStopAction extends PlayingBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {

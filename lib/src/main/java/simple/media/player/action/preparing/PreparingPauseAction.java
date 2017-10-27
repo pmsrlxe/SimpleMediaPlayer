@@ -5,7 +5,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class PreparingPauseAction extends PreparingBaseAction {
 
@@ -13,8 +12,7 @@ public class PreparingPauseAction extends PreparingBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
+    public void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
         try {
             //不用pause，因为preparing完之后，需要start才能播放
             //这里直接改状态就行了

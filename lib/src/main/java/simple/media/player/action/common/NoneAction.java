@@ -5,20 +5,14 @@ import android.util.Log;
 
 import simple.media.player.action.BaseMediaPlayerAction;
 import simple.media.player.data.MediaPlayerError;
-import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.data.MediaPlayerState;
+import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class NoneAction extends BaseMediaPlayerAction {
 
     public NoneAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
-    }
-
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
     }
 
     @Override
@@ -53,12 +47,12 @@ super.perform();
     }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         return 0;
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         return 0;
     }
 }

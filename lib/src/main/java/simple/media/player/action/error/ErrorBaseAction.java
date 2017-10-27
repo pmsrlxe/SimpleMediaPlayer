@@ -5,7 +5,6 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.SimpleMediaPlayer;
-import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class ErrorBaseAction extends BaseMediaPlayerAction {
 
@@ -38,18 +37,14 @@ public class ErrorBaseAction extends BaseMediaPlayerAction {
 
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         return 0;
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         return 0;
     }
 }

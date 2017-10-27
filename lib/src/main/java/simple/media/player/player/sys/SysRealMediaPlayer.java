@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 
 import java.io.IOException;
 
+import simple.media.player.data.MediaParams;
 import simple.media.player.player.RealMediaPlayer;
 
 /**
@@ -51,45 +52,58 @@ public class SysRealMediaPlayer extends MediaPlayer implements RealMediaPlayer {
     }
 
     @Override
-    public void seekTo(int msec) throws IllegalStateException {
+    public void doSeekTo(int msec) throws IllegalStateException {
         super.seekTo(msec);
-        Log.d(TAG, "seekTo(" + msec + "):" + SysRealMediaPlayer.this);
+        Log.d(TAG, "doSeekTo(" + msec + "):" + SysRealMediaPlayer.this);
     }
 
     @Override
-    public void prepare() throws IOException, IllegalStateException {
+    public void doPrepare(MediaParams params) throws IOException, IllegalStateException {
+        setDataSource(params.getUrl());
         super.prepare();
-        Log.d(TAG, "prepare:" + this);
+        Log.d(TAG, "doPrepare:" + this);
     }
 
     @Override
-    public void stop() throws IllegalStateException {
+    public void doStop() throws IllegalStateException {
         super.stop();
-        Log.d(TAG, "stop:" + this);
+        Log.d(TAG, "doStop:" + this);
     }
 
     @Override
-    public void start() throws IllegalStateException {
+    public void doStart() throws IllegalStateException {
         super.start();
-        Log.d(TAG, "start:" + this);
+        Log.d(TAG, "doStart:" + this);
     }
 
     @Override
-    public void pause() throws IllegalStateException {
+    public void doPause() throws IllegalStateException {
         super.pause();
-        Log.d(TAG, "pause:" + this);
+        Log.d(TAG, "doPause:" + this);
     }
 
     @Override
-    public void release() {
+    public long doGetCurrentPositionMs() throws Throwable {
+        Log.d(TAG, "doGetCurrentPositionMs:" + this);
+        return super.getCurrentPosition();
+    }
+
+    @Override
+    public long doGetDurationMs() throws Throwable {
+        Log.d(TAG, "doGetDurationMs:" + this);
+        return super.getDuration();
+    }
+
+    @Override
+    public void doRelease() {
         super.release();
-        Log.d(TAG, "release:" + this);
+        Log.d(TAG, "doRelease:" + this);
     }
 
     @Override
-    public void resetAndSetSource(String url) throws Throwable {
+    public void doReset() throws Throwable {
         reset();
-        setDataSource(url);
+        Log.d(TAG, "doResetAndSetSource:" + this);
     }
 
 }

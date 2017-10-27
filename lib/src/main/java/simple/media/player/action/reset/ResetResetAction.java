@@ -13,10 +13,6 @@ public class ResetResetAction extends ResetBaseAction {
         super(mediaPlayer, changeToState);
     }
 
-    @Override
-    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
-
-    }
 
     @Override
     public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
@@ -50,12 +46,12 @@ public class ResetResetAction extends ResetBaseAction {
     }
 
     @Override
-    public int getCurrentPosition() {
+    public long getCurrentPositionMs() {
         return 0;
     }
 
     @Override
-    public int getDuration() {
+    public long getDurationMs() {
         return 0;
     }
 }
