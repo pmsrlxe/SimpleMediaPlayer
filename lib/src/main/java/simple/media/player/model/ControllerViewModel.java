@@ -1,7 +1,7 @@
 package simple.media.player.model;
 
 
-import simple.media.player.media.SimpleMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
 
 public class ControllerViewModel {
     private final SimpleMediaPlayer simpleMediaPlayer;

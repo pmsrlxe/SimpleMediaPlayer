@@ -1,13 +1,11 @@
-package simple.media.player.media;
+package simple.media.player.player;
 
 
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.listener.OnBufferChangeListener;
-import simple.media.player.listener.OnPlayingBufferListener;
-import simple.media.player.listener.OnStateChangeListener;
+import simple.media.player.listener.MediaPlayerAllAware;
 
-public interface SimpleMediaPlayer {
+public interface SimpleMediaPlayer extends MediaPlayerAllAware {
     String TAG = "SimpleMediaPlayer";
 
     /**
@@ -70,17 +68,16 @@ public interface SimpleMediaPlayer {
     int getCurrentPositionInMs();
 
 
-    /*--------------------------------listeners---------------------------------------*/
+    /**
+     * 代表真正干活的的那个player
+     * real的player只能给action调用！
+     */
+    RealMediaPlayer getRealMediaPlayer();
 
-    void addOnPlayingBufferListener(OnPlayingBufferListener l);
-
-    void removeOnPlayingBufferListener(OnPlayingBufferListener l);
-
-    void addOnStateChangeListener(OnStateChangeListener listener);
-
-    void removeOnStateChangeListener(OnStateChangeListener listener);
-
-    void addOnBufferChangeListener(OnBufferChangeListener l);
-
-    void removeOnBufferChangeListener(OnBufferChangeListener l);
+    /**
+     * 由action调用，设置state
+     *
+     * @param reset
+     */
+    void setMediaPlayerStateFromAction(MediaPlayerState reset);
 }

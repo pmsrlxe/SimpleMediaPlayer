@@ -4,12 +4,11 @@ package simple.media.player.action;
 import android.util.Log;
 
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.media.SimpleMediaPlayer;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.player.SimpleMediaPlayer;
 
 public abstract class BaseMediaPlayerAction extends MediaPlayerAction {
 
-    public BaseMediaPlayerAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
+    public BaseMediaPlayerAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         super(simpleMediaPlayer, changeToState);
     }
 

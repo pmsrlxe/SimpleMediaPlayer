@@ -1,22 +1,23 @@
 package simple.media.player.action;
 
 
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.listener.MediaPlayerStateAware;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.player.RealMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
+import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public abstract class MediaPlayerAction implements MediaPlayerStateAware {
-    private final SimpleMediaPlayerImpl simpleMediaPlayer;
+    private final SimpleMediaPlayer simpleMediaPlayer;
     private final MediaPlayerState changeToState;
     private final MediaPlayerState fromState;
-    private final MediaPlayer realMediaPlayer;
+    private final RealMediaPlayer realMediaPlayer;
     private final Handler handler;
 
-    public MediaPlayerAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
+    public MediaPlayerAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         this.simpleMediaPlayer = simpleMediaPlayer;
         this.realMediaPlayer = simpleMediaPlayer.getRealMediaPlayer();
         this.fromState = simpleMediaPlayer.getMediaPlayerState();
@@ -24,7 +25,7 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
-    public MediaPlayer getRealMediaPlayer() {
+    public RealMediaPlayer getRealMediaPlayer() {
         return realMediaPlayer;
     }
 
@@ -36,11 +37,11 @@ public abstract class MediaPlayerAction implements MediaPlayerStateAware {
         return changeToState;
     }
 
-    public SimpleMediaPlayerImpl getSimpleMediaPlayer() {
+    public SimpleMediaPlayer getSimpleMediaPlayer() {
         return simpleMediaPlayer;
     }
 
-    public abstract void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer);
+    public abstract void onPrepared(SysMediaPlayerImpl simpleMediaPlayer);
 
     public abstract void perform();
 

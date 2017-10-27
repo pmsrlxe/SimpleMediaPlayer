@@ -1,4 +1,4 @@
-package simple.media.player.media;
+package simple.media.player.player.sys;
 
 
 import android.media.MediaPlayer;
@@ -7,14 +7,16 @@ import android.view.SurfaceHolder;
 
 import java.io.IOException;
 
+import simple.media.player.player.RealMediaPlayer;
+
 /**
  * 为了查找问题写的，主要是打印log，无任何逻辑
  */
-public class WrapMediaPlayer extends MediaPlayer {
+public class SysRealMediaPlayer extends MediaPlayer implements RealMediaPlayer {
 
     private static final String TAG = "logMedia";
 
-    public WrapMediaPlayer() {
+    public SysRealMediaPlayer() {
         Log.d(TAG, "new:" + this);
     }
 
@@ -26,7 +28,7 @@ public class WrapMediaPlayer extends MediaPlayer {
                 if (listener != null) {
                     listener.onPrepared(mp);
                 }
-                Log.d(TAG, "onPrepared:" + WrapMediaPlayer.this);
+                Log.d(TAG, "onPrepared:" + SysRealMediaPlayer.this);
             }
         });
     }
@@ -36,7 +38,7 @@ public class WrapMediaPlayer extends MediaPlayer {
         super.setOnInfoListener(new OnInfoListener() {
             @Override
             public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.d(TAG, "onInfo(w=" + what + ",e=" + extra + "):" + WrapMediaPlayer.this);
+                Log.d(TAG, "onInfo(w=" + what + ",e=" + extra + "):" + SysRealMediaPlayer.this);
                 return listener != null && listener.onInfo(mp, what, extra);
             }
         });
@@ -45,13 +47,13 @@ public class WrapMediaPlayer extends MediaPlayer {
     @Override
     public void setDisplay(SurfaceHolder sh) {
         super.setDisplay(sh);
-        Log.d(TAG, "setDisplay(hd:" + sh + "):" + WrapMediaPlayer.this);
+        Log.d(TAG, "setDisplay(hd:" + sh + "):" + SysRealMediaPlayer.this);
     }
 
     @Override
     public void seekTo(int msec) throws IllegalStateException {
         super.seekTo(msec);
-        Log.d(TAG, "seekTo(" + msec + "):" + WrapMediaPlayer.this);
+        Log.d(TAG, "seekTo(" + msec + "):" + SysRealMediaPlayer.this);
     }
 
     @Override
@@ -82,6 +84,12 @@ public class WrapMediaPlayer extends MediaPlayer {
     public void release() {
         super.release();
         Log.d(TAG, "release:" + this);
+    }
+
+    @Override
+    public void resetAndSetSource(String url) throws Throwable {
+        reset();
+        setDataSource(url);
     }
 
 }

@@ -1,4 +1,4 @@
-package simple.media.player.data;
+package simple.media.player.data.sys;
 
 
 import simple.media.player.listener.OnPlayingBufferListener;

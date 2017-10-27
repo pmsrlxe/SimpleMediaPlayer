@@ -5,8 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import simple.media.player.data.MediaParams;
-import simple.media.player.media.MediaPlayerFactory;
-import simple.media.player.media.SimpleMediaPlayer;
+import simple.media.player.player.MediaPlayerFactory;
+import simple.media.player.player.SimpleMediaPlayer;
 import simple.media.player.model.ControllerViewModel;
 import simple.media.player.model.LoadingViewModel;
 import simple.media.player.model.VideoPlayerModel;

@@ -13,10 +13,15 @@ import java.util.Formatter;
 import java.util.Locale;
 
 /**
- * Created by Yxy
- * On 2016年11月22日16:13:53
+ * 工具类
  */
 public class Utils {
+
+    public static boolean isSupportExo() {
+        //Exo只支持到16（4.1）以及以上
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
+
     public static boolean isWifi(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();

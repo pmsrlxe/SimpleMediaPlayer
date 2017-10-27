@@ -17,8 +17,7 @@ import simple.media.player.action.seekcomplete.SeekCompleteFactory;
 import simple.media.player.action.seeking.SeekingFactory;
 import simple.media.player.action.stop.StoppedFactory;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.media.SimpleMediaPlayer;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.player.SimpleMediaPlayer;
 
 public class MediaPlayerActionFactory {
 
@@ -26,7 +25,7 @@ public class MediaPlayerActionFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         MediaPlayerState currentState = simpleMediaPlayer.getMediaPlayerState();
         MediaPlayerAction retAction;
         switch (currentState) {

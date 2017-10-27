@@ -1,7 +1,7 @@
 package simple.media.player.model;
 
 
-import simple.media.player.media.SimpleMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
 
 public class ControllerDurationModel {
     private int updatePeriodMs = 1000;

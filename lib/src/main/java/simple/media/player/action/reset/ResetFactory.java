@@ -5,7 +5,7 @@ import simple.media.player.action.MediaPlayerAction;
 import simple.media.player.action.common.CommonReleaseAction;
 import simple.media.player.action.common.NoneAction;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.player.SimpleMediaPlayer;
 
 public class ResetFactory {
 
@@ -16,7 +16,7 @@ public class ResetFactory {
     /**
      * reset状态下，根据不同的目标状态得到不同的action
      */
-    public static MediaPlayerAction getAction(SimpleMediaPlayerImpl simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
         switch (changeToState) {
             case Init:
                 return new NoneAction(simpleMediaPlayer, changeToState);

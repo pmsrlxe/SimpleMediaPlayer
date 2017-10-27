@@ -2,18 +2,19 @@ package simple.media.player.action.reset;
 
 
 import simple.media.player.data.MediaPlayerError;
-import simple.media.player.data.MediaPlayerInfo;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.player.SimpleMediaPlayer;
+import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class ResetPlayingAction extends ResetBaseAction {
 
-    public ResetPlayingAction(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerState changeToState) {
+    public ResetPlayingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
-    public void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer) {
+    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
         try {
             //0-100
             int percentInt = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
@@ -32,42 +33,46 @@ public class ResetPlayingAction extends ResetBaseAction {
             //是否有跳转
             if (resultSeekMs > 0) {
                 getRealMediaPlayer().seekTo(resultSeekMs);
-                getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Seeking);
+                getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
             } else {
                 getRealMediaPlayer().start();
-                getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
+                getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Playing);
             }
 
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
     }
 
     @Override
-    public boolean onInfo(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerInfo info) {
+    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
-    public boolean onError(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerError error) {
-        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
+        getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
         return false;
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayerImpl mediaPlayer) {
-        getRealMediaPlayer().start();
-        getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Playing);
+    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
+        try {
+            getRealMediaPlayer().start();
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+        } catch (Throwable throwable) {
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
+        }
     }
 
     @Override
-    public void onBufferingUpdate(SimpleMediaPlayerImpl mediaPlayer, int percent) {
+    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
 
     }
 
     @Override
-    public void onCompletion(SimpleMediaPlayerImpl mediaPlayer) {
+    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
 
     }
 
@@ -93,9 +98,9 @@ public class ResetPlayingAction extends ResetBaseAction {
         //已经是reset状态，需要开始播放，那么就preparing
         try {
             getRealMediaPlayer().prepareAsync();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Preparing);
-        } catch (Exception ex) {
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Preparing);
+        } catch (Throwable ex) {
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
     }
 }

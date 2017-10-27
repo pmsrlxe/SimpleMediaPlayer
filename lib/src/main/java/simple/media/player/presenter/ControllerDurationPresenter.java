@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.listener.OnBufferChangeListener;
 import simple.media.player.listener.OnStateChangeListener;
-import simple.media.player.media.SimpleMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
 import simple.media.player.model.ControllerDurationModel;
 import simple.media.player.utils.Utils;
 import simple.media.player.view.ControllerView;

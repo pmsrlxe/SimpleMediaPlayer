@@ -1,4 +1,4 @@
-package simple.media.player.media;
+package simple.media.player.player.sys;
 
 
 import android.media.AudioManager;
@@ -7,33 +7,32 @@ import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import simple.media.player.action.MediaPlayerAction;
 import simple.media.player.action.MediaPlayerActionFactory;
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerError;
-import simple.media.player.data.MediaPlayerInfo;
 import simple.media.player.data.MediaPlayerState;
+import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.listener.MediaListenerHolder;
 import simple.media.player.listener.OnBufferChangeListener;
 import simple.media.player.listener.OnPlayingBufferListener;
 import simple.media.player.listener.OnStateChangeListener;
+import simple.media.player.player.RealMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
 
-public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
-    private MediaPlayer mediaPlayer;
+/**
+ * 系统自带的MediaPlayer实现
+ */
+public class SysMediaPlayerImpl implements SimpleMediaPlayer {
+    private SysRealMediaPlayer realMediaPlayer;
     private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
     private MediaPlayerAction mediaPlayerAction;
     private MediaParams mediaParams;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
-
-    private List<OnStateChangeListener> stateChangeListeners = new ArrayList<>();
-    private List<OnBufferChangeListener> onBufferChangeListeners = new ArrayList<>();
-    private List<OnPlayingBufferListener> onPlayingBufferListeners = new ArrayList<>();
+    private MediaListenerHolder listeners = new MediaListenerHolder();
 
     public void MediaPlayer() {
     }
-
 
     /**
      * 重置player
@@ -86,8 +85,8 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
         }
-        stateChangeListeners.clear();
         perform(false, MediaPlayerState.Released);
+        listeners.release();
     }
 
     /**
@@ -156,71 +155,60 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
 
     //初始化
     private void initIfNeed() {
-        if (mediaPlayer == null) {
-            mediaPlayer = new WrapMediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
-            mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
-            mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
-            mediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
-            mediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
-            mediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
+        if (realMediaPlayer == null) {
+            realMediaPlayer = new SysRealMediaPlayer();
+            realMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            realMediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
+            realMediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
+            realMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
+            realMediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
+            realMediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
+            realMediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
         }
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public synchronized void setMediaPlayerState(MediaPlayerState toState) {
+    public synchronized void setMediaPlayerStateFromAction(MediaPlayerState toState) {
         MediaPlayerState from = this.mediaPlayerState;
         this.mediaPlayerState = toState;
-        if (stateChangeListeners != null) {
-            for (OnStateChangeListener l : stateChangeListeners) {
-                l.onStateChange(from, toState);
-            }
-        }
+        listeners.notifyStateChangeListener(from, toState);
         Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
-
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public MediaPlayer getRealMediaPlayer() {
-        return mediaPlayer;
+    public RealMediaPlayer getRealMediaPlayer() {
+        return realMediaPlayer;
     }
 
     /*--------------------------------listeners---------------------------------------*/
     @Override
     public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
-        onPlayingBufferListeners.add(l);
+        listeners.addOnPlayingBufferListener(l);
     }
 
     @Override
     public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
-        onPlayingBufferListeners.remove(l);
+        listeners.removeOnPlayingBufferListener(l);
     }
 
     @Override
     public void addOnStateChangeListener(OnStateChangeListener listener) {
-        if (listener == null) {
-            return;
-        }
-        stateChangeListeners.add(listener);
+        listeners.addOnStateChangeListener(listener);
     }
 
     @Override
     public void removeOnStateChangeListener(OnStateChangeListener listener) {
-        if (listener == null) {
-            return;
-        }
-        stateChangeListeners.remove(listener);
+        listeners.removeOnStateChangeListener(listener);
     }
 
     @Override
     public void addOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.add(l);
+        listeners.addOnBufferChangeListener(l);
     }
 
     @Override
     public void removeOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.remove(l);
+        listeners.removeOnBufferChangeListener(l);
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/
@@ -230,7 +218,7 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public void onPrepared(MediaPlayer mp) {
             Log.i(TAG, "onPrepared");
-            mediaPlayerAction.onPrepared(SimpleMediaPlayerImpl.this);
+            mediaPlayerAction.onPrepared(SysMediaPlayerImpl.this);
         }
     }
 
@@ -241,10 +229,18 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
             MediaPlayerInfo info = new MediaPlayerInfo(what, extra);
             Log.e(TAG, "onInfo," + info);
             //回调
-            for (OnPlayingBufferListener listener : onPlayingBufferListeners) {
-                info.callback(listener);
-            }
-            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SimpleMediaPlayerImpl.this, info);
+            info.callback(new OnPlayingBufferListener() {
+                @Override
+                public void onPauseForBuffer() {
+                    listeners.notifyPauseForBuffer();
+                }
+
+                @Override
+                public void onPlayingFromPause() {
+                    listeners.notifyPlayingFromPause();
+                }
+            });
+            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SysMediaPlayerImpl.this, info);
         }
     }
 
@@ -253,7 +249,7 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             Log.e(TAG, "onError,w:" + what + ",e:" + extra);
-            return mediaPlayerAction != null && mediaPlayerAction.onError(SimpleMediaPlayerImpl.this,
+            return mediaPlayerAction != null && mediaPlayerAction.onError(SysMediaPlayerImpl.this,
                     new MediaPlayerError(what, extra));
         }
     }
@@ -264,7 +260,7 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         public void onSeekComplete(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onSeekComplete");
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onSeekComplete(SimpleMediaPlayerImpl.this);
+                mediaPlayerAction.onSeekComplete(SysMediaPlayerImpl.this);
             }
         }
     }
@@ -275,12 +271,9 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
             Log.i(TAG, "onBufferingUpdate,pc:" + percent);
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onBufferingUpdate(SimpleMediaPlayerImpl.this, percent);
+                mediaPlayerAction.onBufferingUpdate(SysMediaPlayerImpl.this, percent);
             }
-            //通知回调
-            for (OnBufferChangeListener l : onBufferChangeListeners) {
-                l.onBufferUpdate(percent);
-            }
+            listeners.notifyBufferingUpdate(percent);
         }
     }
 
@@ -290,7 +283,7 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
         public void onCompletion(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onCompletion");
             if (mediaPlayerAction != null) {
-                mediaPlayerAction.onCompletion(SimpleMediaPlayerImpl.this);
+                mediaPlayerAction.onCompletion(SysMediaPlayerImpl.this);
             }
         }
     }
@@ -298,9 +291,9 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
     private class SurfaceCallBackWrapper implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            getRealMediaPlayer().setDisplay(holder);
+            realMediaPlayer.setDisplay(holder);
             //setScreenOnWhilePlaying(true) is ineffective without a SurfaceHolder
-            getRealMediaPlayer().setScreenOnWhilePlaying(true);
+            realMediaPlayer.setScreenOnWhilePlaying(true);
         }
 
         @Override
@@ -313,4 +306,6 @@ public class SimpleMediaPlayerImpl implements SimpleMediaPlayer {
             pause();
         }
     }
+
+
 }

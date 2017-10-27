@@ -2,43 +2,44 @@ package simple.media.player.action.playing;
 
 
 import simple.media.player.data.MediaPlayerError;
-import simple.media.player.data.MediaPlayerInfo;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.media.SimpleMediaPlayerImpl;
+import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.player.SimpleMediaPlayer;
+import simple.media.player.player.sys.SysMediaPlayerImpl;
 
 public class PlayingPauseAction extends PlayingBaseAction {
 
-    public PlayingPauseAction(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerState changeToState) {
+    public PlayingPauseAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, changeToState);
     }
 
     @Override
-    public void onPrepared(SimpleMediaPlayerImpl simpleMediaPlayer) {
+    public void onPrepared(SysMediaPlayerImpl simpleMediaPlayer) {
 
     }
 
     @Override
-    public boolean onInfo(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerInfo info) {
+    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
         return false;
     }
 
     @Override
-    public boolean onError(SimpleMediaPlayerImpl mediaPlayer, MediaPlayerError error) {
+    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
         return false;
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayerImpl mediaPlayer) {
+    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
 
     }
 
     @Override
-    public void onBufferingUpdate(SimpleMediaPlayerImpl mediaPlayer, int percent) {
+    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
 
     }
 
     @Override
-    public void onCompletion(SimpleMediaPlayerImpl mediaPlayer) {
+    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
 
     }
 
@@ -47,10 +48,10 @@ public class PlayingPauseAction extends PlayingBaseAction {
         super.perform();
         try {
             getRealMediaPlayer().pause();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Paused);
-        } catch (Exception ex) {
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+        } catch (Throwable ex) {
             ex.printStackTrace();
-            getSimpleMediaPlayer().setMediaPlayerState(MediaPlayerState.Error);
+            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
 
     }
