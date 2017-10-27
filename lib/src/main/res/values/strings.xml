@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">lib</string>
+    <string name="app_name">My Library</string>
+    <string name="network_4g_warning">温馨提示：您正在使用流量播放</string>
+    <string name="network_warning_continue">继续播放</string>
+    <string name="network_error">网络异常，请检查网络后点击刷新</string>
+    <string name="media_error">内容出错了</string>
+    <string name="refresh">刷 新</string>
 </resources>

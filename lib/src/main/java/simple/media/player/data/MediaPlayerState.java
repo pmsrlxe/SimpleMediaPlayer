@@ -37,7 +37,7 @@ public enum MediaPlayerState {
     }
 
 
-    public boolean hasDataState() {
+    public boolean isHasDataState() {
         return this == Prepared || this == Paused
                 || this == Playing || this == Complete
                 || this == Seeking || this == SeekComplete;

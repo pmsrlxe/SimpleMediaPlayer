@@ -44,7 +44,7 @@ public class ControllerDurationPresenter {
     private OnStateChangeListener listener = new OnStateChangeListener() {
         @Override
         public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
-            if (!now.hasDataState()) {
+            if (!now.isHasDataState()) {
                 stopDuration();
             } else {
                 startDuration();

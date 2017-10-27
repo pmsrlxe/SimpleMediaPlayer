@@ -73,7 +73,7 @@ public class ResetPlayingAction extends ResetBaseAction {
 
     @Override
     public int getDuration() {
-        if (!getSimpleMediaPlayer().getMediaPlayerState().hasDataState()) {
+        if (!getSimpleMediaPlayer().getMediaPlayerState().isHasDataState()) {
             return 0;
         }
         return super.getDuration();
@@ -81,7 +81,7 @@ public class ResetPlayingAction extends ResetBaseAction {
 
     @Override
     public int getCurrentPosition() {
-        if (!getSimpleMediaPlayer().getMediaPlayerState().hasDataState()) {
+        if (!getSimpleMediaPlayer().getMediaPlayerState().isHasDataState()) {
             return 0;
         }
         return super.getCurrentPosition();
