@@ -1,11 +1,12 @@
 package test.seek;
 
+
 import android.app.Activity;
 import android.os.Bundle;
 
-import mediaplayer.yxy.mediaplayer.model.VideoPlayerModel;
-import mediaplayer.yxy.mediaplayer.presenter.VideoPlayerPresenter;
-import mediaplayer.yxy.mediaplayer.view.VideoPlayerView;
+import simple.media.player.model.VideoPlayerModel;
+import simple.media.player.presenter.VideoPlayerPresenter;
+import simple.media.player.view.VideoPlayerView;
 import test.TestConst;
 
 /**
