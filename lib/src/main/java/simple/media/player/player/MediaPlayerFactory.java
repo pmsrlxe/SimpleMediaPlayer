@@ -1,6 +1,6 @@
 package simple.media.player.player;
 
-import simple.media.player.player.exo.SimpleExoMediaPlayerImpl;
+import simple.media.player.player.exo.ExoMediaPlayerImpl;
 import simple.media.player.player.sys.SysMediaPlayerImpl;
 import simple.media.player.utils.Utils;
 
@@ -14,7 +14,7 @@ public final class MediaPlayerFactory {
 
     public static SimpleMediaPlayer getMediaPlayer() {
         if (Utils.isSupportExo()) {
-            return new SimpleExoMediaPlayerImpl();
+            return new ExoMediaPlayerImpl();
         } else {
             return new SysMediaPlayerImpl();
         }

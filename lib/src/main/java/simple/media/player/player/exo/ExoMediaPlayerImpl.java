@@ -15,7 +15,7 @@ import simple.media.player.player.SimpleMediaPlayer;
  * Created by rty on 27/10/2017.
  */
 
-public class SimpleExoMediaPlayerImpl implements SimpleMediaPlayer {
+public class ExoMediaPlayerImpl implements SimpleMediaPlayer {
     private MediaListenerHolder listeners = new MediaListenerHolder();
 
     @Override

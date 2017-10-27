@@ -16,8 +16,12 @@ import java.util.Locale;
  * 工具类
  */
 public class Utils {
+    private static boolean testSys = true;
 
     public static boolean isSupportExo() {
+        if (testSys) {
+            return false;
+        }
         //Exo只支持到16（4.1）以及以上
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }

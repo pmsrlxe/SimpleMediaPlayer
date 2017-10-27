@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import mediaplayer.yxy.lib.R;
+import simple.media.player.R;
 import simple.media.player.utils.Utils;
 
 

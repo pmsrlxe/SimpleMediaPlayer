@@ -11,22 +11,24 @@ import simple.media.player.data.MediaPlayerState;
  */
 
 public class MediaListenerHolder implements MediaPlayerAllAware {
-    private List<OnStateChangeListener> stateChangeListeners = new ArrayList<>();
-    private List<OnBufferChangeListener> onBufferChangeListeners = new ArrayList<>();
-    private List<OnPlayingBufferListener> onPlayingBufferListeners = new ArrayList<>();
+    private final List<OnStateChangeListener> stateChangeListeners = new ArrayList<>();
+    private final List<OnBufferChangeListener> onBufferChangeListeners = new ArrayList<>();
+    private final List<OnPlayingBufferListener> onPlayingBufferListeners = new ArrayList<>();
 
 
     //缓冲更新了
     public void notifyBufferingUpdate(int percent) {
-        //通知回调
-        for (OnBufferChangeListener l : onBufferChangeListeners) {
-            l.onBufferUpdate(percent);
+        synchronized (onBufferChangeListeners) {
+            //通知回调
+            for (OnBufferChangeListener l : onBufferChangeListeners) {
+                l.onBufferUpdate(percent);
+            }
         }
     }
 
     //状态改变了
     public void notifyStateChangeListener(MediaPlayerState from, MediaPlayerState toState) {
-        if (stateChangeListeners != null) {
+        synchronized (stateChangeListeners) {
             for (OnStateChangeListener l : stateChangeListeners) {
                 l.onStateChange(from, toState);
             }
@@ -35,22 +37,34 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
 
     //播放中,开始缓冲了
     public void notifyPauseForBuffer() {
-
+        synchronized (onPlayingBufferListeners) {
+            for (OnPlayingBufferListener bufferListener : onPlayingBufferListeners) {
+                bufferListener.onPauseForBuffer();
+            }
+        }
     }
 
     //播放中缓冲结束了，开始播放
     public void notifyPlayingFromPause() {
-
+        synchronized (onPlayingBufferListeners) {
+            for (OnPlayingBufferListener bufferListener : onPlayingBufferListeners) {
+                bufferListener.onPlayingFromPause();
+            }
+        }
     }
 
     @Override
     public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
-        onPlayingBufferListeners.add(l);
+        synchronized (onPlayingBufferListeners) {
+            onPlayingBufferListeners.add(l);
+        }
     }
 
     @Override
     public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
-        onPlayingBufferListeners.remove(l);
+        synchronized (onPlayingBufferListeners) {
+            onPlayingBufferListeners.remove(l);
+        }
     }
 
     @Override
@@ -58,7 +72,9 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
         if (listener == null) {
             return;
         }
-        stateChangeListeners.add(listener);
+        synchronized (stateChangeListeners) {
+            stateChangeListeners.add(listener);
+        }
     }
 
     @Override
@@ -66,24 +82,36 @@ public class MediaListenerHolder implements MediaPlayerAllAware {
         if (listener == null) {
             return;
         }
-        stateChangeListeners.remove(listener);
+        synchronized (stateChangeListeners) {
+            stateChangeListeners.remove(listener);
+        }
     }
 
     @Override
     public void addOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.add(l);
+        synchronized (onBufferChangeListeners) {
+            onBufferChangeListeners.add(l);
+        }
     }
 
     @Override
     public void removeOnBufferChangeListener(OnBufferChangeListener l) {
-        onBufferChangeListeners.remove(l);
+        synchronized (onBufferChangeListeners) {
+            onBufferChangeListeners.remove(l);
+        }
     }
 
     @Override
     public void release() {
-        stateChangeListeners.clear();
-        onBufferChangeListeners.clear();
-        onPlayingBufferListeners.clear();
+        synchronized (stateChangeListeners) {
+            stateChangeListeners.clear();
+        }
+        synchronized (onBufferChangeListeners) {
+            onBufferChangeListeners.clear();
+        }
+        synchronized (onPlayingBufferListeners) {
+            onPlayingBufferListeners.clear();
+        }
     }
 
 }
