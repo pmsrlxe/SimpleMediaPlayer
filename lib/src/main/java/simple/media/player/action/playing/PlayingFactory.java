@@ -36,8 +36,6 @@ public class PlayingFactory {
                 return new PlayingErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete: //播放中，有可能完成的
                 return new PlayingCompleteAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
                 return new PlayingScAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete: //因为播放中，seek完成自动会播放

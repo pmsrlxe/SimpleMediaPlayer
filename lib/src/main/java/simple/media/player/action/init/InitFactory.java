@@ -36,8 +36,6 @@ public class InitFactory {
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete:

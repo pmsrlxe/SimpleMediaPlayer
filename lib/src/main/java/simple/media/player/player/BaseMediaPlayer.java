@@ -33,10 +33,10 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
 
     public BaseMediaPlayer(Context context) {
         this.context = context;
-        realMediaPlayer = onCreateRealMediaPlayer(context);
+        realMediaPlayer = getRealMediaPlayer(context);
     }
 
-    protected abstract RealMediaPlayer onCreateRealMediaPlayer(Context context);
+    protected abstract RealMediaPlayer getRealMediaPlayer(Context context);
 
     /**
      * 准备播放
@@ -98,6 +98,8 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
             throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
         }
         mediaParams.setSeekToPercent(percent);
+
+        perform(MediaPlayerState.SeekComplete);
     }
 
     @Override
@@ -118,7 +120,7 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
      */
     @Override
     public long getDurationInMs() {
-        if (currentState.isHasDataState()) {
+        if (!currentState.isHasDataState() || realMediaPlayer == null) {
             return 0;
         }
         try {
@@ -136,7 +138,7 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
      */
     @Override
     public long getCurrentPositionInMs() {
-        if (currentState.isHasDataState()) {
+        if (!currentState.isHasDataState() || realMediaPlayer == null) {
             return 0;
         }
         try {
@@ -149,11 +151,14 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
 
     private void perform(MediaPlayerState changeToState) {
         initIfNeed();
+        if (changeToState == currentState) {
+            Log.e(TAG, "Same perform!(" + changeToState + ")");
+            return;
+        }
         if (currentAction != null) {
             currentAction.onRelease();
         }
-        currentAction = MediaPlayerActionFactory.getAction(this, realMediaPlayer,
-                changeToState);
+        currentAction = MediaPlayerActionFactory.getAction(this, realMediaPlayer, changeToState);
         currentAction.perform();
     }
 

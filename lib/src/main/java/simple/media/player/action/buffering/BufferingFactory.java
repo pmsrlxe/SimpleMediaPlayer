@@ -36,8 +36,6 @@ public class BufferingFactory {
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering:
-                return new BufferingErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
                 return new BufferingSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete:

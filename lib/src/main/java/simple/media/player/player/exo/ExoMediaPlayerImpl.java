@@ -49,7 +49,7 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-
+            pause();
         }
     };
 
@@ -58,7 +58,7 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer {
     }
 
     @Override
-    protected RealMediaPlayer onCreateRealMediaPlayer(Context context) {
+    protected RealMediaPlayer getRealMediaPlayer(Context context) {
         initIfNeed();
         return realPlayer;
     }
@@ -77,6 +77,7 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer {
         realPlayer = new ExoRealMediaPlayer(getContext(), new DefaultRenderersFactory(getContext()),
                 trackSelector, new DefaultLoadControl());
         realPlayer.addListener(new EventListenerWrapper());
+
     }
 
 

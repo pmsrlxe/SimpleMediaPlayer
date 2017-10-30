@@ -3,7 +3,6 @@ package simple.media.player.presenter;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.SeekBar;
 
 import java.util.Timer;
@@ -12,7 +11,6 @@ import java.util.TimerTask;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.listener.OnBufferChangeListener;
 import simple.media.player.listener.OnStateChangeListener;
-import simple.media.player.player.SimpleMediaPlayer;
 import simple.media.player.model.ControllerDurationModel;
 import simple.media.player.utils.Utils;
 import simple.media.player.view.ControllerView;
@@ -85,7 +83,7 @@ public class ControllerDurationPresenter {
             timer.cancel();
             timer = null;
         }
-        Log.i(SimpleMediaPlayer.TAG, "stopDuration");
+//        Log.i(SimpleMediaPlayer.TAG, "stopDuration");
     }
 
 
@@ -96,7 +94,7 @@ public class ControllerDurationPresenter {
             timer = new Timer();
         }
         timer.schedule(createTask(), 0, this.model.getUpdatePeriodMs());
-        Log.i(SimpleMediaPlayer.TAG, "startDuration");
+//        Log.i(SimpleMediaPlayer.TAG, "startDuration");
     }
 
     private TimerTask createTask() {

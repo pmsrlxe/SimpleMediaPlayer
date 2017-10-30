@@ -10,9 +10,6 @@ public enum MediaPlayerState {
     Paused(false),        //暂停了
     Error(false),         //出错了
     Complete(false),      //播放完毕
-    @Deprecated
-    //TODO 注意：这个指的是：播放的时候缓冲中的状态，同时会卡住播放，和播放器状态串行的，不是预加载的缓冲。
-            PlayBuffering(false),
     Seeking(true),        //seek中
     SeekComplete(true),   //seek结束
     Released(false);      //释放了

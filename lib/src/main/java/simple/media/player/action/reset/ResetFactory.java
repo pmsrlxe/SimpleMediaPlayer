@@ -39,8 +39,6 @@ public class ResetFactory {
                 return new ResetErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //reset->preparing->seek
                 return new ResetSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete:

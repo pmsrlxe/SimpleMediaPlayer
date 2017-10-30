@@ -27,7 +27,7 @@ public class SysMediaPlayerImpl extends BaseMediaPlayer {
     }
 
     @Override
-    protected RealMediaPlayer onCreateRealMediaPlayer(Context context) {
+    protected RealMediaPlayer getRealMediaPlayer(Context context) {
         initIfNeed();
         return realMediaPlayer;
     }

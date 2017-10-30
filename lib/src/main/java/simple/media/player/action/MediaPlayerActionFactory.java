@@ -31,45 +31,45 @@ public class MediaPlayerActionFactory {
         MediaPlayerAction retAction;
         switch (currentState) {
             case Init:
-                retAction = InitFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = InitFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Reset:
-                retAction = ResetFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = ResetFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Paused:
-                retAction = PauseFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = PauseFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Playing:
-                retAction = PlayingFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
+                retAction = PlayingFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Stopped:
-                retAction = StoppedFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = StoppedFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Preparing:
-                retAction = PreparingFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = PreparingFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Prepared:
-                retAction = PreparedFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = PreparedFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Released:
-                retAction = ReleaseFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = ReleaseFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Error:
-                retAction = ErrorFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
+                retAction = ErrorFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Complete:
-                retAction = CompleteFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
+                retAction = CompleteFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case Seeking:
-                retAction = SeekingFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
+                retAction = SeekingFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             case SeekComplete:
-                retAction = SeekCompleteFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
+                retAction = SeekCompleteFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             default:
                 throw new RuntimeException("unknown state " + simpleMediaPlayer.getMediaPlayerState());
         }
-        String msg = "select action:" + currentState + "->" + retAction.getClass().getSimpleName() + ",wish:" + changeToState;
+        String msg = currentState + "->" + changeToState + ":" + retAction.getClass().getSimpleName();
         if (retAction.getClass() == NoneAction.class) {
             Log.e(SimpleMediaPlayer.TAG, msg);
         } else {

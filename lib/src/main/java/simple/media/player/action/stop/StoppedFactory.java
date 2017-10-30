@@ -36,8 +36,6 @@ public class StoppedFactory {
                 return new StoppedErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete: //stop了怎么可能播放完成
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //stop不可能seek
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete:

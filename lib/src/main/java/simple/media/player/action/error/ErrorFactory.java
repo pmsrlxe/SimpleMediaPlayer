@@ -36,8 +36,6 @@ public class ErrorFactory {
                 return new ErrorErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case PlayBuffering: //error后，怎么可能继续buffering？
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case SeekComplete:
