@@ -5,7 +5,7 @@ import android.view.View;
 
 public interface LoadingView {
     /**
-     * 第一次Preparing的时候的loadingView
+     * Preparing的时候的loadingView
      */
     View getPreparingLoadingView();
 

@@ -3,6 +3,8 @@ package simple.media.player.view;
 import android.view.View;
 import android.widget.TextView;
 
+import simple.media.player.view.impl.SimpleSeekBar;
+
 /**
  * 控制条，暂停，开始等操作按钮
  */

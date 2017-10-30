@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import simple.media.player.model.VideoPlayerModel;
 import simple.media.player.presenter.VideoPlayerPresenter;
-import simple.media.player.view.VideoPlayerView;
+import simple.media.player.view.impl.VideoPlayerView;
 import test.TestConst;
 
 /**

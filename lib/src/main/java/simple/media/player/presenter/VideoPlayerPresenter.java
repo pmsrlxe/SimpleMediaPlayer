@@ -1,32 +1,45 @@
 package simple.media.player.presenter;
 
 
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
 import simple.media.player.data.MediaParams;
-import simple.media.player.player.MediaPlayerFactory;
-import simple.media.player.player.SimpleMediaPlayer;
 import simple.media.player.model.ControllerViewModel;
 import simple.media.player.model.LoadingViewModel;
 import simple.media.player.model.VideoPlayerModel;
+import simple.media.player.player.MediaPlayerFactory;
+import simple.media.player.player.SimpleMediaPlayer;
 import simple.media.player.view.ControllerView;
 import simple.media.player.view.LoadingView;
-import simple.media.player.view.SimpleSeekBar;
-import simple.media.player.view.VideoPlayerView;
+import simple.media.player.view.impl.SimpleSeekBar;
+import simple.media.player.view.impl.TouchProgressViewImpl;
+import simple.media.player.view.impl.TouchVolumeViewImpl;
+import simple.media.player.view.impl.VideoPlayerView;
 
+/**
+ * 视频播放的presenter
+ * 音频的需要自己实现
+ */
 public class VideoPlayerPresenter {
     private final VideoPlayerView player;
     private final SimpleMediaPlayer mediaPlayer;
     private final ControllerViewPresenter controllerViewPresenter;
     private final LoadingViewPresenter loadingViewPresenter;
-
+    private final TouchPresenter touchPresenter;//跟屏幕触摸相关的
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
         this.mediaPlayer = MediaPlayerFactory.getMediaPlayer(player.getContext());
+        //控制条相关
         this.controllerViewPresenter = new ControllerViewPresenter(getControllerView());
+        //loading相关
         this.loadingViewPresenter = new LoadingViewPresenter(createLoadingView());
+        //触摸相关（音量、快进）
+        Context context = player.getContext();
+        this.touchPresenter = new TouchPresenter(player.getContext(), player.rlSurfaceContainer,
+                new TouchProgressViewImpl(context), new TouchVolumeViewImpl(context));
     }
 
 
@@ -40,6 +53,8 @@ public class VideoPlayerPresenter {
 
             }
         });
+        touchPresenter.bind();
+
         //初始化player
         MediaParams mediaParams = new MediaParams(model.getUrl(),
                 model.getHeadData(),
@@ -54,6 +69,7 @@ public class VideoPlayerPresenter {
         loadingViewPresenter.unbind();
         controllerViewPresenter.unbind();
         mediaPlayer.release();
+        touchPresenter.release();
     }
 
     private LoadingView createLoadingView() {

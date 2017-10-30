@@ -1,4 +1,4 @@
-package simple.media.player.view;
+package simple.media.player.view.impl;
 
 import android.content.Context;
 import android.util.AttributeSet;
