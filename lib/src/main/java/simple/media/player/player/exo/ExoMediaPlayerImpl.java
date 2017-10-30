@@ -56,7 +56,7 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer<ExoRealMediaPlayer> {
     }
 
     @Override
-    protected ExoRealMediaPlayer initMediaPlayer() {
+    protected ExoRealMediaPlayer initRealMediaPlayer() {
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
 

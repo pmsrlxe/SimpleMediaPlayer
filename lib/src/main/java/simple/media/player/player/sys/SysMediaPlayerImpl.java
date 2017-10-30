@@ -24,7 +24,7 @@ public class SysMediaPlayerImpl extends BaseMediaPlayer<SysRealMediaPlayer> {
     }
 
     @Override
-    protected SysRealMediaPlayer initMediaPlayer() {
+    protected SysRealMediaPlayer initRealMediaPlayer() {
         SysRealMediaPlayer mediaPlayer = new SysRealMediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
@@ -58,10 +58,6 @@ public class SysMediaPlayerImpl extends BaseMediaPlayer<SysRealMediaPlayer> {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
         }
     }
-
-
-    /*--------------------------------内部使用方法---------------------------------------*/
-
 
     /*--------------------------------listener wrapper---------------------------------------*/
 

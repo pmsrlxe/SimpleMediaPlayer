@@ -33,10 +33,10 @@ public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements Simp
 
     public BaseMediaPlayer(Context context) {
         this.context = context;
-        realMediaPlayer = initMediaPlayer();
+        realMediaPlayer = initRealMediaPlayer();
     }
 
-    protected abstract T initMediaPlayer();
+    protected abstract T initRealMediaPlayer();
 
     /**
      * 准备播放
