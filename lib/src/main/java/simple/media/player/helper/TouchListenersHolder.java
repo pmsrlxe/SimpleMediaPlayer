@@ -13,6 +13,7 @@ import java.util.List;
 
 public class TouchListenersHolder {
     private final List<View.OnTouchListener> onTouchListeners = new ArrayList<>();
+    private View.OnTouchListener handler;
 
     public void addTouchListener(View.OnTouchListener l) {
         if (l == null) {
@@ -33,9 +34,19 @@ public class TouchListenersHolder {
     }
 
     public void onTouch(View view, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            handler = null;
+        }
+        if (handler != null) {
+            handler.onTouch(view, event);
+            return;
+        }
         synchronized (onTouchListeners) {
             for (View.OnTouchListener l : onTouchListeners) {
-                l.onTouch(view, event);
+                if (l.onTouch(view, event)) {
+                    handler = l;
+                    break;
+                }
             }
         }
     }

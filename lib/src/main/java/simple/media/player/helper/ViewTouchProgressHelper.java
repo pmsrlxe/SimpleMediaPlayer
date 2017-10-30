@@ -1,6 +1,5 @@
 package simple.media.player.helper;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,7 +12,6 @@ import simple.media.player.view.TouchableView;
  */
 
 public class ViewTouchProgressHelper {
-    private final Context context;
     private final boolean careHorizontalTouch;
     private int threshold = 80;
     private OnTouchProgressChange onTouchProgressChange;
@@ -22,8 +20,7 @@ public class ViewTouchProgressHelper {
      * @param careHorizontalTouch true只关心水平滑动，false关心垂直触摸
      * @param attachTouchToView   需要触摸的view
      */
-    public ViewTouchProgressHelper(Context context, boolean careHorizontalTouch, TouchableView attachTouchToView) {
-        this.context = context;
+    public ViewTouchProgressHelper(boolean careHorizontalTouch, TouchableView attachTouchToView) {
         this.careHorizontalTouch = careHorizontalTouch;
         attachTouchToView.setOnTouchListener(new TouchListener());
     }
@@ -70,11 +67,13 @@ public class ViewTouchProgressHelper {
 
                         if (onTouchProgressChange != null && careHorizontalTouch) {
                             onTouchProgressChange.onProgressChange(pc, x > downX);
+                            return true;
                         }
                     } else if (absDeltaY > threshold) {
                         float pc = absDeltaY * 1.0f / viewWidth;
                         if (onTouchProgressChange != null && !careHorizontalTouch) {
                             onTouchProgressChange.onProgressChange(pc, y < downY);
+                            return true;
                         }
                     }
                     break;

@@ -34,8 +34,6 @@ public class TouchVolumePresenter {
         public void onTouchDown() {
             downVolumePc = audioManager.getStreamVolume(STREAM_MUSIC) * 1.0f
                     / audioManager.getStreamMaxVolume(STREAM_MUSIC);
-            //看看目前的是什么百分比
-            view.show(downVolumePc);
         }
 
         @Override
@@ -47,7 +45,7 @@ public class TouchVolumePresenter {
 
     public TouchVolumePresenter(Context context, TouchVolumeView view) {
         this.view = view;
-        viewTouchProgressHelper = new ViewTouchProgressHelper(context, false, view);
+        viewTouchProgressHelper = new ViewTouchProgressHelper(false, view);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 

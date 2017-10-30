@@ -21,7 +21,7 @@ public class TouchProgressPresenter {
 
     public TouchProgressPresenter(Context context, TouchProgressView view) {
         this.view = view;
-        viewTouchProgressHelper = new ViewTouchProgressHelper(context, true, view);
+        viewTouchProgressHelper = new ViewTouchProgressHelper(true, view);
     }
 
     public void bind(final TouchProgressModel model) {
@@ -38,11 +38,8 @@ public class TouchProgressPresenter {
 
             @Override
             public void onTouchDown() {
-                long total = model.getSimpleMediaPlayer().getRuntimeInfo().getDurationInMs();
                 downPositionMs = model.getSimpleMediaPlayer().getRuntimeInfo()
                         .getCurrentPositionInMs();
-                float pc = downPositionMs * 1.0f / total;
-                view.show(pc, 0, Utils.stringForTime(downPositionMs), Utils.stringForTime(total));
             }
 
             @Override
