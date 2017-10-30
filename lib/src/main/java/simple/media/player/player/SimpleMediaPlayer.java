@@ -5,12 +5,15 @@ import android.content.Context;
 
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.listener.MediaPlayerAllAware;
+import simple.media.player.listener.MediaPlayerAware;
 
-public interface SimpleMediaPlayer extends MediaPlayerAllAware {
+/**
+ * 这个接口是用来暴露给用户调用的
+ */
+public interface SimpleMediaPlayer extends MediaPlayerAware {
     String TAG = "SimpleMediaPlayer";
 
-    void initIfNeed(Context context);
+    void initIfNeed();
 
     Context getContext();
 
@@ -65,21 +68,14 @@ public interface SimpleMediaPlayer extends MediaPlayerAllAware {
      *
      * @return 0说明没有
      */
-    int getDurationInMs();
+    long getDurationInMs();
 
     /**
      * 获取当前播放的位置
      *
      * @return 0说明没有
      */
-    int getCurrentPositionInMs();
-
-
-    /**
-     * 代表真正干活的的那个player
-     * real的player只能给action调用！
-     */
-    RealMediaPlayer getRealMediaPlayer();
+    long getCurrentPositionInMs();
 
     /**
      * 由action调用，设置state

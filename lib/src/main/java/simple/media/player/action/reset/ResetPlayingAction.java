@@ -3,103 +3,98 @@ package simple.media.player.action.reset;
 
 import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.listener.OnErrorListener;
+import simple.media.player.listener.OnPreparedListener;
+import simple.media.player.listener.OnSeekCompleteListener;
+import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
 public class ResetPlayingAction extends ResetBaseAction {
-
-    public ResetPlayingAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
-        super(mediaPlayer, changeToState);
-    }
-
-
-    @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
-        return false;
-    }
-
-    @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
-        getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
-        return false;
-    }
-
-    @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
-        try {
-            getRealMediaPlayer().doStart();
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Playing);
-        } catch (Throwable throwable) {
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
+    private static final int GAP = 100;
+    private OnPreparedListener onPreparedListener = new OnPreparedListener() {
+        @Override
+        public void onPrepared() {
+            simpleMediaPlayer.removeOnPreparedListener(this);
+            doPrepared();
         }
-    }
-
-    @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
-
-    }
-
-    @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public long getDurationMs() {
-        if (!getSimpleMediaPlayer().getMediaPlayerState().isHasDataState()) {
-            return 0;
+    };
+    private OnSeekCompleteListener onSeekCompleteListener = new OnSeekCompleteListener() {
+        @Override
+        public void onSeekComplete() {
+            try {
+                realMediaPlayer.doStart();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+            } catch (Throwable throwable) {
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            }
         }
-        return super.getDurationMs();
+    };
+
+    private OnErrorListener onErrorListener = new OnErrorListener() {
+        @Override
+        public void onError(MediaPlayerError error) {
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+        }
+    };
+
+    public ResetPlayingAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, realMediaPlayer, changeToState);
+        mediaPlayer.addOnSeekCompleteListener(onSeekCompleteListener);
+        mediaPlayer.addOnErrorListener(onErrorListener);
     }
 
     @Override
-    public long getCurrentPositionMs() {
-        if (!getSimpleMediaPlayer().getMediaPlayerState().isHasDataState()) {
-            return 0;
-        }
-        return super.getCurrentPositionMs();
+    public void onRelease() {
+        super.onRelease();
+        simpleMediaPlayer.removeOnSeekCompleteListener(onSeekCompleteListener);
+        simpleMediaPlayer.removeOnErrorListener(onErrorListener);
     }
+
 
     @Override
     public void perform() {
         super.perform();
         //已经是reset状态，需要开始播放，那么就preparing
         try {
-            getRealMediaPlayer().doPrepareAsync(getSimpleMediaPlayer().getMediaParams());
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Preparing);
+            simpleMediaPlayer.addOnPreparedListener(onPreparedListener);
+
+            realMediaPlayer.doPrepareAsync(simpleMediaPlayer.getMediaParams());
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Preparing);
         } catch (Throwable ex) {
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            simpleMediaPlayer.removeOnPreparedListener(onPreparedListener);
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
     }
 
-    private void onPrepared(SimpleMediaPlayer simpleMediaPlayer) {
+    private void doPrepared() {
         try {
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Prepared);
             //0-100
-            int percentInt = getSimpleMediaPlayer().getMediaParams().getSeekToPercent();
-            int seekToMs = getSimpleMediaPlayer().getMediaParams().getSeekToMs();
+            int percentInt = simpleMediaPlayer.getMediaParams().getSeekToPercent();
+            int seekToMs = simpleMediaPlayer.getMediaParams().getSeekToMs();
 
             int resultSeekMs = 0;
             if (percentInt > 0) {
-                resultSeekMs = (int) (percentInt * 1.0f / 100 * getDurationMs());
+                resultSeekMs = (int) (percentInt * 1.0f / 100 * simpleMediaPlayer.getDurationInMs());
             } else if (seekToMs > 0) {
                 resultSeekMs = seekToMs;
             }
             //处理整数的50000或者60000这种，加上100好像没有关键帧问题了
             //如:给了50000，华为p10会播放的时候回跳到40000，加上100，就没事了
-            resultSeekMs += 100;
+            resultSeekMs += GAP;
 
             //是否有跳转
-            if (resultSeekMs > 0) {
-                getRealMediaPlayer().doSeekTo(resultSeekMs);
-                getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
+            if (resultSeekMs - GAP > 0) {
+                realMediaPlayer.doSeekTo(resultSeekMs);
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
             } else {
-                getRealMediaPlayer().doStart();
-                getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+                realMediaPlayer.doStart();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Playing);
             }
 
         } catch (Throwable ex) {
             ex.printStackTrace();
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
     }
 }

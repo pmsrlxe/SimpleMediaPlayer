@@ -1,24 +1,27 @@
 package simple.media.player.player.exo;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.SurfaceHolder;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 
-import simple.media.player.action.MediaPlayerAction;
-import simple.media.player.action.MediaPlayerActionFactory;
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.listener.MediaListenerHolder;
-import simple.media.player.listener.OnBufferChangeListener;
-import simple.media.player.listener.OnPlayingBufferListener;
-import simple.media.player.listener.OnStateChangeListener;
+import simple.media.player.player.BaseMediaPlayer;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
@@ -28,134 +31,144 @@ import simple.media.player.player.SimpleMediaPlayer;
  * Created by rty on 27/10/2017.
  */
 
-public class ExoMediaPlayerImpl implements SimpleMediaPlayer {
-    private MediaListenerHolder listeners = new MediaListenerHolder();
+public class ExoMediaPlayerImpl extends BaseMediaPlayer {
     private ExoRealMediaPlayer realPlayer = null;
-    private MediaParams mediaParams;
-    private MediaPlayerAction currentAction;
-    private MediaPlayerState currentState;
-    private Context context;
+
+    private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            if (realPlayer != null) {
+                realPlayer.setVideoSurfaceHolder(holder);
+            }
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+
+        }
+    };
+
+    public ExoMediaPlayerImpl(Context context) {
+        super(context);
+    }
+
+    @Override
+    protected RealMediaPlayer onCreateRealMediaPlayer(Context context) {
+        initIfNeed();
+        return realPlayer;
+    }
 
 
     @Override
-    public void initIfNeed(Context context) {
-        this.context = context;
+    public void initIfNeed() {
+        if (realPlayer != null) {
+            return;
+        }
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector =
                 new DefaultTrackSelector(videoTrackSelectionFactory);
-        realPlayer = new ExoRealMediaPlayer(new DefaultRenderersFactory(context), trackSelector,
-                new DefaultLoadControl());
+        realPlayer = new ExoRealMediaPlayer(getContext(), new DefaultRenderersFactory(getContext()),
+                trackSelector, new DefaultLoadControl());
+        realPlayer.addListener(new EventListenerWrapper());
     }
 
-    @Override
-    public Context getContext() {
-        return context;
-    }
 
     @Override
     public void reset(MediaParams mediaParams) {
-        this.mediaParams = new MediaParams(mediaParams);
-        perform(MediaPlayerState.Reset);
+        super.reset(mediaParams);
+        removeCallBack();
+        mediaParams.getSurfaceView().getHolder().addCallback(callback);
+        realPlayer.setVideoSurfaceHolder(mediaParams.getSurfaceView().getHolder());
     }
 
-
-    @Override
-    public void prepare() {
-        perform(MediaPlayerState.Prepared);
-    }
-
-    @Override
-    public void start() {
-        perform(MediaPlayerState.Playing);
-    }
-
-    @Override
-    public void stop() {
-        perform(MediaPlayerState.Stopped);
-    }
-
-    @Override
-    public void pause() {
-        perform(MediaPlayerState.Paused);
-    }
 
     @Override
     public void release() {
-        perform(MediaPlayerState.Released);
+        super.release();
+        removeCallBack();
     }
 
-    @Override
-    public void seekToPercent(int percent) {
-        mediaParams.setSeekToPercent(percent);
-        perform(MediaPlayerState.Seeking);
+    private void removeCallBack() {
+        if (mediaParams != null && mediaParams.getSurfaceView() != null
+                && mediaParams.getSurfaceView().getHolder() != null) {
+            mediaParams.getSurfaceView().getHolder().removeCallback(callback);
+        }
     }
 
-    @Override
-    public synchronized MediaPlayerState getMediaPlayerState() {
-        return currentState;
-    }
+    private class EventListenerWrapper implements Player.EventListener {
+        @Override
+        public void onTimelineChanged(Timeline timeline, Object manifest) {
+            Log.e(SimpleMediaPlayer.TAG, "onTimelineChanged");
+        }
 
-    @Override
-    public MediaParams getMediaParams() {
-        return mediaParams;
-    }
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray
+                trackSelections) {
+            Log.e(SimpleMediaPlayer.TAG, "onTracksChanged");
+        }
 
-    @Override
-    public int getDurationInMs() {
-        return currentAction.getDurationMs();
-    }
+        @Override
+        public void onLoadingChanged(boolean isLoading) {
+            Log.e(SimpleMediaPlayer.TAG, "onLoadingChanged,isLoading:" + isLoading);
+            //exo的所有类型的buffer都会回调这个
+            //所以需要区分类型是preparing的loading
+            //还是seek的loading
+            //没有prepared的不要回调
+            if (!currentState.isHasDataState()) {
+                return;
+            }
+            if (isLoading) {
+                listenersHolder.notifyPauseForBuffer();
+            } else {
+                listenersHolder.notifyPlayingFromPause();
+            }
+        }
 
-    @Override
-    public int getCurrentPositionInMs() {
-        return currentAction.getCurrentPositionMs();
-    }
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            Log.e(SimpleMediaPlayer.TAG, "onPlayerStateChanged,playWhenReady:"
+                    + playWhenReady + ",playbackState:" + playbackState);
+            if (currentState.isHasDataState()) {
+                //seek结束了，会回调这个，变成ready就是seek结束了
+                if (currentState == MediaPlayerState.Seeking && playbackState == Player.STATE_READY) {
+                    listenersHolder.notifySeekComplete();
+                }
+            } else {
+                //这个回调也不靠谱，不能作为prepared的依据
+                //因为setPlayingState一旦调用了，playWhenReady状态变了，这个方法就会回调！
+                //也就是说，调用pause之后start，就会回调这个方法，需要特殊处理下
+                //已经prepared的不要回调（start，pause）
+                if (playbackState == Player.STATE_READY) {
+                    listenersHolder.notifyPrepared();
+                }
+            }
+        }
 
-    @Override
-    public RealMediaPlayer getRealMediaPlayer() {
-        return realPlayer;
-    }
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+            Log.e(SimpleMediaPlayer.TAG, "onRepeatModeChanged:" + repeatMode);
+        }
 
-    @Override
-    public synchronized void setMediaPlayerStateFromAction(MediaPlayerState to) {
-        MediaPlayerState from = currentState;
-        currentState = to;
-        listeners.notifyStateChangeListener(from, to);
-    }
+        @Override
+        public void onPlayerError(ExoPlaybackException error) {
+            Log.e(SimpleMediaPlayer.TAG, "onPlayerError:" + error);
+        }
 
-    @Override
-    public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
-        listeners.addOnPlayingBufferListener(l);
-    }
+        @Override
+        public void onPositionDiscontinuity() {
+            Log.e(SimpleMediaPlayer.TAG, "onPositionDiscontinuity");
+        }
 
-    @Override
-    public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
-        listeners.removeOnPlayingBufferListener(l);
-    }
-
-    @Override
-    public void addOnStateChangeListener(OnStateChangeListener listener) {
-        listeners.addOnStateChangeListener(listener);
-    }
-
-    @Override
-    public void removeOnStateChangeListener(OnStateChangeListener listener) {
-        listeners.removeOnStateChangeListener(listener);
-    }
-
-    @Override
-    public void addOnBufferChangeListener(OnBufferChangeListener l) {
-        listeners.addOnBufferChangeListener(l);
-    }
-
-    @Override
-    public void removeOnBufferChangeListener(OnBufferChangeListener l) {
-        listeners.removeOnBufferChangeListener(l);
-    }
-
-    private void perform(MediaPlayerState changeToState) {
-        currentAction = MediaPlayerActionFactory.getAction(this, changeToState);
-        currentAction.perform();
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+            Log.e(SimpleMediaPlayer.TAG, "onPlaybackParametersChanged");
+        }
     }
 }

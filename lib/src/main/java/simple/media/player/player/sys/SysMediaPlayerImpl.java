@@ -8,37 +8,32 @@ import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import simple.media.player.action.MediaPlayerAction;
-import simple.media.player.action.MediaPlayerActionFactory;
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerError;
-import simple.media.player.data.MediaPlayerState;
 import simple.media.player.data.sys.MediaPlayerInfo;
-import simple.media.player.listener.MediaListenerHolder;
-import simple.media.player.listener.OnBufferChangeListener;
 import simple.media.player.listener.OnPlayingBufferListener;
-import simple.media.player.listener.OnStateChangeListener;
+import simple.media.player.player.BaseMediaPlayer;
 import simple.media.player.player.RealMediaPlayer;
-import simple.media.player.player.SimpleMediaPlayer;
 
 /**
  * 系统自带的MediaPlayer实现
  */
-public class SysMediaPlayerImpl implements SimpleMediaPlayer {
+public class SysMediaPlayerImpl extends BaseMediaPlayer {
     private SysRealMediaPlayer realMediaPlayer;
-    private MediaPlayerState mediaPlayerState = MediaPlayerState.Init;
-    private MediaPlayerAction mediaPlayerAction;
-    private MediaParams mediaParams;
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
-    private MediaListenerHolder listeners = new MediaListenerHolder();
-    private Context context;
 
-    public void MediaPlayer() {
+    public SysMediaPlayerImpl(Context context) {
+        super(context);
     }
 
     @Override
-    public void initIfNeed(Context context) {
-        this.context = context;
+    protected RealMediaPlayer onCreateRealMediaPlayer(Context context) {
+        initIfNeed();
+        return realMediaPlayer;
+    }
+
+    @Override
+    public void initIfNeed() {
         if (realMediaPlayer == null) {
             realMediaPlayer = new SysRealMediaPlayer();
             realMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -51,170 +46,35 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         }
     }
 
-    @Override
-    public Context getContext() {
-        return context;
-    }
-
     /**
      * 重置player
      */
     @Override
     public void reset(MediaParams mediaParams) {
-        this.mediaParams = new MediaParams(mediaParams);
+        super.reset(mediaParams);
         this.surfaceCallBackWrapper = new SurfaceCallBackWrapper();
         this.mediaParams.getSurfaceView().getHolder().addCallback(surfaceCallBackWrapper);
-        perform(MediaPlayerState.Reset);
     }
 
-    /**
-     * 准备播放
-     */
-    @Override
-    public void prepare() {
-        perform(MediaPlayerState.Prepared);
-    }
-
-    /**
-     * 播放
-     */
-    @Override
-    public void start() {
-        perform(MediaPlayerState.Playing);
-    }
-
-    /**
-     * 停止
-     */
-    @Override
-    public void stop() {
-        perform(MediaPlayerState.Stopped);
-    }
-
-    /**
-     * 暂停
-     */
-    @Override
-    public void pause() {
-        perform(MediaPlayerState.Paused);
-    }
 
     /**
      * 释放
      */
     @Override
     public void release() {
+        super.release();
         if (surfaceCallBackWrapper != null) {
             this.mediaParams.getSurfaceView().getHolder().removeCallback(surfaceCallBackWrapper);
         }
-        perform(MediaPlayerState.Released);
-        listeners.release();
     }
 
-    /**
-     * 跳转 0-100
-     */
-    @Override
-    public void seekToPercent(int percent) {
-        if (percent < 0 || percent > 100) {
-            throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
-        }
-        mediaParams.setSeekToPercent(percent);
-        perform(MediaPlayerState.SeekComplete);
-    }
-
-    /**
-     * 获取当前player的状态
-     */
-    @Override
-    public synchronized MediaPlayerState getMediaPlayerState() {
-        return mediaPlayerState;
-    }
-
-    /**
-     * 获取当前player的参数
-     */
-    @Override
-    public MediaParams getMediaParams() {
-        return mediaParams;
-    }
-
-    /**
-     * 获取当前的player长度
-     *
-     * @return 0说明没有
-     */
-    @Override
-    public int getDurationInMs() {
-        if (mediaPlayerAction == null) {
-            return 0;
-        }
-        return mediaPlayerAction.getDurationMs();
-    }
-
-    /**
-     * 获取当前播放的位置
-     *
-     * @return 0说明没有
-     */
-    @Override
-    public int getCurrentPositionInMs() {
-        if (mediaPlayerAction == null) {
-            return 0;
-        }
-        return mediaPlayerAction.getCurrentPositionMs();
-    }
 
     /*--------------------------------内部使用方法---------------------------------------*/
 
-    private void perform(MediaPlayerState changeToState) {
-        initIfNeed(context);
-        mediaPlayerAction = MediaPlayerActionFactory.getAction(this, changeToState);
-        mediaPlayerAction.perform();
-    }
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public synchronized void setMediaPlayerStateFromAction(MediaPlayerState toState) {
-        MediaPlayerState from = this.mediaPlayerState;
-        this.mediaPlayerState = toState;
-        listeners.notifyStateChangeListener(from, toState);
-        Log.i(SimpleMediaPlayer.TAG, "setMediaPlayerState " + from + "->" + toState);
-    }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     public RealMediaPlayer getRealMediaPlayer() {
         return realMediaPlayer;
-    }
-
-    /*--------------------------------listeners---------------------------------------*/
-    @Override
-    public void addOnPlayingBufferListener(OnPlayingBufferListener l) {
-        listeners.addOnPlayingBufferListener(l);
-    }
-
-    @Override
-    public void removeOnPlayingBufferListener(OnPlayingBufferListener l) {
-        listeners.removeOnPlayingBufferListener(l);
-    }
-
-    @Override
-    public void addOnStateChangeListener(OnStateChangeListener listener) {
-        listeners.addOnStateChangeListener(listener);
-    }
-
-    @Override
-    public void removeOnStateChangeListener(OnStateChangeListener listener) {
-        listeners.removeOnStateChangeListener(listener);
-    }
-
-    @Override
-    public void addOnBufferChangeListener(OnBufferChangeListener l) {
-        listeners.addOnBufferChangeListener(l);
-    }
-
-    @Override
-    public void removeOnBufferChangeListener(OnBufferChangeListener l) {
-        listeners.removeOnBufferChangeListener(l);
     }
 
     /*--------------------------------listener wrapper---------------------------------------*/
@@ -224,7 +84,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public void onPrepared(MediaPlayer mp) {
             Log.i(TAG, "onPrepared");
-            mediaPlayerAction.onPrepared(SysMediaPlayerImpl.this);
+            listenersHolder.notifyPrepared();
         }
     }
 
@@ -238,15 +98,15 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
             info.callback(new OnPlayingBufferListener() {
                 @Override
                 public void onPauseForBuffer() {
-                    listeners.notifyPauseForBuffer();
+                    listenersHolder.notifyPauseForBuffer();
                 }
 
                 @Override
                 public void onPlayingFromPause() {
-                    listeners.notifyPlayingFromPause();
+                    listenersHolder.notifyPlayingFromPause();
                 }
             });
-            return mediaPlayerAction != null && mediaPlayerAction.onInfo(SysMediaPlayerImpl.this, info);
+            return true;
         }
     }
 
@@ -255,8 +115,8 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             Log.e(TAG, "onError,w:" + what + ",e:" + extra);
-            return mediaPlayerAction != null && mediaPlayerAction.onError(SysMediaPlayerImpl.this,
-                    new MediaPlayerError(what, extra));
+            listenersHolder.notifyError(new MediaPlayerError(what, extra));
+            return true;
         }
     }
 
@@ -265,9 +125,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public void onSeekComplete(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onSeekComplete");
-            if (mediaPlayerAction != null) {
-                mediaPlayerAction.onSeekComplete(SysMediaPlayerImpl.this);
-            }
+            listenersHolder.notifySeekComplete();
         }
     }
 
@@ -276,10 +134,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
             Log.i(TAG, "onBufferingUpdate,pc:" + percent);
-            if (mediaPlayerAction != null) {
-                mediaPlayerAction.onBufferingUpdate(SysMediaPlayerImpl.this, percent);
-            }
-            listeners.notifyBufferingUpdate(percent);
+            listenersHolder.notifyBufferingUpdate(percent);
         }
     }
 
@@ -288,9 +143,7 @@ public class SysMediaPlayerImpl implements SimpleMediaPlayer {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             Log.e(TAG, "onCompletion");
-            if (mediaPlayerAction != null) {
-                mediaPlayerAction.onCompletion(SysMediaPlayerImpl.this);
-            }
+            listenersHolder.notifyComplete();
         }
     }
 

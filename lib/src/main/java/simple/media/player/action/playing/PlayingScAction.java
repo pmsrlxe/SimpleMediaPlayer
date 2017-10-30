@@ -1,55 +1,53 @@
 package simple.media.player.action.playing;
 
 
-import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.listener.OnCompleteListener;
+import simple.media.player.listener.OnSeekCompleteListener;
+import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
 public class PlayingScAction extends PlayingBaseAction {
+    private OnSeekCompleteListener seekCompleteListener = new OnSeekCompleteListener() {
+        @Override
+        public void onSeekComplete() {
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+        }
+    };
+    private OnCompleteListener onCompleteListener = new OnCompleteListener() {
+        @Override
+        public void onComplete() {
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+        }
+    };
 
-    public PlayingScAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
-        super(mediaPlayer, changeToState);
+    public PlayingScAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, realMediaPlayer, changeToState);
+        mediaPlayer.addOnSeekCompleteListener(seekCompleteListener);
+        mediaPlayer.addOnCompleteListener(onCompleteListener);
     }
 
-
-    @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
-        return false;
-    }
-
-    @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
-        return false;
-    }
-
-    @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
-        getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Playing);
-    }
-
-    @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
-
-    }
-
-    @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
-        getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Paused);
-    }
 
     @Override
     public void perform() {
         super.perform();
         try {
-            float pc = getSimpleMediaPlayer().getMediaParams().getSeekToPercent() * 1.0f / 100;
-            int timeInSecond = (int) (pc * getRealMediaPlayer().doGetDurationMs());
-            getRealMediaPlayer().doSeekTo(timeInSecond);
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
+            float pc = simpleMediaPlayer.getMediaParams().getSeekToPercent() * 1.0f / 100;
+            int timeInMs = (int) (pc * realMediaPlayer.doGetDurationMs());
+            realMediaPlayer.doSeekTo(timeInMs);
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Seeking);
         } catch (Throwable ex) {
             ex.printStackTrace();
-            getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
         }
 
     }
+
+    @Override
+    public void onRelease() {
+        super.onRelease();
+        simpleMediaPlayer.removeOnSeekCompleteListener(seekCompleteListener);
+        simpleMediaPlayer.removeOnCompleteListener(onCompleteListener);
+    }
 }
+

@@ -26,7 +26,7 @@ public class TestSeekTo extends Activity {
         playerPresenter = new VideoPlayerPresenter(videoPlayerView);
 
         VideoPlayerModel model = new VideoPlayerModel(TestConst.VIDEO_URL, null);
-        model.setSeekToMs(50000);
+//        model.setSeekToMs(50000);
 
         playerPresenter.bind(model);
 

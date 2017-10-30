@@ -1,45 +1,27 @@
 package simple.media.player.action.seeking;
 
 
-import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.data.sys.MediaPlayerInfo;
+import simple.media.player.listener.OnCompleteListener;
+import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
 public class SeekingCompleteAction extends SeekingBaseAction {
+    private OnCompleteListener onCompleteListener = new OnCompleteListener() {
+        @Override
+        public void onComplete() {
+            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+        }
+    };
 
-    public SeekingCompleteAction(SimpleMediaPlayer mediaPlayer, MediaPlayerState changeToState) {
-        super(mediaPlayer, changeToState);
-    }
-
-
-    @Override
-    public boolean onInfo(SimpleMediaPlayer mediaPlayer, MediaPlayerInfo info) {
-        return false;
-    }
-
-    @Override
-    public boolean onError(SimpleMediaPlayer mediaPlayer, MediaPlayerError error) {
-        return false;
+    public SeekingCompleteAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
+        super(mediaPlayer, realMediaPlayer, changeToState);
+        mediaPlayer.addOnCompleteListener(onCompleteListener);
     }
 
     @Override
-    public void onSeekComplete(SimpleMediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void onBufferingUpdate(SimpleMediaPlayer mediaPlayer, int percent) {
-
-    }
-
-    @Override
-    public void onCompletion(SimpleMediaPlayer mediaPlayer) {
-        getSimpleMediaPlayer().setMediaPlayerStateFromAction(MediaPlayerState.Paused);
-    }
-
-    @Override
-    public void perform() {
-        super.perform();
+    public void onRelease() {
+        super.onRelease();
+        simpleMediaPlayer.removeOnCompleteListener(onCompleteListener);
     }
 }

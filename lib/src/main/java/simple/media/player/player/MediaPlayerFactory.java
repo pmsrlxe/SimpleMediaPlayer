@@ -17,11 +17,11 @@ public final class MediaPlayerFactory {
     public static SimpleMediaPlayer getMediaPlayer(Context context) {
         SimpleMediaPlayer player;
         if (Utils.isSupportExo()) {
-            player = new ExoMediaPlayerImpl();
+            player = new ExoMediaPlayerImpl(context);
         } else {
-            player = new SysMediaPlayerImpl();
+            player = new SysMediaPlayerImpl(context);
         }
-        player.initIfNeed(context);
+        player.initIfNeed();
         return player;
     }
 

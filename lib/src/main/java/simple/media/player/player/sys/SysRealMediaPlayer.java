@@ -52,13 +52,13 @@ public class SysRealMediaPlayer extends MediaPlayer implements RealMediaPlayer {
     }
 
     @Override
-    public void doSeekTo(int msec) throws IllegalStateException {
-        super.seekTo(msec);
-        Log.d(TAG, "doSeekTo(" + msec + "):" + SysRealMediaPlayer.this);
+    public void doSeekTo(int positionMs) throws IllegalStateException {
+        super.seekTo(positionMs);
+        Log.d(TAG, "doSeekTo(" + positionMs + "):" + SysRealMediaPlayer.this);
     }
 
     @Override
-    public void doPrepare(MediaParams params) throws IOException, IllegalStateException {
+    public void doPrepareAsync(MediaParams params) throws IOException, IllegalStateException {
         setDataSource(params.getUrl());
         super.prepare();
         Log.d(TAG, "doPrepare:" + this);

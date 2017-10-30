@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import simple.media.player.data.MediaParams;
 import simple.media.player.player.RealMediaPlayer;
+import simple.media.player.player.SimpleMediaPlayer;
 
 /**
  * Exo real接口实例
@@ -28,7 +29,8 @@ import simple.media.player.player.RealMediaPlayer;
  */
 
 public class ExoRealMediaPlayer extends SimpleExoPlayer implements RealMediaPlayer {
-    private static final String TAG = "ExoRealMediaPlayer";
+    private static final String TAG = SimpleMediaPlayer.TAG;
+
     private final Context context;
 
     protected ExoRealMediaPlayer(Context context, RenderersFactory renderersFactory,
@@ -40,13 +42,13 @@ public class ExoRealMediaPlayer extends SimpleExoPlayer implements RealMediaPlay
 
 
     @Override
-    public void doSeekTo(int msec) throws IllegalStateException {
-        super.seekTo(msec);
-        Log.d(TAG, "doSeekTo(" + msec + "):" + ExoRealMediaPlayer.this);
+    public void doSeekTo(int positionMs) throws IllegalStateException {
+        super.seekTo(positionMs);
+        Log.d(TAG, "doSeekTo(" + positionMs + "):" + ExoRealMediaPlayer.this);
     }
 
     @Override
-    public void doPrepare(MediaParams params) throws IOException, IllegalStateException {
+    public void doPrepareAsync(MediaParams params) throws IOException, IllegalStateException {
         // Measures bandwidth during playback. Can be null if not required.
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
 // Produces DataSource instances through which media data is loaded.
@@ -75,8 +77,9 @@ public class ExoRealMediaPlayer extends SimpleExoPlayer implements RealMediaPlay
 
     @Override
     public void doPause() throws IllegalStateException {
-        super.stop();
         Log.d(TAG, "doPause:" + this);
+        //setPlayWhenReady can be used to start and pause playback
+        setPlayWhenReady(false);
     }
 
     @Override
@@ -99,8 +102,6 @@ public class ExoRealMediaPlayer extends SimpleExoPlayer implements RealMediaPlay
 
     @Override
     public void doReset() throws Throwable {
-        doRelease();
-
         Log.d(TAG, "doResetAndSetSource:" + this);
     }
 

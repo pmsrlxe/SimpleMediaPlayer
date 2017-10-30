@@ -17,6 +17,7 @@ import simple.media.player.action.seekcomplete.SeekCompleteFactory;
 import simple.media.player.action.seeking.SeekingFactory;
 import simple.media.player.action.stop.StoppedFactory;
 import simple.media.player.data.MediaPlayerState;
+import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
 public class MediaPlayerActionFactory {
@@ -25,45 +26,45 @@ public class MediaPlayerActionFactory {
 
     }
 
-    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, MediaPlayerState changeToState) {
+    public static MediaPlayerAction getAction(SimpleMediaPlayer simpleMediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         MediaPlayerState currentState = simpleMediaPlayer.getMediaPlayerState();
         MediaPlayerAction retAction;
         switch (currentState) {
             case Init:
-                retAction = InitFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = InitFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Reset:
-                retAction = ResetFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = ResetFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Paused:
-                retAction = PauseFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = PauseFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Playing:
-                retAction = PlayingFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = PlayingFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
                 break;
             case Stopped:
-                retAction = StoppedFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = StoppedFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Preparing:
-                retAction = PreparingFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = PreparingFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Prepared:
-                retAction = PreparedFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = PreparedFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Released:
-                retAction = ReleaseFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = ReleaseFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             case Error:
-                retAction = ErrorFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = ErrorFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
                 break;
             case Complete:
-                retAction = CompleteFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = CompleteFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
                 break;
             case Seeking:
-                retAction = SeekingFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = SeekingFactory.getAction(simpleMediaPlayer, realMediaPlayer,changeToState);
                 break;
             case SeekComplete:
-                retAction = SeekCompleteFactory.getAction(simpleMediaPlayer, changeToState);
+                retAction = SeekCompleteFactory.getAction(simpleMediaPlayer,realMediaPlayer, changeToState);
                 break;
             default:
                 throw new RuntimeException("unknown state " + simpleMediaPlayer.getMediaPlayerState());

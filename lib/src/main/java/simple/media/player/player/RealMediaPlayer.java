@@ -13,9 +13,9 @@ import simple.media.player.data.MediaParams;
 
 public interface RealMediaPlayer {
 
-    void doSeekTo(int msSecond) throws Throwable;
+    void doSeekTo(int positionMs) throws Throwable;
 
-    void doPrepare(MediaParams params) throws Throwable;
+    void doPrepareAsync(MediaParams params) throws Throwable;
 
     void doStop() throws Throwable;
 
@@ -27,9 +27,6 @@ public interface RealMediaPlayer {
 
     long doGetDurationMs() throws Throwable;
 
-    /**
-     * reset下，并且设置下数据源
-     */
     void doReset() throws Throwable;
 
     void doRelease();
