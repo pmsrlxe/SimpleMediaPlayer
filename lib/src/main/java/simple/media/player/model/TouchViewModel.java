@@ -3,15 +3,13 @@ package simple.media.player.model;
 import simple.media.player.player.SimpleMediaPlayer;
 
 /**
- * 触摸的时候，展示的进度条 model
  * Created by rty on 30/10/2017.
  */
 
-public class TouchProgressModel {
+public class TouchViewModel {
+    private SimpleMediaPlayer simpleMediaPlayer;
 
-    private final SimpleMediaPlayer simpleMediaPlayer;
-
-    public TouchProgressModel(SimpleMediaPlayer simpleMediaPlayer) {
+    public TouchViewModel(SimpleMediaPlayer simpleMediaPlayer) {
         this.simpleMediaPlayer = simpleMediaPlayer;
     }
 

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import simple.media.player.data.MediaParams;
 import simple.media.player.model.ControllerViewModel;
 import simple.media.player.model.LoadingViewModel;
+import simple.media.player.model.TouchViewModel;
 import simple.media.player.model.VideoPlayerModel;
 import simple.media.player.player.MediaPlayerFactory;
 import simple.media.player.player.SimpleMediaPlayer;
@@ -24,28 +25,28 @@ import simple.media.player.view.impl.VideoPlayerView;
  */
 public class VideoPlayerPresenter {
     private final VideoPlayerView player;
-    private final SimpleMediaPlayer mediaPlayer;
+    private final SimpleMediaPlayer simpleMediaPlayer;
     private final ControllerViewPresenter controllerViewPresenter;
     private final LoadingViewPresenter loadingViewPresenter;
-    private final TouchPresenter touchPresenter;//跟屏幕触摸相关的
+    private final TouchViewPresenter touchViewPresenter;//跟屏幕触摸相关的
 
     public VideoPlayerPresenter(final VideoPlayerView player) {
         this.player = player;
-        this.mediaPlayer = MediaPlayerFactory.getMediaPlayer(player.getContext());
+        this.simpleMediaPlayer = MediaPlayerFactory.getMediaPlayer(player.getContext());
         //控制条相关
         this.controllerViewPresenter = new ControllerViewPresenter(getControllerView());
         //loading相关
         this.loadingViewPresenter = new LoadingViewPresenter(createLoadingView());
         //触摸相关（音量、快进）
         Context context = player.getContext();
-        this.touchPresenter = new TouchPresenter(player.getContext(), player.rlSurfaceContainer,
+        this.touchViewPresenter = new TouchViewPresenter(player.getContext(), player.rlSurfaceContainer,
                 new TouchProgressViewImpl(context), new TouchVolumeViewImpl(context));
     }
 
 
     public void bind(final VideoPlayerModel model) {
-        controllerViewPresenter.bind(new ControllerViewModel(mediaPlayer));
-        loadingViewPresenter.bind(new LoadingViewModel(mediaPlayer));
+        controllerViewPresenter.bind(new ControllerViewModel(simpleMediaPlayer));
+        loadingViewPresenter.bind(new LoadingViewModel(simpleMediaPlayer));
 
         player.ivFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +54,14 @@ public class VideoPlayerPresenter {
 
             }
         });
-        touchPresenter.bind();
+        touchViewPresenter.bind(new TouchViewModel(simpleMediaPlayer));
 
         //初始化player
         MediaParams mediaParams = new MediaParams(model.getUrl(),
                 model.getHeadData(),
                 player.surfaceView);
         mediaParams.setSeekToMs(model.getSeekToMs());
-        mediaPlayer.reset(mediaParams);
+        simpleMediaPlayer.reset(mediaParams);
 
     }
 
@@ -68,8 +69,8 @@ public class VideoPlayerPresenter {
     public void unbind() {
         loadingViewPresenter.unbind();
         controllerViewPresenter.unbind();
-        mediaPlayer.release();
-        touchPresenter.release();
+        simpleMediaPlayer.release();
+        touchViewPresenter.release();
     }
 
     private LoadingView createLoadingView() {

@@ -7,9 +7,10 @@ package simple.media.player.view;
 
 public interface TouchProgressView extends TouchableView {
     /**
-     * @param pc 0f-1.0f
+     * @param pc        0f-1.0f
+     * @param direction -1,0,1 小于0快退，0无动作，大于0快进
      */
-    void show(float pc, boolean increase, String timeCurrent, String timeTotal);
+    void show(float pc, int direction, String timeCurrent, String timeTotal);
 
     void dismiss();
 }

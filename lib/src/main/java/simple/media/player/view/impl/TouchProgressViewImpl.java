@@ -45,7 +45,7 @@ public class TouchProgressViewImpl implements TouchProgressView {
 
 
     @Override
-    public void show(float pc, boolean increase, String timeCurrent, String timeTotal) {
+    public void show(float pc, int direction, String timeCurrent, String timeTotal) {
         if (dlgProgress == null) {
             LayoutInflater.from(context).inflate(R.layout.progress_dialog, null);
             View localView = LayoutInflater.from(context).inflate(R.layout.progress_dialog, null);
@@ -72,10 +72,15 @@ public class TouchProgressViewImpl implements TouchProgressView {
         dlgProgressCurrent.setText(timeCurrent);
         dlgProgressTotal.setText(timeTotal);
 
-        if (increase) {
-            dlgProgressIcon.setBackgroundResource(R.drawable.forward_icon);
+        if (direction == 0) {
+            dlgProgressIcon.setVisibility(View.INVISIBLE);
         } else {
-            dlgProgressIcon.setBackgroundResource(R.drawable.backward_icon);
+            dlgProgressIcon.setVisibility(View.VISIBLE);
+            if (direction > 0) {
+                dlgProgressIcon.setBackgroundResource(R.drawable.forward_icon);
+            } else {
+                dlgProgressIcon.setBackgroundResource(R.drawable.backward_icon);
+            }
         }
     }
 

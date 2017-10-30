@@ -57,11 +57,11 @@ public class Utils {
      * @param timeMs
      * @return
      */
-    public static String stringForTime(int timeMs) {
+    public static String stringForTime(long timeMs) {
         if (timeMs <= 0) {
             return "00:00";
         }
-        int totalSeconds = timeMs / 1000;
+        int totalSeconds = (int) (timeMs / 1000);
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
