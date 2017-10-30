@@ -19,21 +19,34 @@ public class TouchVolumePresenter {
     private final TouchVolumeView view;
     private ViewTouchProgressHelper viewTouchProgressHelper;
     private final AudioManager audioManager;
-    private float downVolumePc;
+    private int downVolumePc;
     private OnTouchProgressChange onTouchProgressChange = new OnTouchProgressChange() {
         @Override
         public void onProgressChange(float percent, boolean increase) {
-            float result = downVolumePc + percent;
-            view.show(result);
+            int max = audioManager.getStreamMaxVolume(STREAM_MUSIC);
+            int gap = (int) (percent * max);
+            int result;
+
+            if (increase) {
+                result = gap + downVolumePc;
+            } else {
+                result = downVolumePc - gap;
+            }
+            if (result > max) {
+                result = max;
+            }
+            if (result <= 0) {
+                result = 0;
+            }
+
+            view.show(result * 1.0f / max);
             //更新音量
-            audioManager.setStreamVolume(STREAM_MUSIC,
-                    (int) (result * audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)), 0);
+            audioManager.setStreamVolume(STREAM_MUSIC, result, 0);
         }
 
         @Override
         public void onTouchDown() {
-            downVolumePc = audioManager.getStreamVolume(STREAM_MUSIC) * 1.0f
-                    / audioManager.getStreamMaxVolume(STREAM_MUSIC);
+            downVolumePc = audioManager.getStreamVolume(STREAM_MUSIC);
         }
 
         @Override
