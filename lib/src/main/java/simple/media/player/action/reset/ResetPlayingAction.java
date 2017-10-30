@@ -75,7 +75,7 @@ public class ResetPlayingAction extends ResetBaseAction {
 
             int resultSeekMs = 0;
             if (percentInt > 0) {
-                resultSeekMs = (int) (percentInt * 1.0f / 100 * simpleMediaPlayer.getDurationInMs());
+                resultSeekMs = (int) (percentInt * 1.0f / 100 * simpleMediaPlayer.getRuntimeInfo().getDurationInMs());
             } else if (seekToMs > 0) {
                 resultSeekMs = seekToMs;
             }

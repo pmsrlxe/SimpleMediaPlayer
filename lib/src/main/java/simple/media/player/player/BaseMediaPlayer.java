@@ -23,20 +23,20 @@ import simple.media.player.listener.OnStateChangeListener;
  * Created by rty on 30/10/2017.
  */
 
-public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
+public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements SimpleMediaPlayer {
     protected final Context context;
     protected final MediaListenersHolder listenersHolder = new MediaListenersHolder();
     protected MediaPlayerAction currentAction;
     protected MediaPlayerState currentState = MediaPlayerState.Init;
     protected MediaParams mediaParams;
-    protected RealMediaPlayer realMediaPlayer;
+    protected T realMediaPlayer;
 
     public BaseMediaPlayer(Context context) {
         this.context = context;
-        realMediaPlayer = getRealMediaPlayer(context);
+        realMediaPlayer = initMediaPlayer();
     }
 
-    protected abstract RealMediaPlayer getRealMediaPlayer(Context context);
+    protected abstract T initMediaPlayer();
 
     /**
      * 准备播放
@@ -84,10 +84,6 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
         return currentState;
     }
 
-    @Override
-    public Context getContext() {
-        return context;
-    }
 
     /**
      * 跳转 0-100
@@ -113,13 +109,13 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
         return mediaParams;
     }
 
-    /**
-     * 获取当前的player长度
-     *
-     * @return 0说明没有
-     */
+
     @Override
-    public long getDurationInMs() {
+    public RuntimeInfo getRuntimeInfo() {
+        return new RuntimeInfo(getCurrentPositionInMs(), getDurationInMs(), currentState);
+    }
+
+    private long getDurationInMs() {
         if (!currentState.isHasDataState() || realMediaPlayer == null) {
             return 0;
         }
@@ -131,13 +127,7 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
         }
     }
 
-    /**
-     * 获取当前播放的位置
-     *
-     * @return 0说明没有
-     */
-    @Override
-    public long getCurrentPositionInMs() {
+    private long getCurrentPositionInMs() {
         if (!currentState.isHasDataState() || realMediaPlayer == null) {
             return 0;
         }
@@ -150,7 +140,6 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
     }
 
     private void perform(MediaPlayerState changeToState) {
-        initIfNeed();
         if (changeToState == currentState) {
             Log.e(TAG, "Same perform!(" + changeToState + ")");
             return;

@@ -21,7 +21,6 @@ public final class MediaPlayerFactory {
         } else {
             player = new SysMediaPlayerImpl(context);
         }
-        player.initIfNeed();
         return player;
     }
 

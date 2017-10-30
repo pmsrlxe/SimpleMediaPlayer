@@ -4,7 +4,6 @@ package simple.media.player.player.sys;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -13,13 +12,11 @@ import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.listener.OnPlayingBufferListener;
 import simple.media.player.player.BaseMediaPlayer;
-import simple.media.player.player.RealMediaPlayer;
 
 /**
  * 系统自带的MediaPlayer实现
  */
-public class SysMediaPlayerImpl extends BaseMediaPlayer {
-    private SysRealMediaPlayer realMediaPlayer;
+public class SysMediaPlayerImpl extends BaseMediaPlayer<SysRealMediaPlayer> {
     private SurfaceCallBackWrapper surfaceCallBackWrapper;
 
     public SysMediaPlayerImpl(Context context) {
@@ -27,24 +24,18 @@ public class SysMediaPlayerImpl extends BaseMediaPlayer {
     }
 
     @Override
-    protected RealMediaPlayer getRealMediaPlayer(Context context) {
-        initIfNeed();
-        return realMediaPlayer;
+    protected SysRealMediaPlayer initMediaPlayer() {
+        SysRealMediaPlayer mediaPlayer = new SysRealMediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
+        mediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
+        mediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
+        mediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
+        mediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
+        mediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
+        return mediaPlayer;
     }
 
-    @Override
-    public void initIfNeed() {
-        if (realMediaPlayer == null) {
-            realMediaPlayer = new SysRealMediaPlayer();
-            realMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            realMediaPlayer.setOnCompletionListener(new OnCompletionListenerWrapper());
-            realMediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListenerWrapper());
-            realMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListenerWrapper());
-            realMediaPlayer.setOnErrorListener(new OnErrorListenerWrapper());
-            realMediaPlayer.setOnInfoListener(new OnInfoListenerWrapper());
-            realMediaPlayer.setOnPreparedListener(new OnPreparedListenerWrapper());
-        }
-    }
 
     /**
      * 重置player
@@ -71,11 +62,6 @@ public class SysMediaPlayerImpl extends BaseMediaPlayer {
 
     /*--------------------------------内部使用方法---------------------------------------*/
 
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public RealMediaPlayer getRealMediaPlayer() {
-        return realMediaPlayer;
-    }
 
     /*--------------------------------listener wrapper---------------------------------------*/
 

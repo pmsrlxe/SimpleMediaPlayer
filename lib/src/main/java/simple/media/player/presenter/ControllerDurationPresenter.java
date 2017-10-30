@@ -116,8 +116,8 @@ public class ControllerDurationPresenter {
             return;
         }
 
-        int duration = (int) model.getSimpleMediaPlayer().getDurationInMs();
-        int current = (int) model.getSimpleMediaPlayer().getCurrentPositionInMs();
+        int duration = (int) model.getSimpleMediaPlayer().getRuntimeInfo().getDurationInMs();
+        int current = (int) model.getSimpleMediaPlayer().getRuntimeInfo().getCurrentPositionInMs();
 
         int pc = duration == 0 ? 0 : (int) (current * 1.0f / duration * 100);
         //Log.i(SimpleMediaPlayer.TAG, "cur:" + current + ",dur:" + duration + "," + pc + "%");

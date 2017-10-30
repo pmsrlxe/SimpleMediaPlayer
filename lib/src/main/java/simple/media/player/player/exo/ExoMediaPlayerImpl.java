@@ -22,7 +22,6 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
 import simple.media.player.player.BaseMediaPlayer;
-import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
 /**
@@ -31,14 +30,13 @@ import simple.media.player.player.SimpleMediaPlayer;
  * Created by rty on 27/10/2017.
  */
 
-public class ExoMediaPlayerImpl extends BaseMediaPlayer {
-    private ExoRealMediaPlayer realPlayer = null;
+public class ExoMediaPlayerImpl extends BaseMediaPlayer<ExoRealMediaPlayer> {
 
     private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            if (realPlayer != null) {
-                realPlayer.setVideoSurfaceHolder(holder);
+            if (realMediaPlayer != null) {
+                realMediaPlayer.setVideoSurfaceHolder(holder);
             }
         }
 
@@ -58,35 +56,27 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer {
     }
 
     @Override
-    protected RealMediaPlayer getRealMediaPlayer(Context context) {
-        initIfNeed();
+    protected ExoRealMediaPlayer initMediaPlayer() {
+
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        ExoRealMediaPlayer realPlayer = new ExoRealMediaPlayer(context, new DefaultRenderersFactory(context),
+                trackSelector, new DefaultLoadControl());
+
+        realPlayer.addListener(new EventListenerWrapper());
         return realPlayer;
     }
-
-
-    @Override
-    public void initIfNeed() {
-        if (realPlayer != null) {
-            return;
-        }
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector =
-                new DefaultTrackSelector(videoTrackSelectionFactory);
-        realPlayer = new ExoRealMediaPlayer(getContext(), new DefaultRenderersFactory(getContext()),
-                trackSelector, new DefaultLoadControl());
-        realPlayer.addListener(new EventListenerWrapper());
-
-    }
-
 
     @Override
     public void reset(MediaParams mediaParams) {
         super.reset(mediaParams);
         removeCallBack();
         mediaParams.getSurfaceView().getHolder().addCallback(callback);
-        realPlayer.setVideoSurfaceHolder(mediaParams.getSurfaceView().getHolder());
+        realMediaPlayer.setVideoSurfaceHolder(mediaParams.getSurfaceView().getHolder());
     }
 
 
