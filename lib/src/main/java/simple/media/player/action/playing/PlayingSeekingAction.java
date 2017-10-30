@@ -7,7 +7,7 @@ import simple.media.player.listener.OnSeekCompleteListener;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
-public class PlayingScAction extends PlayingBaseAction {
+public class PlayingSeekingAction extends PlayingBaseAction {
     private OnSeekCompleteListener seekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete() {
@@ -21,7 +21,7 @@ public class PlayingScAction extends PlayingBaseAction {
         }
     };
 
-    public PlayingScAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
+    public PlayingSeekingAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, realMediaPlayer, changeToState);
         mediaPlayer.addOnSeekCompleteListener(seekCompleteListener);
         mediaPlayer.addOnCompleteListener(onCompleteListener);

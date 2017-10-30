@@ -38,8 +38,6 @@ public class InitFactory {
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case SeekComplete:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state " + simpleMediaPlayer.getMediaPlayerState());
         }

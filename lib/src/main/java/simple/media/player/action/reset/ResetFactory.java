@@ -41,8 +41,6 @@ public class ResetFactory {
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //reset->preparing->seek
                 return new ResetSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case SeekComplete:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }

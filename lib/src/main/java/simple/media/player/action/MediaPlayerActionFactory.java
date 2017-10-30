@@ -13,7 +13,6 @@ import simple.media.player.action.prepared.PreparedFactory;
 import simple.media.player.action.preparing.PreparingFactory;
 import simple.media.player.action.release.ReleaseFactory;
 import simple.media.player.action.reset.ResetFactory;
-import simple.media.player.action.seekcomplete.SeekCompleteFactory;
 import simple.media.player.action.seeking.SeekingFactory;
 import simple.media.player.action.stop.StoppedFactory;
 import simple.media.player.data.MediaPlayerState;
@@ -62,9 +61,6 @@ public class MediaPlayerActionFactory {
                 break;
             case Seeking:
                 retAction = SeekingFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-                break;
-            case SeekComplete:
-                retAction = SeekCompleteFactory.getAction(simpleMediaPlayer, realMediaPlayer, changeToState);
                 break;
             default:
                 throw new RuntimeException("unknown state " + simpleMediaPlayer.getMediaPlayerState());

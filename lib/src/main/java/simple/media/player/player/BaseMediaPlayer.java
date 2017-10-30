@@ -99,7 +99,7 @@ public abstract class BaseMediaPlayer implements SimpleMediaPlayer {
         }
         mediaParams.setSeekToPercent(percent);
 
-        perform(MediaPlayerState.SeekComplete);
+        perform(MediaPlayerState.Seeking);
     }
 
     @Override

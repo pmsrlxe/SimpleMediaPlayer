@@ -37,9 +37,7 @@ public class PauseFactory {
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //暂停是可以seek的
-                return new PausedScAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case SeekComplete:
-                return new PausedScAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new PausedSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }

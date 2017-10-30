@@ -39,8 +39,6 @@ public class PreparingFactory {
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //准备完毕，需要seek到某个地方
                 return new PreparingSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case SeekComplete: //临时状态没有啥要干的
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }

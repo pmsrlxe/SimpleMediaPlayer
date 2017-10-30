@@ -8,7 +8,7 @@ import simple.media.player.listener.OnSeekCompleteListener;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 
-public class PausedScAction extends PauseBaseAction {
+public class PausedSeekingAction extends PauseBaseAction {
     private OnErrorListener onErrorListener = new OnErrorListener() {
         @Override
         public void onError(MediaPlayerError error) {
@@ -22,7 +22,7 @@ public class PausedScAction extends PauseBaseAction {
         }
     };
 
-    public PausedScAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
+    public PausedSeekingAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, realMediaPlayer, changeToState);
     }
 

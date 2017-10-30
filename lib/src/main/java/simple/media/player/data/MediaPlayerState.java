@@ -11,7 +11,6 @@ public enum MediaPlayerState {
     Error(false),         //出错了
     Complete(false),      //播放完毕
     Seeking(true),        //seek中
-    SeekComplete(true),   //seek结束
     Released(false);      //释放了
 
     //是否是临时状态，临时状态都是临时状态，不能表明现在MediaPlayer的最后状态
@@ -37,6 +36,6 @@ public enum MediaPlayerState {
     public boolean isHasDataState() {
         return this == Prepared || this == Paused
                 || this == Playing || this == Complete
-                || this == Seeking || this == SeekComplete;
+                || this == Seeking;
     }
 }

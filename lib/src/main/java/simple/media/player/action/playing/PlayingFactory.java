@@ -37,9 +37,7 @@ public class PlayingFactory {
             case Complete: //播放中，有可能完成的
                 return new PlayingCompleteAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
-                return new PlayingScAction(simpleMediaPlayer, realMediaPlayer, changeToState);
-            case SeekComplete: //因为播放中，seek完成自动会播放
-                return new PlayingScAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new PlayingSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }
