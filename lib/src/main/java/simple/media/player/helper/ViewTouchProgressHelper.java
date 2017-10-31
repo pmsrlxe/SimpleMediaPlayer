@@ -104,11 +104,8 @@ public class ViewTouchProgressHelper {
         }
 
         private boolean invalidTouch(float absDeltaX, float absDeltaY) {
-            if ((System.currentTimeMillis() - downTime) <= MIN_SCROLL_TIME_GAP
-                    || (absDeltaX < threshold && absDeltaY < threshold)) {
-                return true;
-            }
-            return false;
+            return (System.currentTimeMillis() - downTime) <= MIN_SCROLL_TIME_GAP
+                    || (absDeltaX < threshold && absDeltaY < threshold);
         }
     }
 }
