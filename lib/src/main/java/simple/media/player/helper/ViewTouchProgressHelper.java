@@ -13,7 +13,7 @@ import simple.media.player.view.TouchableView;
 
 public class ViewTouchProgressHelper {
     private final boolean careHorizontalTouch;
-    private int threshold = 80;
+    private int threshold = 100;
     private static final int MIN_SCROLL_TIME_GAP = 500;
     private OnTouchProgressChange onTouchProgressChange;
     private boolean enable = true;
@@ -61,6 +61,11 @@ public class ViewTouchProgressHelper {
             float x = event.getX();
             float y = event.getY();
 
+            float deltaX = x - downX;
+            float deltaY = y - downY;
+            float absDeltaX = Math.abs(deltaX);
+            float absDeltaY = Math.abs(deltaY);
+
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downX = x;
@@ -71,13 +76,9 @@ public class ViewTouchProgressHelper {
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (System.currentTimeMillis() - downTime <= MIN_SCROLL_TIME_GAP) {
+                    if (invalidTouch(absDeltaX, absDeltaY)) {
                         return false;
                     }
-                    float deltaX = x - downX;
-                    float deltaY = y - downY;
-                    float absDeltaX = Math.abs(deltaX);
-                    float absDeltaY = Math.abs(deltaY);
                     if (absDeltaX >= threshold) {
                         float pc = deltaX * 1.0f / viewWidth;
 
@@ -95,9 +96,17 @@ public class ViewTouchProgressHelper {
                     break;
                 case MotionEvent.ACTION_UP:
                     if (onTouchProgressChange != null) {
-                        onTouchProgressChange.onTouchUp();
+                        onTouchProgressChange.onTouchUp(!invalidTouch(absDeltaX, absDeltaY));
                     }
                     break;
+            }
+            return false;
+        }
+
+        private boolean invalidTouch(float absDeltaX, float absDeltaY) {
+            if ((System.currentTimeMillis() - downTime) <= MIN_SCROLL_TIME_GAP
+                    || (absDeltaX < threshold && absDeltaY < threshold)) {
+                return true;
             }
             return false;
         }

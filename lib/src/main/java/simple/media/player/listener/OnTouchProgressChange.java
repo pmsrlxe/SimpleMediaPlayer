@@ -22,6 +22,7 @@ public interface OnTouchProgressChange {
 
     /**
      * 手指离开view
+     * @param isValidUp
      */
-    void onTouchUp();
+    void onTouchUp(boolean isValidUp);
 }

@@ -53,7 +53,7 @@ public class TouchVolumePresenter {
         }
 
         @Override
-        public void onTouchUp() {
+        public void onTouchUp(boolean isValidUp) {
             view.dismiss();
         }
     };

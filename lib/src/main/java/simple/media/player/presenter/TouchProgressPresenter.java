@@ -55,12 +55,14 @@ public class TouchProgressPresenter {
             }
 
             @Override
-            public void onTouchUp() {
+            public void onTouchUp(boolean isValidUp) {
                 view.dismiss();
-                long total = model.getSimpleMediaPlayer().getRuntimeInfo().getDurationInMs();
-                //seekTo
-                if (resultCurrent != downPositionMs) {
-                    model.getSimpleMediaPlayer().seekToPercent((int) (resultCurrent * 1.0f / total * 100));
+                if (isValidUp) {
+                    long total = model.getSimpleMediaPlayer().getRuntimeInfo().getDurationInMs();
+                    //seekTo
+                    if (resultCurrent != downPositionMs) {
+                        model.getSimpleMediaPlayer().seekToPercent((int) (resultCurrent * 1.0f / total * 100));
+                    }
                 }
             }
         });
