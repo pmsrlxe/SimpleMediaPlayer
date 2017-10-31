@@ -90,8 +90,11 @@ public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements Simp
      */
     @Override
     public void seekToPercent(int percent) {
-        if (percent < 0 || percent > 100) {
-            throw new IllegalArgumentException("percent=" + percent + " is not correct,range should in [0-100]");
+        if (percent < 0) {
+            percent = 0;
+        }
+        if (percent > 100) {
+            percent = 100;
         }
         mediaParams.setSeekToPercent(percent);
 

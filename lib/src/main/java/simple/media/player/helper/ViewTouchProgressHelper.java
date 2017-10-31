@@ -14,7 +14,10 @@ import simple.media.player.view.TouchableView;
 public class ViewTouchProgressHelper {
     private final boolean careHorizontalTouch;
     private int threshold = 80;
+    private static final int MIN_SCROLL_TIME_GAP = 500;
     private OnTouchProgressChange onTouchProgressChange;
+    private boolean enable = true;
+
 
     /**
      * @param careHorizontalTouch true只关心水平滑动，false关心垂直触摸
@@ -33,10 +36,19 @@ public class ViewTouchProgressHelper {
         this.onTouchProgressChange = onTouchProgressChange;
     }
 
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
     private class TouchListener implements View.OnTouchListener {
 
         private float downX;
         private float downY;
+        private long downTime;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -53,11 +65,15 @@ public class ViewTouchProgressHelper {
                 case MotionEvent.ACTION_DOWN:
                     downX = x;
                     downY = y;
+                    downTime = System.currentTimeMillis();
                     if (onTouchProgressChange != null) {
                         onTouchProgressChange.onTouchDown();
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    if (System.currentTimeMillis() - downTime <= MIN_SCROLL_TIME_GAP) {
+                        return false;
+                    }
                     float deltaX = x - downX;
                     float deltaY = y - downY;
                     float absDeltaX = Math.abs(deltaX);

@@ -90,6 +90,5 @@ public class ControllerViewPresenter {
         model.getSimpleMediaPlayer().removeOnStateChangeListener(listener);
         durationPresenter.unbind();
         visiblePresenter.unbind();
-
     }
 }

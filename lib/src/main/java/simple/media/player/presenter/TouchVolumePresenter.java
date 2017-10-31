@@ -24,7 +24,10 @@ public class TouchVolumePresenter {
         @Override
         public void onProgressChange(float percent, boolean increase) {
             int max = audioManager.getStreamMaxVolume(STREAM_MUSIC);
-            int gap = (int) (percent * max);
+            int gap = (int) ((percent * max) + 0.5f);
+            if (gap < 1) {
+                gap = 1;//让音量触摸更有反馈性
+            }
             int result;
 
             if (increase) {
@@ -67,7 +70,7 @@ public class TouchVolumePresenter {
         viewTouchProgressHelper.setOnTouchProgressChange(onTouchProgressChange);
     }
 
-    public void release() {
+    public void unbind() {
         viewTouchProgressHelper.setOnTouchProgressChange(null);
     }
 

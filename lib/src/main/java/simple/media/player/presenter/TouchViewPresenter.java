@@ -1,7 +1,6 @@
 package simple.media.player.presenter;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 
 import simple.media.player.helper.TouchListenersHolder;
@@ -19,7 +18,6 @@ import simple.media.player.view.TouchVolumeView;
 public class TouchViewPresenter {
     private final TouchProgressPresenter touchProgressPresenter;
     private final TouchVolumePresenter touchVolumePresenter;
-    private final TouchListenersHolder holder;
     private final TouchProgressView progressView;
     private final TouchVolumeView touchVolumeView;
     private final View panelToTouch;
@@ -32,8 +30,6 @@ public class TouchViewPresenter {
         this.touchVolumeView = touchVolumeView;
         this.panelToTouch = panelToTouch;
 
-        holder = new TouchListenersHolder();
-
         touchProgressPresenter = new TouchProgressPresenter(context, progressView);
         touchVolumePresenter = new TouchVolumePresenter(context, touchVolumeView);
     }
@@ -42,21 +38,15 @@ public class TouchViewPresenter {
         touchProgressPresenter.bind(new TouchProgressModel(model.getSimpleMediaPlayer()));
         touchVolumePresenter.bind(new TouchVolumeModel());
 
-        holder.addTouchListener(progressView.getOnTouchListener());
-        holder.addTouchListener(touchVolumeView.getOnTouchListener());
-
-        this.panelToTouch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                holder.onTouch(v, event);
-                return false;
-            }
-        });
+        TouchListenersHolder.getInstance().addTouchListener(panelToTouch, progressView.getOnTouchListener());
+        TouchListenersHolder.getInstance().addTouchListener(panelToTouch, touchVolumeView.getOnTouchListener());
     }
 
-    public void release() {
-        holder.removeTouchListener(progressView.getOnTouchListener());
-        holder.removeTouchListener(touchVolumeView.getOnTouchListener());
+    public void unbind() {
+        TouchListenersHolder.getInstance().removeTouchListener(panelToTouch, progressView.getOnTouchListener());
+        TouchListenersHolder.getInstance().removeTouchListener(panelToTouch, touchVolumeView.getOnTouchListener());
+        touchVolumePresenter.unbind();
+        touchProgressPresenter.unbind();
         this.panelToTouch.setOnTouchListener(null);
     }
 

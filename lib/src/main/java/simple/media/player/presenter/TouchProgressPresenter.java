@@ -2,7 +2,9 @@ package simple.media.player.presenter;
 
 import android.content.Context;
 
+import simple.media.player.data.MediaPlayerState;
 import simple.media.player.helper.ViewTouchProgressHelper;
+import simple.media.player.listener.OnStateChangeListener;
 import simple.media.player.listener.OnTouchProgressChange;
 import simple.media.player.model.TouchProgressModel;
 import simple.media.player.utils.Utils;
@@ -18,6 +20,13 @@ public class TouchProgressPresenter {
     private final ViewTouchProgressHelper viewTouchProgressHelper;
     private long downPositionMs;
     private long resultCurrent;
+    private TouchProgressModel model;
+    private OnStateChangeListener onStateChangeListener = new OnStateChangeListener() {
+        @Override
+        public void onStateChange(MediaPlayerState from, MediaPlayerState now) {
+            viewTouchProgressHelper.setEnable(now.isHasDataState());
+        }
+    };
 
     public TouchProgressPresenter(Context context, TouchProgressView view) {
         this.view = view;
@@ -25,6 +34,7 @@ public class TouchProgressPresenter {
     }
 
     public void bind(final TouchProgressModel model) {
+        this.model = model;
         viewTouchProgressHelper.setOnTouchProgressChange(new OnTouchProgressChange() {
             @Override
             public void onProgressChange(float percent, boolean increase) {
@@ -40,6 +50,8 @@ public class TouchProgressPresenter {
             public void onTouchDown() {
                 downPositionMs = model.getSimpleMediaPlayer().getRuntimeInfo()
                         .getCurrentPositionInMs();
+                //true就block后续touch了，因为没有数据，没有必要快进，快退
+                //没有数据就返回true
             }
 
             @Override
@@ -52,7 +64,13 @@ public class TouchProgressPresenter {
                 }
             }
         });
+        model.getSimpleMediaPlayer().addOnStateChangeListener(onStateChangeListener);
     }
 
+    public void unbind() {
+        if (model != null) {
+            model.getSimpleMediaPlayer().removeOnStateChangeListener(onStateChangeListener);
+        }
+    }
 
 }

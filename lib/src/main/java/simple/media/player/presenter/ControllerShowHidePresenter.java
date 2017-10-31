@@ -7,6 +7,8 @@ import android.os.Message;
 import android.view.View;
 
 import simple.media.player.data.MediaPlayerState;
+import simple.media.player.helper.TouchClickListener;
+import simple.media.player.helper.TouchListenersHolder;
 import simple.media.player.listener.OnStateChangeListener;
 import simple.media.player.model.ControllerShowHideModel;
 import simple.media.player.view.ControllerView;
@@ -19,6 +21,13 @@ public class ControllerShowHidePresenter {
     private static final int SHOW = 1989;
     private final ControllerView view;
     private ControllerShowHideModel model;
+    private TouchClickListener touchClickListener = new TouchClickListener() {
+        @Override
+        public void onClick(View v) {
+            toggleShow(model.getSimpleMediaPlayer().getMediaPlayerState(),
+                    view.getControlPanel().getVisibility() == View.VISIBLE);
+        }
+    };
 
     private OnStateChangeListener listener = new OnStateChangeListener() {
         @Override
@@ -75,21 +84,15 @@ public class ControllerShowHidePresenter {
 
     public void bind(final ControllerShowHideModel model) {
         this.model = model;
-        view.getSurfaceContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleShow(model.getSimpleMediaPlayer().getMediaPlayerState(),
-                        view.getControlPanel().getVisibility() == View.VISIBLE);
-            }
-        });
+        TouchListenersHolder.getInstance().addTouchListener(view.getSurfaceContainer(), touchClickListener);
         model.getSimpleMediaPlayer().addOnStateChangeListener(listener);
     }
-
 
     public void unbind() {
         if (model != null) {
             model.getSimpleMediaPlayer().removeOnStateChangeListener(listener);
         }
+        TouchListenersHolder.getInstance().removeTouchListener(view.getSurfaceContainer(), touchClickListener);
     }
 
     private void hideToolbar(int duration) {

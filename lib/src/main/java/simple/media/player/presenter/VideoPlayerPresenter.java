@@ -70,7 +70,7 @@ public class VideoPlayerPresenter {
         loadingViewPresenter.unbind();
         controllerViewPresenter.unbind();
         simpleMediaPlayer.release();
-        touchViewPresenter.release();
+        touchViewPresenter.unbind();
     }
 
     private LoadingView createLoadingView() {

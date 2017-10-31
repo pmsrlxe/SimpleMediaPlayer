@@ -44,9 +44,9 @@ public class TouchVolumeViewImpl implements TouchVolumeView {
             dlgVolumeProgressBar.setMax(MAX);
             dlgVolume = new Dialog(context, R.style.oklib_video_player_style_dialog_progress);
             dlgVolume.setContentView(localView);
-            dlgVolume.getWindow().addFlags(8);
-            dlgVolume.getWindow().addFlags(32);
-            dlgVolume.getWindow().addFlags(16);
+            dlgVolume.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dlgVolume.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            dlgVolume.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
             dlgVolume.getWindow().setLayout(-2, -2);
             WindowManager.LayoutParams localLayoutParams = dlgVolume.getWindow().getAttributes();
             localLayoutParams.gravity = 19;
