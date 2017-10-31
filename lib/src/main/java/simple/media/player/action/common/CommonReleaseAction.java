@@ -33,6 +33,7 @@ public class CommonReleaseAction extends BaseMediaPlayerAction {
                         @Override
                         public void run() {
                             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Released);
+                            notifyActionFinish();
                         }
                     });
                 }

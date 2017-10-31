@@ -17,11 +17,11 @@ public class InitResetAction extends InitBaseAction {
         try {
             realMediaPlayer.doReset();
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Reset);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } finally {
+            notifyActionFinish();
         }
     }
 }

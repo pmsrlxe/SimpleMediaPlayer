@@ -13,6 +13,7 @@ public abstract class MediaPlayerAction {
     protected final MediaPlayerState changeToState;
     protected final MediaPlayerState fromState;
     protected final RealMediaPlayer realMediaPlayer;
+    protected ActionListener actionListener;
 
     public MediaPlayerAction(SimpleMediaPlayer simpleMediaPlayer,
                              RealMediaPlayer realMediaPlayer,
@@ -21,6 +22,16 @@ public abstract class MediaPlayerAction {
         this.realMediaPlayer = realMediaPlayer;
         this.fromState = simpleMediaPlayer.getMediaPlayerState();
         this.changeToState = changeToState;
+    }
+
+    public void notifyActionFinish() {
+        if (actionListener != null) {
+            actionListener.onActionFinish();
+        }
+    }
+
+    public void setActionListener(ActionListener actionListener) {
+        this.actionListener = actionListener;
     }
 
     /**

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.RestrictTo;
 import android.util.Log;
 
-import simple.media.player.action.MediaPlayerAction;
+import simple.media.player.action.ActionTask;
 import simple.media.player.action.MediaPlayerActionFactory;
 import simple.media.player.data.MediaParams;
 import simple.media.player.data.MediaPlayerState;
@@ -26,14 +26,15 @@ import simple.media.player.listener.OnStateChangeListener;
 public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements SimpleMediaPlayer {
     protected final Context context;
     protected final MediaListenersHolder listenersHolder = new MediaListenersHolder();
-    protected MediaPlayerAction currentAction;
     protected MediaPlayerState currentState = MediaPlayerState.Init;
     protected MediaParams mediaParams;
     protected T realMediaPlayer;
+    private final ActionTask actionTask;
 
     public BaseMediaPlayer(Context context) {
         this.context = context;
         realMediaPlayer = initRealMediaPlayer();
+        actionTask = new ActionTask();
     }
 
     protected abstract T initRealMediaPlayer();
@@ -77,6 +78,7 @@ public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements Simp
     public void release() {
         listenersHolder.release();
         perform(MediaPlayerState.Released);
+        actionTask.release();
     }
 
     @Override
@@ -147,11 +149,7 @@ public abstract class BaseMediaPlayer<T extends RealMediaPlayer> implements Simp
             Log.e(TAG, "Same perform!(" + changeToState + ")");
             return;
         }
-        if (currentAction != null) {
-            currentAction.onRelease();
-        }
-        currentAction = MediaPlayerActionFactory.getAction(this, realMediaPlayer, changeToState);
-        currentAction.perform();
+        actionTask.enqueue(MediaPlayerActionFactory.getAction(this, realMediaPlayer, changeToState));
     }
 
 

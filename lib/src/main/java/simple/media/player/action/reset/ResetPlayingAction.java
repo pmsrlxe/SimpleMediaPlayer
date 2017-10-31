@@ -24,8 +24,10 @@ public class ResetPlayingAction extends ResetBaseAction {
             try {
                 realMediaPlayer.doStart();
                 simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+                notifyActionFinish();
             } catch (Throwable throwable) {
                 simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+                notifyActionFinish();
             }
         }
     };
@@ -34,6 +36,7 @@ public class ResetPlayingAction extends ResetBaseAction {
         @Override
         public void onError(MediaPlayerError error) {
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            notifyActionFinish();
         }
     };
 
@@ -63,6 +66,7 @@ public class ResetPlayingAction extends ResetBaseAction {
         } catch (Throwable ex) {
             simpleMediaPlayer.removeOnPreparedListener(onPreparedListener);
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            notifyActionFinish();
         }
     }
 
@@ -95,6 +99,8 @@ public class ResetPlayingAction extends ResetBaseAction {
         } catch (Throwable ex) {
             ex.printStackTrace();
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+        }finally {
+            notifyActionFinish();
         }
     }
 }

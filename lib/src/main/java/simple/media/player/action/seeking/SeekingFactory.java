@@ -21,7 +21,7 @@ public class SeekingFactory {
             case Reset:
                 return new SeekingResetAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Paused:
-                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new SeekingPauseAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Playing:
                 return new SeekingStartAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Stopped:

@@ -10,5 +10,8 @@ public class BufferingPauseAction extends BufferingBaseAction {
         super(mediaPlayer, realMediaPlayer, changeToState);
     }
 
-
+    @Override
+    public void perform() {
+        super.perform();
+    }
 }
