@@ -25,10 +25,11 @@ public class ActionTask {
                 try {
                     final MediaPlayerAction currentAction = queue.take();
                     if (lastAction != null) {
+                        final MediaPlayerAction temp = lastAction;
                         Task.post(new Runnable() {
                             @Override
                             public void run() {
-                                lastAction.onRelease();
+                                temp.onRelease();
                             }
                         });
                     }

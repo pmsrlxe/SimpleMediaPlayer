@@ -1,9 +1,7 @@
 package simple.media.player.action.stop;
 
 
-import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 

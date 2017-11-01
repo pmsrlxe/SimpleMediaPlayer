@@ -2,9 +2,7 @@ package simple.media.player.action.seeking;
 
 
 import simple.media.player.action.BaseMediaPlayerAction;
-import simple.media.player.data.MediaPlayerError;
 import simple.media.player.data.MediaPlayerState;
-import simple.media.player.data.sys.MediaPlayerInfo;
 import simple.media.player.player.RealMediaPlayer;
 import simple.media.player.player.SimpleMediaPlayer;
 

@@ -12,12 +12,14 @@ public class PlayingSeekingAction extends PlayingBaseAction {
         @Override
         public void onSeekComplete() {
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Playing);
+            notifyActionFinish();
         }
     };
     private OnCompleteListener onCompleteListener = new OnCompleteListener() {
         @Override
         public void onComplete() {
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+            notifyActionFinish();
         }
     };
 

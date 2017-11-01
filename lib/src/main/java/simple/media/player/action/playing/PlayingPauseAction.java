@@ -20,6 +20,8 @@ public class PlayingPauseAction extends PlayingBaseAction {
         } catch (Throwable ex) {
             ex.printStackTrace();
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+        } finally {
+            notifyActionFinish();
         }
 
     }

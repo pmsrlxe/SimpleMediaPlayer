@@ -10,12 +10,22 @@ public class SeekingResetAction extends SeekingBaseAction {
     private OnSeekCompleteListener onSeekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete() {
+            try {
+                realMediaPlayer.doReset();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Reset);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            } finally {
+                notifyActionFinish();
+            }
 
         }
     };
 
     public SeekingResetAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, realMediaPlayer, changeToState);
+        simpleMediaPlayer.addOnSeekCompleteListener(onSeekCompleteListener);
     }
 
     @Override

@@ -13,14 +13,17 @@ public class PausedSeekingAction extends PauseBaseAction {
         @Override
         public void onError(MediaPlayerError error) {
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            notifyActionFinish();
         }
     };
     private OnSeekCompleteListener onSeekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete() {
             simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+            notifyActionFinish();
         }
     };
+
 
     public PausedSeekingAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, realMediaPlayer, changeToState);

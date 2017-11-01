@@ -10,7 +10,15 @@ public class SeekingCompleteAction extends SeekingBaseAction {
     private OnCompleteListener onCompleteListener = new OnCompleteListener() {
         @Override
         public void onComplete() {
-            simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+            try {
+                realMediaPlayer.doPause();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Paused);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+            } finally {
+                notifyActionFinish();
+            }
         }
     };
 

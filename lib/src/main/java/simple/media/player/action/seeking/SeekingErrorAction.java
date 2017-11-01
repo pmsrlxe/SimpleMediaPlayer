@@ -10,4 +10,11 @@ public class SeekingErrorAction extends SeekingBaseAction {
     public SeekingErrorAction(SimpleMediaPlayer mediaPlayer, RealMediaPlayer realMediaPlayer, MediaPlayerState changeToState) {
         super(mediaPlayer, realMediaPlayer, changeToState);
     }
+
+    @Override
+    public void perform() {
+        super.perform();
+        simpleMediaPlayer.setMediaPlayerStateFromAction(MediaPlayerState.Error);
+        notifyActionFinish();
+    }
 }

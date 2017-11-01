@@ -24,7 +24,7 @@ public class ResetFactory {
             case Reset:    //重复reset是可以的，reset完毕之后再次reset
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Paused:   //reset然后preparing，然后pause
-                return new ResetPauseAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Playing:  //reset之后播放
                 return new ResetPlayingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Stopped:  //因为stop就需要重新preparing，所以没有意义。
@@ -36,11 +36,11 @@ public class ResetFactory {
             case Released:
                 return new CommonReleaseAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Error:    //reset 因为设置了数据源，会出现error，需要处理
-                return new ResetErrorAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Complete:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:  //reset->preparing->seek
-                return new ResetSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }

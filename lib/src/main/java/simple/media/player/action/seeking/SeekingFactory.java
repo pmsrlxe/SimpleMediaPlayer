@@ -37,7 +37,7 @@ public class SeekingFactory {
             case Complete: //seek到末尾发生了这个
                 return new SeekingCompleteAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Seeking:
-                return new SeekingSeekingAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             default:
                 throw new RuntimeException("unknown state  " + simpleMediaPlayer.getMediaPlayerState());
         }

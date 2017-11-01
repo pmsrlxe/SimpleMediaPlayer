@@ -128,8 +128,12 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer<ExoRealMediaPlayer> {
                     + playWhenReady + ",playbackState:" + playbackState);
             if (currentState.isHasDataState()) {
                 //seek结束了，会回调这个，变成ready就是seek结束了
-                if (currentState == MediaPlayerState.Seeking && playbackState == Player.STATE_READY) {
+                if (currentState == MediaPlayerState.Seeking && playbackState == Player.STATE_READY
+                        //直接拖到最后了
+                        || (currentState == MediaPlayerState.Seeking && playbackState == Player.STATE_ENDED)
+                        ) {
                     listenersHolder.notifySeekComplete();
+                    Log.e(SimpleMediaPlayer.TAG, "notifySeekComplete");
                 }
             } else {
                 //这个回调也不靠谱，不能作为prepared的依据
@@ -138,8 +142,16 @@ public class ExoMediaPlayerImpl extends BaseMediaPlayer<ExoRealMediaPlayer> {
                 //已经prepared的不要回调（start，pause）
                 if (playbackState == Player.STATE_READY) {
                     listenersHolder.notifyPrepared();
+                    Log.e(SimpleMediaPlayer.TAG, "notifyPrepared");
                 }
             }
+
+
+            //播放结束
+            if (playbackState == Player.STATE_ENDED) {
+                listenersHolder.notifyComplete();
+            }
+
         }
 
         @Override

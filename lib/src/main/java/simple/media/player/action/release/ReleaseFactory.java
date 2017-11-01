@@ -18,7 +18,7 @@ public class ReleaseFactory {
             case Init:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Reset:
-                return new ReleaseResetAction(simpleMediaPlayer, realMediaPlayer, changeToState);
+                return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Paused:
                 return new NoneAction(simpleMediaPlayer, realMediaPlayer, changeToState);
             case Playing:

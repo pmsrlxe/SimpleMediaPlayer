@@ -13,7 +13,7 @@ import simple.media.player.view.TouchableView;
 
 public class ViewTouchProgressHelper {
     private final boolean careHorizontalTouch;
-    private int threshold = 100;
+    private int threshold = 50;
     private static final int MIN_SCROLL_TIME_GAP = 500;
     private OnTouchProgressChange onTouchProgressChange;
     private boolean enable = true;
