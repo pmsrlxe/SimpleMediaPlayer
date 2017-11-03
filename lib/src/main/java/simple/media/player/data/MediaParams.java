@@ -1,11 +1,13 @@
 package simple.media.player.data;
 
 
+import android.content.Context;
 import android.view.SurfaceView;
 
 import java.util.Map;
 
 public class MediaParams {
+    private final Context context;
     private String url;
     private Map<String, String> mapHeadData;
     private SurfaceView surfaceView;
@@ -14,20 +16,26 @@ public class MediaParams {
     private int seekToPercent;//这2个互相冲突，设置了那么second就=0，无效了
     private int seekToMs;//这2个互相冲突，设置了那么percent就=0，无效了
 
-    public MediaParams(String url,
+    public MediaParams(Context context, String url,
                        Map<String, String> mapHeadData,
                        SurfaceView surfaceView) {
+        this.context = context;
         this.url = url;
         this.mapHeadData = mapHeadData;
         this.surfaceView = surfaceView;
     }
 
     public MediaParams(MediaParams mediaParams) {
-        this(mediaParams.url,
+        this(mediaParams.getContext(),
+                mediaParams.url,
                 mediaParams.mapHeadData,
                 mediaParams.surfaceView);
         this.seekToPercent = mediaParams.getSeekToPercent();
         this.seekToMs = mediaParams.getSeekToMs();
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public void setUrl(String url) {

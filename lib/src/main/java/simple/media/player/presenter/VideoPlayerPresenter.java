@@ -57,7 +57,8 @@ public class VideoPlayerPresenter {
         touchViewPresenter.bind(new TouchViewModel(simpleMediaPlayer));
 
         //初始化player
-        MediaParams mediaParams = new MediaParams(model.getUrl(),
+        MediaParams mediaParams = new MediaParams(player.getContext(),
+                model.getUrl(),
                 model.getHeadData(),
                 player.surfaceView);
         mediaParams.setSeekToMs(model.getSeekToMs());

@@ -2,6 +2,8 @@ package simple.media.player.player.sys;
 
 
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -59,7 +61,12 @@ public class SysRealMediaPlayer extends MediaPlayer implements RealMediaPlayer {
 
     @Override
     public void doPrepareAsync(MediaParams params) throws IOException, IllegalStateException {
-        setDataSource(params.getUrl());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setDataSource(params.getContext(), Uri.parse(params.getUrl()));
+        } else {
+            setDataSource(params.getUrl());
+        }
+
         super.prepare();
         Log.d(TAG, "doPrepare:" + this);
     }

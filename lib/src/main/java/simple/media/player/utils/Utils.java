@@ -16,7 +16,7 @@ import java.util.Locale;
  * 工具类
  */
 public class Utils {
-    private static boolean testSys = false;
+    private static boolean testSys = true;
 
     public static boolean isSupportExo() {
         if (testSys) {
